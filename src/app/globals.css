@@ -130,28 +130,34 @@ code {
   z-index: 1;
 }
 
-/* Title Row - Editorial style */
+/* Title band: the full-width sticky teal band under the site nav on the
+   published UK dashboards (uk-spring-statement-2026 / uk-childcare-100k-threshold
+   globals.css .title-row). */
 .title-row {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(40, 94, 97, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.title-row-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  gap: var(--pe-space-md);
-  position: sticky;
-  top: 0;
-  background: linear-gradient(180deg, rgba(249, 250, 251, 0.95) 0%, rgba(249, 250, 251, 0.9) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 20px 0;
-  margin: -20px 0 32px 0;
-  z-index: 100;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .title-row h1 {
-  font-size: 2.25rem;
+  font-family: var(--pe-font-family);
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
   font-weight: 700;
-  color: var(--pe-gray-900);
+  color: white;
   margin: 0;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -767,6 +773,10 @@ code {
   .main-content {
     padding: 24px;
   }
+
+  .title-row-inner {
+    padding: 16px 24px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -774,14 +784,12 @@ code {
     grid-template-columns: 1fr;
   }
 
-  .title-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .title-row-inner {
+    padding: 12px 16px;
   }
 
   .title-row h1 {
-    font-size: 1.75rem;
+    font-size: 1.15rem;
   }
 
   .tab-navigation {

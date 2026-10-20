@@ -1,8 +1,10 @@
 "use client";
 
-// Page shell mirrors PolicyEngine/uk-autumn-budget-dashboard-2026 src/App.jsx:
-// .app > .main-content > sticky .title-row, pill .tab-navigation,
-// .dashboard-intro, then the tab's sections. ?tab= keeps the tab in the URL.
+// Page shell. The title is the full-width sticky teal .title-row band that the
+// published UK dashboards render under the site nav (uk-spring-statement-2026
+// app/page.jsx, uk-childcare-100k-threshold Dashboard.jsx); below it,
+// .main-content holds the tabs, the tab intro and the tab's sections.
+// ?tab= keeps the tab in the URL.
 
 import { useEffect, useState } from "react";
 import { TABS, FOOTER_ROWS } from "./components/sections";
@@ -51,10 +53,13 @@ export default function App() {
 
   return (
     <div className="app">
-      <main className="main-content">
-        <div className="title-row">
+      <header className="title-row">
+        <div className="title-row-inner">
           <h1>UK living standards outlook</h1>
         </div>
+      </header>
+
+      <main className="main-content">
 
         <div className="tab-navigation" role="tablist">
           {TABS.map((t) => (
