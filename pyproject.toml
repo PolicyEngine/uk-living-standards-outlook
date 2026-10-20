@@ -1,0 +1,12 @@
+[project]
+name = "uk-living-standards-outlook-pipeline"
+version = "0.1.0"
+description = "Data pipeline for the UK living standards outlook demo dashboard"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "policyengine[uk]==6.8.0",
+    "odfpy>=1.4",
+]
+
+[tool.uv]
+package = false
