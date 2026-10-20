@@ -28,6 +28,7 @@ import {
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
+import { HbaiSource } from "../../lib/sources";
 
 /** meta.units[metric] may be a string or an object with a label/unit field. */
 function unitFor(meta, metric) {
@@ -125,6 +126,7 @@ export default function LivingStandardsSection({ data }) {
       title="Household income"
       description={description}
       summary={summary}
+      source={<HbaiSource />}
       exportOptions={chartData.length ? { filename: `living-standards-${metric}-${adjustment}`, legendItems: legendItemsFor(effectiveView, !noOutturn) } : null}
       controls={
         <>

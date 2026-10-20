@@ -10,6 +10,11 @@ import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
 import { changeClass, pctLabel, percentAxis, ppLabel, toRows } from "../../lib/forecast";
 import { formatOneDp } from "../../lib/outlook";
+import { ObrSource, PeDerivedSource } from "../../lib/sources";
+
+// CPI after housing costs and social rent are PolicyEngine derivations, not OBR series.
+const DERIVED = new Set(["cpi_ahc", "social_rent"]);
+const sourceFor = (series) => (DERIVED.has(series.key) ? <PeDerivedSource /> : <ObrSource />);
 
 const pctTick = (v) => `${formatOneDp(v).replace(/\.0$/, "")}%`;
 
@@ -32,6 +37,7 @@ function ForecastChartCard({ series, published, preLabel, postLabel }) {
   return (
     <ChartCard
       title={series.label}
+      source={sourceFor(series)}
       exportOptions={{
         filename: `forecast-${series.key}`,
         legendItems: lines.map((l) => ({ color: l.colour, label: l.name, type: "line" })),
@@ -55,7 +61,7 @@ function ForecastTableCard({ series, published, preLabel, postLabel }) {
   const rows = toRows(series, published);
   if (!rows.length) return null;
   return (
-    <ChartCard title={series.label} description="Annual growth rate (%).">
+    <ChartCard title={series.label} description="Annual growth rate (%)." source={sourceFor(series)}>
       <div className="comparison-table-wrapper">
         <table className="comparison-table">
           <thead>

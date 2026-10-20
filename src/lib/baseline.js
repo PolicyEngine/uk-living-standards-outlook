@@ -62,7 +62,7 @@ export function lineSeries(viewMode, hasOutturn = true) {
   return [
     {
       key: "historical",
-      name: "Official (historical)",
+      name: "Official: DWP Households Below Average Income",
       colour: OUTTURN_COLOUR,
       hidden: viewMode === "forecast" || !hasOutturn,
     },

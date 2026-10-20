@@ -8,9 +8,9 @@
 
 import { useState } from "react";
 import { fyDash, splitSource } from "../../lib/outlook";
+import { HBAI_URL, OBR_EFO_TITLE, OBR_EFO_URL, plainWords } from "../../lib/sources";
 
 const NOTE_LIMIT = 160;
-const OBR_EFO_URL = "https://obr.uk/economic-and-fiscal-outlooks/";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /** "microcosm-uk-2024-25-national-20261019T083323Z-6cba5d71" -> "Microcosm UK national, 19 Oct 2026, 6cba5d71". */
@@ -28,12 +28,6 @@ function describeDataset(ds) {
   return parts.join(", ");
 }
 
-/** HBAI source label -> "HBAI FYE 2025". */
-function shortHbai(label) {
-  const m = label.match(/Households Below Average Income.*?FYE \d{4} to (FYE \d{4})/i);
-  return m ? `HBAI ${m[1]}` : label;
-}
-
 function shorten(note) {
   if (note.length <= NOTE_LIMIT) return note;
   const cut = note.slice(0, NOTE_LIMIT);
@@ -46,9 +40,6 @@ export default function AboutDataSection({ data }) {
   if (!meta) return null;
   const hbai = splitSource(meta.outturn_source);
   const ds = meta.dataset || {};
-  const efo =
-    (meta.deflator || "").match(/OBR EFO ([A-Z][a-z]+ \d{4})/) ||
-    (data.forecast?.pre_label || "").match(/OBR ([A-Z][a-z]+ \d{4})/);
   const deflatorText = meta.deflator || "";
   const deflator = /consumer_price_index_ahc|CPI after housing costs/i.test(deflatorText)
     ? "OBR CPI (BHC), CPI after housing costs (AHC)"
@@ -103,26 +94,19 @@ export default function AboutDataSection({ data }) {
             )}
             <dt>Sources</dt>
             <dd>
-              {hbai.url ? (
-                <a href={hbai.url} target="_blank" rel="noopener noreferrer" title={hbai.label}>
-                  {shortHbai(hbai.label)}
-                </a>
-              ) : (
-                shortHbai(hbai.label)
-              )}
-              {efo && (
-                <>
-                  {" · "}
-                  <a href={OBR_EFO_URL} target="_blank" rel="noopener noreferrer">
-                    OBR EFO {efo[1]}
-                  </a>
-                </>
-              )}
+              DWP,{" "}
+              <a href={hbai.url || HBAI_URL} target="_blank" rel="noopener noreferrer">
+                Households Below Average Income
+              </a>
+              ; Office for Budget Responsibility,{" "}
+              <a href={OBR_EFO_URL} target="_blank" rel="noopener noreferrer">
+                {OBR_EFO_TITLE}
+              </a>
             </dd>
           </dl>
           <ul className="meta-notes">
             {notes.map((n) => (
-              <li key={n}>{fyDash(shorten(n))}</li>
+              <li key={n}>{fyDash(plainWords(shorten(n)))}</li>
             ))}
           </ul>
           {long.length > 0 && (
@@ -130,7 +114,7 @@ export default function AboutDataSection({ data }) {
               <summary>Technical notes</summary>
               <ul className="meta-notes">
                 {long.map((n) => (
-                  <li key={n}>{fyDash(n)}</li>
+                  <li key={n}>{fyDash(plainWords(n))}</li>
                 ))}
               </ul>
             </details>

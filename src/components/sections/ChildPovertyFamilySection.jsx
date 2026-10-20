@@ -9,6 +9,7 @@ import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
 import { PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
 import { fyDash, fyLabel, formatPct, formatPctAxis, headlineYear } from "../../lib/outlook";
+import { PeSource } from "../../lib/sources";
 
 const SPLITS = {
   children: {
@@ -80,6 +81,7 @@ export default function ChildPovertyFamilySection({ data }) {
           </p>
         )
       }
+      source={<PeSource />}
       exportOptions={{
         filename: `child-poverty-${split}-${measure}`,
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
@@ -116,3 +118,6 @@ export default function ChildPovertyFamilySection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+ChildPovertyFamilySection.requires = "child_poverty_by_family";

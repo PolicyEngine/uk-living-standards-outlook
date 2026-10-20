@@ -17,6 +17,7 @@ import {
   formatPoundsKAxis,
   headlineSpan,
 } from "../../lib/outlook";
+import { PeSource } from "../../lib/sources";
 
 const pctTick = (v) => `${formatOneDp(v).replace(/\.0$/, "")}%`;
 const signed = (v) => `${v > 0 ? "+" : ""}${formatOneDp(v)}%`;
@@ -61,6 +62,7 @@ export default function NonPensionerSplitSection({ data }) {
           </p>
         )
       }
+      source={<PeSource />}
       exportOptions={{
         filename: `non-pensioner-halves-${view}`,
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
@@ -91,3 +93,6 @@ export default function NonPensionerSplitSection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+NonPensionerSplitSection.requires = "income_by_decile";

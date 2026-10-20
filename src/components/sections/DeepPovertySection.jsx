@@ -9,6 +9,7 @@ import ChartCard from "../ChartCard";
 import BarSeriesChart from "../BarSeriesChart";
 import { PALETTE, niceAxis } from "../../lib/baseline";
 import { changeVerb, fyDash, fyLabel, fyStart, formatPct, formatPctAxis, headlineYear } from "../../lib/outlook";
+import { PeSource } from "../../lib/sources";
 
 export default function DeepPovertySection({ data }) {
   const deep = data.deep_poverty.projection;
@@ -51,6 +52,7 @@ export default function DeepPovertySection({ data }) {
           <strong>{verb || "stays flat"}</strong> from {fyDash(first.fy)}.
         </p>
       }
+      source={<PeSource />}
       exportOptions={{
         filename: "depth-of-poverty",
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "rect" })),
@@ -70,3 +72,6 @@ export default function DeepPovertySection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+DeepPovertySection.requires = "deep_poverty";

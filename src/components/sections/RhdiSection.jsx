@@ -9,6 +9,7 @@ import ChartCard from "../ChartCard";
 import LineSeriesChart from "../LineSeriesChart";
 import { PALETTE, rangeAxis } from "../../lib/baseline";
 import { changeVerb, fyDash, fyLabel, fyStart, formatPounds } from "../../lib/outlook";
+import { ObrSource } from "../../lib/sources";
 
 export default function RhdiSection({ data }) {
   const r = data.obr_rhdi;
@@ -45,13 +46,11 @@ export default function RhdiSection({ data }) {
             Real household disposable income per person <strong>{verb || "stays flat"}</strong> in the OBR
             forecast, from {formatPounds(a.value)} in {fyDash(a.year)} to{" "}
             {formatPounds(b.value)} by {fyDash(b.year)} (national accounts, not comparable in level with the
-            Baseline tab).{" "}
-            <a href={r.url} target="_blank" rel="noopener noreferrer">
-              Source
-            </a>
+            Baseline tab).
           </p>
         )
       }
+      source={<ObrSource />}
       exportOptions={{
         filename: "obr-rhdi-per-person",
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
@@ -70,3 +69,6 @@ export default function RhdiSection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+RhdiSection.requires = "obr_rhdi";

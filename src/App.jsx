@@ -15,7 +15,12 @@ function Row({ row, data }) {
   const foot = row.foot ? row.foot(data) : null;
   // blocks: each is [A, B] (two-up, rows shared so the cards line up) or [A]
   // (full width). A plain { section } row is one full-width block.
-  const blocks = row.blocks || [[row.section]];
+  // Cards whose outlook.json block is missing (e.g. the sample file) are
+  // skipped; a pair with one card left renders it full width.
+  const blocks = (row.blocks || [[row.section]])
+    .map((block) => block.filter((S) => !S.requires || data[S.requires]))
+    .filter((block) => block.length);
+  if (!blocks.length) return null;
   return (
     <section className={`dashboard-section${row.heading || row.spaced ? " has-heading" : ""}`}>
       {row.heading && <h2 className="section-heading">{row.heading}</h2>}

@@ -8,6 +8,7 @@ import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
 import { EMPTY, VIEW_OPTIONS, legendItemsFor, lineSeries, mergeSeries, rangeAxis, visibleRows } from "../../lib/baseline";
 import { fyDash, fyLabel, headlineSpan } from "../../lib/outlook";
+import { HbaiSource } from "../../lib/sources";
 
 const FORMAT = {
   gini: (v) => v.toFixed(3),
@@ -56,9 +57,10 @@ export default function InequalitySection({ data }) {
   return (
     <ChartCard
       title="Inequality"
-      description="Gini: 0 is perfect equality, 1 is one household holding all income. 90:10: income at the 90th percentile over income at the 10th. The model's Gini is about 3 points below HBAI's in 2024–25. HBAI outturn: Table 1.2b."
+      description="Gini: 0 is perfect equality, 1 is one household holding all income. 90:10: income at the 90th percentile over income at the 10th. The model's Gini is about 3 points below official statistics in 2024–25. Official figures: Households Below Average Income, Table 1.2b."
       summary={summary}
       footer={<p className="chart-note">Read the projection as a change, not a level.</p>}
+      source={<HbaiSource />}
       exportOptions={rows.length ? { filename: `inequality-${measure}-${basis}`, legendItems: legendItemsFor(viewMode, !noOutturn) } : null}
       controls={
         <>
@@ -99,3 +101,6 @@ export default function InequalitySection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+InequalitySection.requires = "inequality";

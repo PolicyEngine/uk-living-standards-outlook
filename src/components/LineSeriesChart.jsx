@@ -14,6 +14,8 @@ import { yearAxisProps } from "../utils/yearAxis";
 
 /** Below this width the legend drops the logo gutter and sits above the logo. */
 const NARROW = 520;
+/** Legend block height on wide charts: two 12px lines plus padding. */
+export const LEGEND_HEIGHT = 56;
 
 /**
  * Line chart in the AB26 house style (EmploymentIncomeChart /
@@ -101,6 +103,9 @@ export default function LineSeriesChart({
           <Legend
             verticalAlign="bottom"
             align="center"
+            // Reserve two legend lines on wide charts so paired cards keep
+            // their x axes level whether a legend wraps or not.
+            height={narrow ? undefined : LEGEND_HEIGHT}
             iconType="line"
             iconSize={18}
             wrapperStyle={
@@ -115,7 +120,7 @@ export default function LineSeriesChart({
               payload: { strokeDasharray: s.dashed ? "8 4" : "0" },
             }))}
             formatter={(value) => (
-              <span style={{ fontSize: "13px", fontWeight: 500, color: "#374151" }}>{value}</span>
+              <span style={{ fontSize: "12px", fontWeight: 500, color: "#374151" }}>{value}</span>
             )}
           />
           {series.map((s) => (

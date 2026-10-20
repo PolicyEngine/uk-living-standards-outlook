@@ -36,6 +36,7 @@ export default function ChartCard({
   exportOptions,
   children,
   footer,
+  source,
   className = "",
 }) {
   const chartRef = useRef(null);
@@ -90,7 +91,10 @@ export default function ChartCard({
       <div ref={chartRef} className="chart-area">
         {children}
       </div>
-      <div className="chart-slot chart-slot-footer">{footer}</div>
+      <div className="chart-slot chart-slot-footer">
+        {footer}
+        {source && <p className="chart-source">{source}</p>}
+      </div>
     </div>
   );
 }

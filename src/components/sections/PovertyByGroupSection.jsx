@@ -8,6 +8,7 @@ import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import { PALETTE, niceAxis } from "../../lib/baseline";
 import { changeVerb, fyDash, formatPct, formatPounds, headlineYear } from "../../lib/outlook";
+import { PeSource } from "../../lib/sources";
 
 const MEASURES = {
   relative_ahc: {
@@ -75,7 +76,7 @@ export default function PovertyByGroupSection({ data }) {
   return (
     <ChartCard
       title={`By ${b.label.toLowerCase()}`}
-      description={`Relative poverty: share of people below 60% of current median income after housing costs. Median income is per person, adjusted for household size, in ${fyDash(data.meta.real_price_base)} prices. Family type is at benefit-unit level; a pensioner family has someone at or above State Pension age. Disability means someone in the family receives DLA, PIP or similar, narrower than HBAI's self-reported definition, and disability benefits count as income. Regions are single-year model estimates (HBAI uses three-year averages).`}
+      description={`Relative poverty: share of people below 60% of current median income after housing costs. Median income is per person, adjusted for household size, in ${fyDash(data.meta.real_price_base)} prices. Family type is at benefit-unit level; a pensioner family has someone at or above State Pension age. Disability means someone in the family receives DLA, PIP or similar, narrower than the self-reported definition in official statistics, and disability benefits count as income. Regions are single-year model estimates (official statistics use three-year averages).`}
       summary={
         top && (
           <p className="chart-summary">
@@ -91,6 +92,7 @@ export default function PovertyByGroupSection({ data }) {
           </p>
         )
       }
+      source={<PeSource />}
       controls={
         <>
           <Dropdown
@@ -154,3 +156,6 @@ export default function PovertyByGroupSection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+PovertyByGroupSection.requires = "poverty_by_group";

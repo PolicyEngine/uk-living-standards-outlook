@@ -19,6 +19,7 @@ import {
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
+import { HbaiSource } from "../../lib/sources";
 
 const GROUP_SUFFIX = {
   all: "",
@@ -99,6 +100,7 @@ export default function PovertySection({ data }) {
       title="Poverty rate"
       description={description}
       summary={summary}
+      source={<HbaiSource />}
       exportOptions={visibleEmpty ? null : { filename: `poverty-${measure}-${group}`, legendItems: legendItemsFor(viewMode, !noOutturn) }}
       controls={
         <>

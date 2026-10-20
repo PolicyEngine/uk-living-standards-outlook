@@ -9,6 +9,7 @@ import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
 import { PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
 import { formatOneDp, fyDash, fyLabel, formatPct, formatPctAxis, headlineYear } from "../../lib/outlook";
+import { PeSource, plainWords } from "../../lib/sources";
 
 export default function TwoChildLimitSection({ data }) {
   const cp = data.child_poverty_by_family;
@@ -51,6 +52,7 @@ export default function TwoChildLimitSection({ data }) {
         "Current law removes the two-child limit in Universal Credit and Child Tax Credit from April 2026; the comparison keeps it.",
         ...(cp.notes || []).filter((n) => !/^Relative AHC child poverty falls|discontinuity|UC health element/i.test(n)),
       ]
+        .map(plainWords)
         .join(" ")
         .replace(/(\d{4})-(\d{2})(?!\d)/g, "$1–$2")}
       summary={
@@ -71,6 +73,7 @@ export default function TwoChildLimitSection({ data }) {
           </p>
         )
       }
+      source={<PeSource />}
       exportOptions={{
         filename: `two-child-limit-${measure}`,
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
@@ -92,3 +95,6 @@ export default function TwoChildLimitSection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+TwoChildLimitSection.requires = "child_poverty_by_family";

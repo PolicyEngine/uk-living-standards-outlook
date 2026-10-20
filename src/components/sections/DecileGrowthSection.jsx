@@ -9,6 +9,7 @@ import Dropdown from "../Dropdown";
 import BarSeriesChart from "../BarSeriesChart";
 import { PALETTE, rangeAxis } from "../../lib/baseline";
 import { changeVerb, fyDash, formatOneDp, headlineYear } from "../../lib/outlook";
+import { PeSource } from "../../lib/sources";
 
 const pctTick = (v) => `${formatOneDp(v).replace(/\.0$/, "")}%`;
 const signed = (v) => `${v > 0 ? "+" : ""}${formatOneDp(v)}%`;
@@ -38,6 +39,7 @@ export default function DecileGrowthSection({ data }) {
           tenth <strong>{say(bottom)}</strong>; in the highest-income tenth it <strong>{say(top)}</strong>.
         </p>
       }
+      source={<PeSource />}
       exportOptions={{
         filename: `income-growth-by-decile-${basis}`,
         legendItems: [
@@ -74,3 +76,6 @@ export default function DecileGrowthSection({ data }) {
     </ChartCard>
   );
 }
+
+// Rendered only when outlook.json has this block (App.jsx Row).
+DecileGrowthSection.requires = "income_by_decile";

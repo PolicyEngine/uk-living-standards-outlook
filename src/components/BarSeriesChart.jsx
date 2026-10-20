@@ -2,7 +2,7 @@ import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Refe
 import { PolicyEngineLogo } from "../utils/chartLogo";
 import useElementWidth from "../hooks/useElementWidth";
 import { yearAxisProps } from "../utils/yearAxis";
-import { NARROW } from "./LineSeriesChart";
+import { LEGEND_HEIGHT, NARROW } from "./LineSeriesChart";
 
 /**
  * Bar chart in the same house style as LineSeriesChart (grid, ticks, axis
@@ -92,6 +92,9 @@ export default function BarSeriesChart({
             <Legend
               verticalAlign="bottom"
               align="center"
+              // Reserve two legend lines on wide charts so paired cards keep
+              // their x axes level whether a legend wraps or not.
+              height={narrow ? undefined : LEGEND_HEIGHT}
               iconType="square"
               iconSize={12}
               payload={legendPayload}
@@ -101,7 +104,7 @@ export default function BarSeriesChart({
                   : { paddingTop: "15px", paddingRight: "100px" }
               }
               formatter={(value) => (
-                <span style={{ fontSize: "13px", fontWeight: 500, color: "#374151" }}>{value}</span>
+                <span style={{ fontSize: "12px", fontWeight: 500, color: "#374151" }}>{value}</span>
               )}
             />
           )}
