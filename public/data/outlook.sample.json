@@ -1,0 +1,1670 @@
+{
+  "meta": {
+    "generated_at": "2026-01-01T00:00:00Z",
+    "policyengine": "SAMPLE",
+    "policyengine_uk": "SAMPLE",
+    "dataset": {
+      "name": "SAMPLE placeholder (not model output)",
+      "tag": "SAMPLE",
+      "sha256": "SAMPLE"
+    },
+    "units": {
+      "mean_income": "\u00a3 per household per year",
+      "median_income": "\u00a3 per household per year",
+      "mean_equivalised_income": "\u00a3 per week, equivalised",
+      "median_equivalised_income": "\u00a3 per week, equivalised"
+    },
+    "real_price_base": "2025-26",
+    "deflator": "SAMPLE deflator",
+    "outturn_source": "SAMPLE placeholder; real outturn will come from HBAI https://www.gov.uk/government/collections/households-below-average-income-hbai--2",
+    "notes": [
+      "SAMPLE DATA: every number in this file is a straight-line placeholder written by the frontend, not PolicyEngine output.",
+      "Unvalidated under this engine."
+    ]
+  },
+  "living_standards": {
+    "metrics": {
+      "mean_income": "Mean income",
+      "median_income": "Median income",
+      "mean_equivalised_income": "Mean equivalised income",
+      "median_equivalised_income": "Median equivalised income"
+    },
+    "outturn": {
+      "mean_income": [],
+      "median_income": [],
+      "mean_equivalised_income": [
+        {
+          "year": "2016-17",
+          "nominal": 600,
+          "real": 760
+        },
+        {
+          "year": "2017-18",
+          "nominal": 620,
+          "real": 765
+        },
+        {
+          "year": "2018-19",
+          "nominal": 640,
+          "real": 770
+        },
+        {
+          "year": "2019-20",
+          "nominal": 660,
+          "real": 775
+        },
+        {
+          "year": "2020-21",
+          "nominal": 680,
+          "real": 780
+        },
+        {
+          "year": "2021-22",
+          "nominal": 700,
+          "real": 785
+        },
+        {
+          "year": "2022-23",
+          "nominal": 720,
+          "real": 790
+        },
+        {
+          "year": "2023-24",
+          "nominal": 740,
+          "real": 795
+        },
+        {
+          "year": "2024-25",
+          "nominal": 760,
+          "real": 800
+        }
+      ],
+      "median_equivalised_income": [
+        {
+          "year": "2016-17",
+          "nominal": 500,
+          "real": 640
+        },
+        {
+          "year": "2017-18",
+          "nominal": 515,
+          "real": 644
+        },
+        {
+          "year": "2018-19",
+          "nominal": 530,
+          "real": 648
+        },
+        {
+          "year": "2019-20",
+          "nominal": 545,
+          "real": 652
+        },
+        {
+          "year": "2020-21",
+          "nominal": 560,
+          "real": 656
+        },
+        {
+          "year": "2021-22",
+          "nominal": 575,
+          "real": 660
+        },
+        {
+          "year": "2022-23",
+          "nominal": 590,
+          "real": 664
+        },
+        {
+          "year": "2023-24",
+          "nominal": 605,
+          "real": 668
+        },
+        {
+          "year": "2024-25",
+          "nominal": 620,
+          "real": 672
+        }
+      ]
+    },
+    "projection": {
+      "mean_income": [
+        {
+          "year": "2024-25",
+          "nominal": 40000,
+          "real": 40000
+        },
+        {
+          "year": "2025-26",
+          "nominal": 41500,
+          "real": 40500
+        },
+        {
+          "year": "2026-27",
+          "nominal": 43000,
+          "real": 41000
+        },
+        {
+          "year": "2027-28",
+          "nominal": 44500,
+          "real": 41500
+        },
+        {
+          "year": "2028-29",
+          "nominal": 46000,
+          "real": 42000
+        },
+        {
+          "year": "2029-30",
+          "nominal": 47500,
+          "real": 42500
+        },
+        {
+          "year": "2030-31",
+          "nominal": 49000,
+          "real": 43000
+        }
+      ],
+      "median_income": [
+        {
+          "year": "2024-25",
+          "nominal": 33000,
+          "real": 33600
+        },
+        {
+          "year": "2025-26",
+          "nominal": 34200,
+          "real": 34000
+        },
+        {
+          "year": "2026-27",
+          "nominal": 35400,
+          "real": 34400
+        },
+        {
+          "year": "2027-28",
+          "nominal": 36600,
+          "real": 34800
+        },
+        {
+          "year": "2028-29",
+          "nominal": 37800,
+          "real": 35200
+        },
+        {
+          "year": "2029-30",
+          "nominal": 39000,
+          "real": 35600
+        },
+        {
+          "year": "2030-31",
+          "nominal": 40200,
+          "real": 36000
+        }
+      ],
+      "mean_equivalised_income": [
+        {
+          "year": "2024-25",
+          "nominal": 780,
+          "real": 800
+        },
+        {
+          "year": "2025-26",
+          "nominal": 805,
+          "real": 808
+        },
+        {
+          "year": "2026-27",
+          "nominal": 830,
+          "real": 816
+        },
+        {
+          "year": "2027-28",
+          "nominal": 855,
+          "real": 824
+        },
+        {
+          "year": "2028-29",
+          "nominal": 880,
+          "real": 832
+        },
+        {
+          "year": "2029-30",
+          "nominal": 905,
+          "real": 840
+        },
+        {
+          "year": "2030-31",
+          "nominal": 930,
+          "real": 848
+        }
+      ],
+      "median_equivalised_income": [
+        {
+          "year": "2024-25",
+          "nominal": 640,
+          "real": 660
+        },
+        {
+          "year": "2025-26",
+          "nominal": 660,
+          "real": 666
+        },
+        {
+          "year": "2026-27",
+          "nominal": 680,
+          "real": 672
+        },
+        {
+          "year": "2027-28",
+          "nominal": 700,
+          "real": 678
+        },
+        {
+          "year": "2028-29",
+          "nominal": 720,
+          "real": 684
+        },
+        {
+          "year": "2029-30",
+          "nominal": 740,
+          "real": 690
+        },
+        {
+          "year": "2030-31",
+          "nominal": 760,
+          "real": 696
+        }
+      ]
+    }
+  },
+  "poverty": {
+    "measures": {
+      "absolute_bhc": "Absolute (BHC)",
+      "absolute_ahc": "Absolute (AHC)",
+      "relative_bhc": "Relative (BHC)",
+      "relative_ahc": "Relative (AHC)"
+    },
+    "groups": {
+      "all": "All people",
+      "children": "Children",
+      "working_age": "Working-age adults",
+      "pensioners": "Pensioners"
+    },
+    "outturn": {
+      "absolute_bhc": {
+        "all": [
+          {
+            "year": "2016-17",
+            "rate": 0.17
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.1675
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.165
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.1625
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.16
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.1575
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.155
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.1525
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.15
+          }
+        ],
+        "children": [
+          {
+            "year": "2016-17",
+            "rate": 0.22
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2175
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.215
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2125
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.21
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2075
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.205
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2025
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.2
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2016-17",
+            "rate": 0.16
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.1575
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.155
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.1525
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.15
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.1475
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.145
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.1425
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.14
+          }
+        ]
+      },
+      "absolute_ahc": {
+        "all": [
+          {
+            "year": "2016-17",
+            "rate": 0.22
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2175
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.215
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2125
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.21
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2075
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.205
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2025
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.2
+          }
+        ],
+        "children": [
+          {
+            "year": "2016-17",
+            "rate": 0.27
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2675
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.265
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2625
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.26
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2575
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.255
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2525
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.25
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2016-17",
+            "rate": 0.21
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2075
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.205
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2025
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.2
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.1975
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.195
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.1925
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.19
+          }
+        ]
+      },
+      "relative_bhc": {
+        "all": [
+          {
+            "year": "2016-17",
+            "rate": 0.19
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.1875
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.185
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.1825
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.18
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.1775
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.175
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.1725
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.17
+          }
+        ],
+        "children": [
+          {
+            "year": "2016-17",
+            "rate": 0.24
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2375
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.235
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2325
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.23
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2275
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.225
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2225
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.22
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2016-17",
+            "rate": 0.18
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.1775
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.175
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.1725
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.17
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.1675
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.165
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.1625
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.16
+          }
+        ]
+      },
+      "relative_ahc": {
+        "all": [
+          {
+            "year": "2016-17",
+            "rate": 0.24
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2375
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.235
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2325
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.23
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2275
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.225
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2225
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.22
+          }
+        ],
+        "children": [
+          {
+            "year": "2016-17",
+            "rate": 0.29
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2875
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.285
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2825
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.28
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2775
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.275
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2725
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.27
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2016-17",
+            "rate": 0.23
+          },
+          {
+            "year": "2017-18",
+            "rate": 0.2275
+          },
+          {
+            "year": "2018-19",
+            "rate": 0.225
+          },
+          {
+            "year": "2019-20",
+            "rate": 0.2225
+          },
+          {
+            "year": "2020-21",
+            "rate": 0.22
+          },
+          {
+            "year": "2021-22",
+            "rate": 0.2175
+          },
+          {
+            "year": "2022-23",
+            "rate": 0.215
+          },
+          {
+            "year": "2023-24",
+            "rate": 0.2125
+          },
+          {
+            "year": "2024-25",
+            "rate": 0.21
+          }
+        ]
+      }
+    },
+    "projection": {
+      "absolute_bhc": {
+        "all": [
+          {
+            "year": "2024-25",
+            "rate": 0.15
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.148
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.146
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.144
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.142
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.14
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.138
+          }
+        ],
+        "children": [
+          {
+            "year": "2024-25",
+            "rate": 0.2
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.198
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.196
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.194
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.192
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.19
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.188
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2024-25",
+            "rate": 0.14
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.138
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.136
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.134
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.132
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.13
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.128
+          }
+        ],
+        "pensioners": [
+          {
+            "year": "2024-25",
+            "rate": 0.12
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.118
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.116
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.114
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.112
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.11
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.108
+          }
+        ]
+      },
+      "absolute_ahc": {
+        "all": [
+          {
+            "year": "2024-25",
+            "rate": 0.2
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.198
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.196
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.194
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.192
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.19
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.188
+          }
+        ],
+        "children": [
+          {
+            "year": "2024-25",
+            "rate": 0.25
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.248
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.246
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.244
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.242
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.24
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.238
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2024-25",
+            "rate": 0.19
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.188
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.186
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.184
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.182
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.18
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.178
+          }
+        ],
+        "pensioners": [
+          {
+            "year": "2024-25",
+            "rate": 0.17
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.168
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.166
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.164
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.162
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.16
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.158
+          }
+        ]
+      },
+      "relative_bhc": {
+        "all": [
+          {
+            "year": "2024-25",
+            "rate": 0.17
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.168
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.166
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.164
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.162
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.16
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.158
+          }
+        ],
+        "children": [
+          {
+            "year": "2024-25",
+            "rate": 0.22
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.218
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.216
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.214
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.212
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.21
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.208
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2024-25",
+            "rate": 0.16
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.158
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.156
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.154
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.152
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.15
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.148
+          }
+        ],
+        "pensioners": [
+          {
+            "year": "2024-25",
+            "rate": 0.14
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.138
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.136
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.134
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.132
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.13
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.128
+          }
+        ]
+      },
+      "relative_ahc": {
+        "all": [
+          {
+            "year": "2024-25",
+            "rate": 0.22
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.218
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.216
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.214
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.212
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.21
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.208
+          }
+        ],
+        "children": [
+          {
+            "year": "2024-25",
+            "rate": 0.27
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.268
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.266
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.264
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.262
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.26
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.258
+          }
+        ],
+        "working_age": [
+          {
+            "year": "2024-25",
+            "rate": 0.21
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.208
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.206
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.204
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.202
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.2
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.198
+          }
+        ],
+        "pensioners": [
+          {
+            "year": "2024-25",
+            "rate": 0.19
+          },
+          {
+            "year": "2025-26",
+            "rate": 0.188
+          },
+          {
+            "year": "2026-27",
+            "rate": 0.186
+          },
+          {
+            "year": "2027-28",
+            "rate": 0.184
+          },
+          {
+            "year": "2028-29",
+            "rate": 0.182
+          },
+          {
+            "year": "2029-30",
+            "rate": 0.18
+          },
+          {
+            "year": "2030-31",
+            "rate": 0.178
+          }
+        ]
+      }
+    }
+  },
+  "forecast": {
+    "pre_label": "OBR March 2026 (pre-Budget)",
+    "post_label": "Budget forecast",
+    "post_published": false,
+    "headline": [
+      "cpi",
+      "rpi",
+      "earnings"
+    ],
+    "sections": [
+      {
+        "title": "Inflation and price indices",
+        "series": [
+          {
+            "key": "cpi",
+            "label": "CPI inflation",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.035
+              },
+              {
+                "year": "2026",
+                "value": 0.032
+              },
+              {
+                "year": "2027",
+                "value": 0.029
+              },
+              {
+                "year": "2028",
+                "value": 0.026
+              },
+              {
+                "year": "2029",
+                "value": 0.023
+              },
+              {
+                "year": "2030",
+                "value": 0.02
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.035
+              },
+              {
+                "year": "2026",
+                "value": 0.032
+              },
+              {
+                "year": "2027",
+                "value": 0.029
+              },
+              {
+                "year": "2028",
+                "value": 0.026
+              },
+              {
+                "year": "2029",
+                "value": 0.023
+              },
+              {
+                "year": "2030",
+                "value": 0.02
+              }
+            ]
+          },
+          {
+            "key": "cpih",
+            "label": "CPIH inflation",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.036
+              },
+              {
+                "year": "2026",
+                "value": 0.033
+              },
+              {
+                "year": "2027",
+                "value": 0.03
+              },
+              {
+                "year": "2028",
+                "value": 0.027
+              },
+              {
+                "year": "2029",
+                "value": 0.024
+              },
+              {
+                "year": "2030",
+                "value": 0.021
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.036
+              },
+              {
+                "year": "2026",
+                "value": 0.033
+              },
+              {
+                "year": "2027",
+                "value": 0.03
+              },
+              {
+                "year": "2028",
+                "value": 0.027
+              },
+              {
+                "year": "2029",
+                "value": 0.024
+              },
+              {
+                "year": "2030",
+                "value": 0.021
+              }
+            ]
+          },
+          {
+            "key": "rpi",
+            "label": "RPI inflation",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.045
+              },
+              {
+                "year": "2026",
+                "value": 0.041
+              },
+              {
+                "year": "2027",
+                "value": 0.037
+              },
+              {
+                "year": "2028",
+                "value": 0.033
+              },
+              {
+                "year": "2029",
+                "value": 0.029
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.045
+              },
+              {
+                "year": "2026",
+                "value": 0.041
+              },
+              {
+                "year": "2027",
+                "value": 0.037
+              },
+              {
+                "year": "2028",
+                "value": 0.033
+              },
+              {
+                "year": "2029",
+                "value": 0.029
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Income and earnings",
+        "series": [
+          {
+            "key": "earnings",
+            "label": "Earnings growth",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.045
+              },
+              {
+                "year": "2026",
+                "value": 0.041
+              },
+              {
+                "year": "2027",
+                "value": 0.037
+              },
+              {
+                "year": "2028",
+                "value": 0.033
+              },
+              {
+                "year": "2029",
+                "value": 0.029
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.045
+              },
+              {
+                "year": "2026",
+                "value": 0.041
+              },
+              {
+                "year": "2027",
+                "value": 0.037
+              },
+              {
+                "year": "2028",
+                "value": 0.033
+              },
+              {
+                "year": "2029",
+                "value": 0.029
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ]
+          },
+          {
+            "key": "non_labour_income",
+            "label": "Non-labour income growth",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.04
+              },
+              {
+                "year": "2026",
+                "value": 0.037
+              },
+              {
+                "year": "2027",
+                "value": 0.034
+              },
+              {
+                "year": "2028",
+                "value": 0.031
+              },
+              {
+                "year": "2029",
+                "value": 0.028
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.04
+              },
+              {
+                "year": "2026",
+                "value": 0.037
+              },
+              {
+                "year": "2027",
+                "value": 0.034
+              },
+              {
+                "year": "2028",
+                "value": 0.031
+              },
+              {
+                "year": "2029",
+                "value": 0.028
+              },
+              {
+                "year": "2030",
+                "value": 0.025
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Housing and rent",
+        "series": [
+          {
+            "key": "house_prices",
+            "label": "House price growth",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.02
+              },
+              {
+                "year": "2026",
+                "value": 0.022
+              },
+              {
+                "year": "2027",
+                "value": 0.024
+              },
+              {
+                "year": "2028",
+                "value": 0.026
+              },
+              {
+                "year": "2029",
+                "value": 0.028
+              },
+              {
+                "year": "2030",
+                "value": 0.03
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.02
+              },
+              {
+                "year": "2026",
+                "value": 0.022
+              },
+              {
+                "year": "2027",
+                "value": 0.024
+              },
+              {
+                "year": "2028",
+                "value": 0.026
+              },
+              {
+                "year": "2029",
+                "value": 0.028
+              },
+              {
+                "year": "2030",
+                "value": 0.03
+              }
+            ]
+          },
+          {
+            "key": "rent",
+            "label": "Private rent growth",
+            "pre": [
+              {
+                "year": "2025",
+                "value": 0.06
+              },
+              {
+                "year": "2026",
+                "value": 0.054
+              },
+              {
+                "year": "2027",
+                "value": 0.048
+              },
+              {
+                "year": "2028",
+                "value": 0.042
+              },
+              {
+                "year": "2029",
+                "value": 0.036
+              },
+              {
+                "year": "2030",
+                "value": 0.03
+              }
+            ],
+            "post": [
+              {
+                "year": "2025",
+                "value": 0.06
+              },
+              {
+                "year": "2026",
+                "value": 0.054
+              },
+              {
+                "year": "2027",
+                "value": 0.048
+              },
+              {
+                "year": "2028",
+                "value": 0.042
+              },
+              {
+                "year": "2029",
+                "value": 0.036
+              },
+              {
+                "year": "2030",
+                "value": 0.03
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
