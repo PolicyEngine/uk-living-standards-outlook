@@ -3,8 +3,27 @@ import { CHART_LOGO } from "../utils/chartLogo";
 import { exportChartAsSvg } from "../utils/exportChartAsSvg";
 import "./ChartExport.css";
 
+/** Small ⓘ next to a card title; the definition shows on hover or focus. */
+export function InfoTip({ text }) {
+  if (!text) return null;
+  return (
+    <span className="info-tip" tabIndex={0} aria-label={text}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+      <span className="info-tip-bubble" role="tooltip">
+        {text}
+      </span>
+    </span>
+  );
+}
+
 /**
- * Card with AB26's chart header (h2, description, SVG export button).
+ * Card with AB26's chart header (h2, SVG export button). The description is
+ * a definition shown in an ⓘ tooltip next to the title; the card's one block
+ * of text is the dynamic summary sentence.
  *
  * exportOptions: { filename, legendItems } shows the export button; the SVG
  * is taken from the Recharts chart inside the card body.
@@ -33,10 +52,10 @@ export default function ChartCard({
   return (
     <div className={`chart-card ${className}`}>
       <div className="chart-header">
-        <div>
-          <h2>{title}</h2>
-          {description && <p className="chart-description">{description}</p>}
-        </div>
+        <h2>
+          {title}
+          <InfoTip text={description} />
+        </h2>
         {exportOptions && (
           <button
             className="export-button"

@@ -47,6 +47,10 @@
   color: #4b5563;
 }
 
+.chart-summary a {
+  color: var(--pe-teal-700);
+}
+
 .chart-summary strong {
   color: #0f766e;
   font-weight: 600;
@@ -232,9 +236,16 @@
   }
 }
 
-/* Sections stack with the 24px rhythm of the AB26 results column. */
+/* Section rhythm: 24px between plain rows; a heading gets 48px above it and
+   16px below, so it reads with the cards under it. Cards in a grid are 24px
+   apart both ways. */
 .dashboard-section + .dashboard-section {
   margin-top: 24px;
+}
+
+.dashboard-section + .dashboard-section.has-heading,
+.series-block + .series-block {
+  margin-top: 48px;
 }
 
 .section-heading {
@@ -242,6 +253,173 @@
   font-weight: 600;
   color: #374151;
   margin: 0 0 16px 0;
+}
+
+.section-block + .section-block {
+  margin-top: 24px;
+}
+
+.section-foot {
+  margin: 12px 0 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--pe-gray-500);
+}
+
+.section-lead {
+  margin: -8px 0 16px 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--pe-gray-500);
+}
+
+.section-notes {
+  margin: 12px 0 0 0;
+  padding-left: 18px;
+  list-style: disc;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--pe-gray-500);
+}
+
+.section-notes li + li {
+  margin-top: 2px;
+}
+
+/* Definition tooltip next to a card title. */
+.chart-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-card .chart-header {
+  position: relative;
+}
+
+/* The bubble is placed against the card header, so it never runs past the
+   card (or the viewport on phones). */
+.info-tip {
+  position: static;
+  display: inline-flex;
+  color: #9ca3af;
+  cursor: help;
+  outline: none;
+}
+
+.info-tip:hover,
+.info-tip:focus-visible {
+  color: #319795;
+}
+
+.info-tip-bubble {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 50;
+  display: none;
+  width: max-content;
+  max-width: min(360px, 100%);
+  padding: 8px 10px;
+  background: #1f2937;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.45;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-tip:hover .info-tip-bubble,
+.info-tip:focus .info-tip-bubble {
+  display: block;
+}
+
+/* Dot plot (poverty by group): start and end year per group. */
+.dot-plot {
+  margin: 8px 0 4px;
+  font-size: 0.8125rem;
+  color: #374151;
+}
+
+.dot-plot-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  color: #4b5563;
+}
+
+.dot-plot-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+.dot-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 240px) 1fr 64px;
+  align-items: center;
+  gap: 12px;
+  min-height: 30px;
+  border-bottom: 1px dashed #eef0f2;
+}
+
+.dot-label {
+  line-height: 1.3;
+}
+
+.dot-track {
+  position: relative;
+  height: 20px;
+  margin: 0 8px;
+}
+
+.dot-link {
+  position: absolute;
+  top: 9px;
+  height: 2px;
+  background: #cbd5e1;
+}
+
+.dot {
+  position: absolute;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.dot.from {
+  background: #9ca3af;
+}
+
+.dot.to {
+  background: #319795;
+}
+
+.dot-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.dot-axis {
+  border-bottom: none;
+}
+
+.dot-tick {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #666;
+  white-space: nowrap;
 }
 
 .section-toolbar {
@@ -398,7 +576,7 @@
 }
 
 .site-footer-inner {
-  max-width: 1400px;
+  max-width: 1280px; /* 1200px content + 40px gutters */
   margin: 0 auto;
   padding: 20px 40px;
   display: flex;
@@ -449,6 +627,24 @@
 }
 
 @media (max-width: 768px) {
+  .dot-row {
+    grid-template-columns: 1fr 56px;
+    row-gap: 2px;
+    padding: 4px 0;
+  }
+
+  .dot-label {
+    grid-column: 1 / -1;
+  }
+
+  .dot-track {
+    margin: 0 8px 0 6px;
+  }
+
+  .dot-axis .dot-label {
+    display: none;
+  }
+
   .site-footer-inner {
     flex-direction: column;
     align-items: flex-start;

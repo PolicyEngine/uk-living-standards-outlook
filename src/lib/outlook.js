@@ -72,3 +72,24 @@ export function splitSource(text) {
   const label = String(text).replace(m[0], "").replace(/[\s:;,(–-]+$/, "").trim();
   return { label: label || url, url };
 }
+
+/** End year for headline comparisons (meta.headline_end_year, e.g. "2029-30"). */
+export const headlineYear = (data) => data?.meta?.headline_end_year || null;
+
+/** First row and the headline-year row (or the last row) of a projection. */
+export function headlineSpan(rows, data) {
+  if (!rows || rows.length < 2) return null;
+  const end = headlineYear(data);
+  const last = (end && rows.find((r) => r.year === end)) || rows[rows.length - 1];
+  return [rows[0], last];
+}
+
+/** "rises 10.0%" / "falls 1.3pp" / null when the change rounds to zero. */
+export function changeVerb(delta, unit) {
+  if (delta == null || Math.abs(delta) < 0.05) return null;
+  return `${delta > 0 ? "rises" : "falls"} ${formatOneDp(Math.abs(delta))}${unit}`;
+}
+
+/** Section notes minus the 2030-31 UC step, which meta.headline_end_year_note states once. */
+export const sectionNotes = (notes) =>
+  (notes || []).filter((n) => !/baseline discontinuity|UC health element protection/i.test(n));

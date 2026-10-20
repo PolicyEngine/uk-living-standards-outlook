@@ -95,3 +95,54 @@ export function niceAxis(dataMax) {
   const ticks = Array.from({ length: n + 1 }, (_, i) => Math.round(i * step * 1e6) / 1e6);
   return { domain: [0, ticks[n]], ticks };
 }
+
+/**
+ * Axis over [min, max] (optionally forced to include 0) with about five round
+ * steps. For series that do not start at zero (Gini, 90:10) or that go
+ * negative (growth). Returns { domain, ticks }.
+ */
+export function rangeAxis(values, { includeZero = false, pad = 0.05 } = {}) {
+  const vals = values.filter((v) => v != null && Number.isFinite(v));
+  if (!vals.length) return { domain: [0, 1], ticks: [0, 1] };
+  let lo = Math.min(...vals, ...(includeZero ? [0] : []));
+  let hi = Math.max(...vals, ...(includeZero ? [0] : []));
+  const span = hi - lo || Math.abs(hi) || 1;
+  if (!(includeZero && lo === 0)) lo -= span * pad;
+  if (!(includeZero && hi === 0)) hi += span * pad;
+  const raw = (hi - lo) / 5;
+  const mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+  const start = Math.floor(lo / step) * step;
+  const end = Math.ceil(hi / step) * step;
+  const ticks = [];
+  for (let v = start; v <= end + step * 1e-6; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return { domain: [ticks[0], ticks[ticks.length - 1]], ticks };
+}
+
+/** Rows of { year, value } -> chart rows keyed by fiscal-year start. */
+export const byYear = (rows, pick = (d) => d.value) =>
+  (rows || []).map((d) => ({ year: fyStart(d.year), value: pick(d) }));
+
+/** Join several { year, ... } series into one row per year: { year, [key]: value }. */
+export function joinSeries(entries) {
+  const out = {};
+  entries.forEach(([key, rows, pick]) =>
+    (rows || []).forEach((d) => {
+      const year = fyStart(d.year);
+      const v = pick(d);
+      if (v == null) return;
+      out[year] = { ...(out[year] || { year }), [key]: v };
+    }),
+  );
+  return Object.values(out).sort((a, b) => a.year - b.year);
+}
+
+/** Chart palette (teal ramp + neutral), as the published UK dashboards. */
+export const PALETTE = {
+  dark: "#285E61",
+  teal: "#319795",
+  light: "#81E6D9",
+  grey: "#9CA3AF",
+  amber: "#D97706",
+  red: "#B91C1C",
+};

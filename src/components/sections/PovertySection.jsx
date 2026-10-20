@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
-import { fyDash, fyLabel, formatOneDp, formatPct, formatPctAxis } from "../../lib/outlook";
+import { changeVerb, fyDash, fyLabel, formatPct, formatPctAxis, headlineSpan } from "../../lib/outlook";
 import {
   EMPTY,
   VIEW_OPTIONS,
@@ -20,11 +20,11 @@ import {
   visibleRows,
 } from "../../lib/baseline";
 
-const GROUP_PHRASE = {
+const GROUP_SUFFIX = {
   all: "",
-  children: "child ",
-  working_age: "working-age ",
-  pensioners: "pensioner ",
+  children: " among children",
+  working_age: " among working-age adults",
+  pensioners: " among pensioners",
 };
 
 export default function PovertySection({ data }) {
@@ -58,22 +58,29 @@ export default function PovertySection({ data }) {
   const groupName = poverty.groups[group].toLowerCase();
 
   let summary = null;
-  if (projection.length >= 2) {
-    const first = projection[0];
-    const last = projection[projection.length - 1];
-    if (first.rate != null && last.rate != null) {
-      const a = first.rate * 100;
-      const b = last.rate * 100;
-      const pp = b - a;
-      const dir = Math.abs(pp) < 0.05 ? null : pp > 0 ? "increase" : "decrease";
-      summary = (
-        <p className="chart-summary">
-          The {GROUP_PHRASE[group] ?? ""}poverty rate is forecast to{" "}
-          <strong>{dir ? `${dir} by ${formatOneDp(Math.abs(pp))}pp` : "stay flat"}</strong> from{" "}
-          {formatPct(a)} in {fyDash(first.year)} to {formatPct(b)} by {fyDash(last.year)}.
-        </p>
-      );
-    }
+  const span = headlineSpan(projection, data);
+  if (span && span[0].rate != null && span[1].rate != null) {
+    const [first, last] = span;
+    const a = first.rate * 100;
+    const b = last.rate * 100;
+    const verb = changeVerb(b - a, "pp");
+    const kind = isAbsolute ? "Absolute" : "Relative";
+    const line = isAbsolute ? "fixed real-terms line" : "60% of current median";
+    summary = (
+      <p className="chart-summary">
+        {kind} poverty{GROUP_SUFFIX[group] ?? ""} ({isAHC ? "AHC" : "BHC"}, {line}){" "}
+        {verb ? (
+          <>
+            <strong>{verb}</strong>, from {formatPct(a)} in {fyDash(first.year)} to {formatPct(b)} by{" "}
+            {fyDash(last.year)}.
+          </>
+        ) : (
+          <>
+            <strong>stays flat</strong> at {formatPct(a)} from {fyDash(first.year)} to {fyDash(last.year)}.
+          </>
+        )}
+      </p>
+    );
   }
 
   const noOutturn = outturn.length === 0;

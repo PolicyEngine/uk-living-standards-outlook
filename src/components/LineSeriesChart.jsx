@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { PolicyEngineLogo } from "../utils/chartLogo";
 import useElementWidth from "../hooks/useElementWidth";
+import { yearAxisProps } from "../utils/yearAxis";
 
 /** Below this width the legend drops the logo gutter and sits above the logo. */
 const NARROW = 520;
@@ -21,6 +22,8 @@ const NARROW = 520;
  *
  * series: [{ key, name, colour, dashed?, hidden? }]
  */
+export { NARROW };
+
 export default function LineSeriesChart({
   data,
   series,
@@ -37,16 +40,16 @@ export default function LineSeriesChart({
   const narrow = width > 0 && width < NARROW;
   const visible = series.filter((s) => !s.hidden);
 
-  // Year ticks: every year when there is room; every other year on narrow
-  // charts; rotated when a straight label would collide with its neighbour.
   const yAxisWidth = narrow ? 58 : 70;
   const margin = { top: 20, right: narrow ? 12 : 30, left: narrow ? 0 : 20, bottom: 10 };
-  const plotWidth = Math.max(0, width - yAxisWidth - margin.left - margin.right);
-  const perTick = data.length ? plotWidth / data.length : plotWidth;
-  const longest = Math.max(1, ...data.map((d) => String(xFormat(d[xKey])).length));
-  const labelWidth = longest * 6.6 + 10;
-  const tickInterval = narrow && data.length > 6 ? 1 : 0;
-  const rotate = perTick * (tickInterval + 1) < labelWidth;
+  const xAxis = yearAxisProps({
+    width,
+    count: data.length,
+    labels: data.map((d) => xFormat(d[xKey])),
+    yAxisWidth,
+    margin,
+    narrow,
+  });
 
   return (
     <div ref={ref} style={{ width: "100%", height }}>
@@ -61,12 +64,7 @@ export default function LineSeriesChart({
           <XAxis
             dataKey={xKey}
             tickFormatter={xFormat}
-            tick={{ fontSize: 11, fill: "#666" }}
-            interval={tickInterval}
-            angle={rotate ? -40 : 0}
-            textAnchor={rotate ? "end" : "middle"}
-            height={rotate ? Math.ceil(longest * 6.6 * 0.64 + 20) : 30}
-            tickMargin={rotate ? 4 : 6}
+            {...xAxis}
           />
           <YAxis
             domain={yDomain}
@@ -108,7 +106,7 @@ export default function LineSeriesChart({
             wrapperStyle={
               narrow
                 ? { paddingTop: "12px", paddingBottom: "26px" }
-                : { paddingTop: "15px", paddingRight: "140px" }
+                : { paddingTop: "15px", paddingRight: "100px" }
             }
             payload={visible.map((s) => ({
               value: s.name,

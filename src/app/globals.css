@@ -123,7 +123,7 @@ code {
 }
 
 .main-content {
-  max-width: 1400px;
+  max-width: 1280px; /* 1200px content + 40px gutters */
   margin: 0 auto;
   padding: 32px 40px;
   position: relative;
@@ -133,6 +133,13 @@ code {
 /* Title band: the full-width sticky teal band under the site nav on the
    published UK dashboards (uk-spring-statement-2026 / uk-childcare-100k-threshold
    globals.css .title-row). */
+/* Only the title band is frozen: the ui-kit site nav (PolicyEngineShell
+   renders it with an inline position:sticky) scrolls away normally. It keeps
+   its z-index so its menus still open above the band. */
+.min-h-screen.flex.flex-col > div:first-child[style*="sticky"] {
+  position: relative !important;
+}
+
 .title-row {
   position: sticky;
   top: 0;
@@ -145,7 +152,7 @@ code {
 }
 
 .title-row-inner {
-  max-width: 1400px;
+  max-width: 1280px; /* 1200px content + 40px gutters */
   margin: 0 auto;
   padding: 16px 40px;
   display: flex;
@@ -155,7 +162,7 @@ code {
 
 .title-row h1 {
   font-family: var(--pe-font-family);
-  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 700;
   color: white;
   margin: 0;
@@ -784,11 +791,11 @@ code {
   }
 
   .title-row-inner {
-    padding: 12px 16px;
+    padding: 10px 16px;
   }
 
   .title-row h1 {
-    font-size: 1.15rem;
+    font-size: 0.95rem;
   }
 
   .tab-navigation {

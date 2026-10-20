@@ -8,23 +8,35 @@
 
 import { useEffect, useState } from "react";
 import { TABS, FOOTER_ROWS } from "./components/sections";
-import { loadOutlook } from "./lib/outlook";
+import { fyDash, loadOutlook } from "./lib/outlook";
 
 function Row({ row, data }) {
-  if (row.grid) {
-    return (
-      <div className="charts-grid dashboard-section">
-        {row.grid.map((Section, i) => (
-          <Section key={i} data={data} />
-        ))}
-      </div>
-    );
-  }
-  const Section = row.section;
+  if (row.requires && !data[row.requires]) return null;
+  const foot = row.foot ? row.foot(data) : null;
+  // blocks: each is [A, B] (two-up, rows shared so the cards line up) or [A]
+  // (full width). A plain { section } row is one full-width block.
+  const blocks = row.blocks || [[row.section]];
   return (
-    <div className="dashboard-section">
-      <Section data={data} />
-    </div>
+    <section className={`dashboard-section${row.heading || row.spaced ? " has-heading" : ""}`}>
+      {row.heading && <h2 className="section-heading">{row.heading}</h2>}
+      {blocks.map((block, i) =>
+        block.length > 1 ? (
+          <div className="charts-grid section-block" key={i}>
+            {block.map((S, j) => (
+              <S key={j} data={data} />
+            ))}
+          </div>
+        ) : (
+          <div className="section-block" key={i}>
+            {(() => {
+              const S = block[0];
+              return <S data={data} />;
+            })()}
+          </div>
+        ),
+      )}
+      {foot && <p className="section-foot">{fyDash(foot)}</p>}
+    </section>
   );
 }
 
@@ -85,13 +97,7 @@ export default function App() {
           </div>
         )}
 
-        <p className="dashboard-intro">
-          {tab.intro} A demo of the{" "}
-          <a href="https://policyengine.org" target="_blank" rel="noopener noreferrer">
-            PolicyEngine
-          </a>{" "}
-          baseline for the Autumn Budget 2026.
-        </p>
+        <p className="dashboard-intro">{tab.intro(data)}</p>
 
         {loading && <p className="dashboard-loading">Loading outlook data…</p>}
         {error && <div className="page-notice warning">Could not load outlook data: {error}</div>}

@@ -1,13 +1,22 @@
 // Page layout registry. Each tab lists its rows in order; a row is either one
-// full-width section or { grid: [...] } for AB26's two-up .charts-grid. Every
-// section is a component in this folder that takes { data } (outlook.json).
+// full-width section or { blocks: [[A, B], [C]] }: two-up .charts-grid blocks
+// whose cards share rows so they line up, or full-width ones. A row may carry
+// a heading and one short line under it (foot). Every section is a component in
+// this folder that takes { data } (outlook.json).
 // To add a section: write the component here and add it to a tab's rows.
 
 import LivingStandardsSection from "./LivingStandardsSection";
 import PovertySection from "./PovertySection";
-import ForecastStatusSection from "./ForecastStatusSection";
+import DecileGrowthSection from "./DecileGrowthSection";
+import NonPensionerSplitSection from "./NonPensionerSplitSection";
+import ChildPovertyFamilySection from "./ChildPovertyFamilySection";
+import TwoChildLimitSection from "./TwoChildLimitSection";
+import InequalitySection from "./InequalitySection";
+import DeepPovertySection from "./DeepPovertySection";
+import PovertyByGroupSection from "./PovertyByGroupSection";
 import ForecastHeadlineSection from "./ForecastHeadlineSection";
 import ForecastSeriesSection from "./ForecastSeriesSection";
+import RhdiSection from "./RhdiSection";
 import AboutDataSection from "./AboutDataSection";
 
 export const TABS = [
@@ -22,21 +31,53 @@ export const TABS = [
         <path d="M8 17v-3" />
       </>
     ),
-    intro:
-      "Projections of UK household incomes and poverty under current legislated policy: the baseline against which Autumn Budget 2026 measures are scored.",
-    rows: [{ id: "living-poverty", grid: [LivingStandardsSection, PovertySection] }],
+    intro: () => (
+      <>
+        Projections of UK household incomes and poverty under current legislated policy: the baseline against which
+        Autumn Budget 2026 measures are scored. A demo of the{" "}
+        <a href="https://policyengine.org" target="_blank" rel="noopener noreferrer">
+          PolicyEngine
+        </a>{" "}
+        baseline for the Autumn Budget 2026.
+      </>
+    ),
+    rows: [
+      {
+        id: "incomes",
+        heading: "Incomes",
+        blocks: [
+          [LivingStandardsSection, DecileGrowthSection],
+          [NonPensionerSplitSection, InequalitySection],
+        ],
+        // Said once, under the first section whose headlines stop there.
+        foot: (d) => d.meta?.headline_end_year_note,
+      },
+      {
+        id: "poverty",
+        heading: "Poverty",
+        blocks: [[PovertySection, DeepPovertySection], [PovertyByGroupSection]],
+      },
+      {
+        id: "child-poverty",
+        heading: "Child poverty",
+        requires: "child_poverty_by_family",
+        blocks: [[ChildPovertyFamilySection, TwoChildLimitSection]],
+      },
+    ],
   },
   {
     id: "forecast",
     label: "Forecast changes",
     icon: <polyline points="3 17 9 11 13 15 21 7" />,
-    intro:
-      "The OBR economic forecast that drives the baseline, and how the Autumn Budget 2026 forecast revises it once published.",
+    intro: (data) =>
+      data?.forecast?.post_published
+        ? `The OBR economic forecast behind the baseline. This compares the ${data.forecast.pre_label.replace(/\s*\(pre-Budget\)/, "")} forecast with the Autumn Budget 2026 forecast.`
+        : "The OBR economic forecast behind the baseline. This shows the OBR March 2026 (pre-Budget) forecast; each chart will add the Autumn Budget 2026 forecast once the OBR publishes it on 28 October.",
     requires: "forecast",
     rows: [
-      { id: "status", section: ForecastStatusSection },
       { id: "headline", section: ForecastHeadlineSection },
-      { id: "series", section: ForecastSeriesSection },
+      { id: "series", spaced: true, section: ForecastSeriesSection },
+      { id: "rhdi", heading: "Household income", requires: "obr_rhdi", section: RhdiSection },
     ],
   },
 ];

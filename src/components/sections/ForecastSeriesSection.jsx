@@ -91,7 +91,7 @@ export default function ForecastSeriesSection({ data }) {
   return (
     <div>
       {forecast.sections.map((section, i) => (
-        <div key={section.title} className={i ? "dashboard-section" : undefined}>
+        <div key={section.title} className="series-block">
           <div className="section-toolbar">
             <h2 className="section-heading">{section.title}</h2>
             {i === 0 && (

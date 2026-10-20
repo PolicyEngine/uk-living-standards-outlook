@@ -8,9 +8,10 @@ import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
 import {
+  changeVerb,
   fyDash,
   fyLabel,
-  formatOneDp,
+  headlineSpan,
   formatPounds,
   formatPoundsKAxis,
   formatPoundsWholeAxis,
@@ -34,6 +35,11 @@ function unitFor(meta, metric) {
   if (!u) return null;
   if (typeof u === "string") return u;
   return u.label || u.unit || u.description || null;
+}
+
+/** "Median equivalised income (BHC)" -> "Median income after adjusting for household size (BHC)". */
+function plainMetric(label) {
+  return label.replace(/equivalised income/i, "income after adjusting for household size");
 }
 
 function describeMetric(id, label) {
@@ -81,38 +87,42 @@ export default function LivingStandardsSection({ data }) {
   const realSuffix = adjustment === "real" ? `, ${priceBase} prices` : "";
   const yFormat = yMax >= 10000 ? formatPoundsKAxis : formatPoundsWholeAxis;
 
+  // One sentence: what the measure is (a few words) and how it moves to the
+  // headline year. Units live in the y-axis label.
   let summary = null;
-  if (projection.length >= 2) {
-    const first = projection[0];
-    const last = projection[projection.length - 1];
+  const span = headlineSpan(projection, data);
+  if (span) {
+    const [first, last] = span;
     const a = first[adjustment];
     const b = last[adjustment];
     if (a != null && b != null && a !== 0) {
-      const pct = ((b - a) / a) * 100;
-      const dir = Math.abs(pct) < 0.05 ? null : pct > 0 ? "increase" : "decrease";
-      const qualifiers = [units, adjustment === "real" ? `${priceBase} prices` : null].filter(Boolean);
+      const verb = changeVerb(((b - a) / a) * 100, "%");
       summary = (
         <p className="chart-summary">
-          {label}
-          {qualifiers.length ? ` (${qualifiers.join(", ")})` : ""} is forecast to{" "}
-          <strong>{dir ? `${dir} by ${formatOneDp(Math.abs(pct))}%` : "stay flat"}</strong> from{" "}
-          {formatPounds(a)} in {fyDash(first.year)} to {formatPounds(b)} by {fyDash(last.year)}.
+          {plainMetric(label)}
+          {adjustment === "real" ? ` in ${priceBase} prices` : ""}{" "}
+          {verb ? (
+            <>
+              <strong>{verb}</strong>, from {formatPounds(a)} in {fyDash(first.year)} to {formatPounds(b)} by{" "}
+              {fyDash(last.year)}.
+            </>
+          ) : (
+            <>
+              <strong>stays flat</strong> at {formatPounds(a)} from {fyDash(first.year)} to {fyDash(last.year)}.
+            </>
+          )}
         </p>
       );
     }
   }
 
-  const description = `${describeMetric(metric, label)} ${
-    adjustment === "real" ? `Real values are in ${priceBase} prices. ` : ""
-  }${
-    noOutturn
-      ? "The dashed line shows the PolicyEngine projection."
-      : "The solid line shows official statistics; the dashed line shows the PolicyEngine projection."
+  const description = `${describeMetric(metric, label)}${
+    adjustment === "real" ? ` Real values are in ${priceBase} prices.` : ""
   }`;
 
   return (
     <ChartCard
-      title="Living standards"
+      title="Household income"
       description={description}
       summary={summary}
       exportOptions={chartData.length ? { filename: `living-standards-${metric}-${adjustment}`, legendItems: legendItemsFor(effectiveView, !noOutturn) } : null}
