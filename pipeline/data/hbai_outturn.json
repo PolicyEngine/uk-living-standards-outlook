@@ -4,7 +4,7 @@
     "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
     "file": "https://assets.publishing.service.gov.uk/media/69c28ffcb920af63be1c7767/summary-hbai-1994-95-2024-25-tables.ods",
     "file_sha256": "38586ace5e06ca0029f9b5345a6047c54143ee03c644a2c0553d77813ca27a21",
-    "tables": "1.2b (BHC block), 1.3a, 1.4a, 1.5a, 1.6a"
+    "tables": "1.2b (BHC and AHC blocks), 1.3a, 1.4a, 1.5a, 1.6a"
   },
   "poverty": {
     "relative_bhc": {
@@ -340,6 +340,120 @@
         "year": "2024-25",
         "weekly_2024_25_prices": 854.9794938417181
       }
+    ],
+    "median_equivalised_income_ahc": [
+      {
+        "year": "2021-22",
+        "weekly_2024_25_prices": 614.8349202347997
+      },
+      {
+        "year": "2022-23",
+        "weekly_2024_25_prices": 603.1052848787544
+      },
+      {
+        "year": "2023-24",
+        "weekly_2024_25_prices": 592.8481780609443
+      },
+      {
+        "year": "2024-25",
+        "weekly_2024_25_prices": 623.1440591131203
+      }
+    ],
+    "mean_equivalised_income_ahc": [
+      {
+        "year": "2021-22",
+        "weekly_2024_25_prices": 747.940518075343
+      },
+      {
+        "year": "2022-23",
+        "weekly_2024_25_prices": 739.8491786060586
+      },
+      {
+        "year": "2023-24",
+        "weekly_2024_25_prices": 724.9398523451239
+      },
+      {
+        "year": "2024-25",
+        "weekly_2024_25_prices": 749.8215501373668
+      }
     ]
+  },
+  "inequality": {
+    "bhc": {
+      "gini": [
+        {
+          "year": "2021-22",
+          "value": 0.33224
+        },
+        {
+          "year": "2022-23",
+          "value": 0.3394
+        },
+        {
+          "year": "2023-24",
+          "value": 0.33452
+        },
+        {
+          "year": "2024-25",
+          "value": 0.32737
+        }
+      ],
+      "p90_p10": [
+        {
+          "year": "2021-22",
+          "value": 3.7242
+        },
+        {
+          "year": "2022-23",
+          "value": 3.7941
+        },
+        {
+          "year": "2023-24",
+          "value": 3.7339
+        },
+        {
+          "year": "2024-25",
+          "value": 3.7112
+        }
+      ]
+    },
+    "ahc": {
+      "gini": [
+        {
+          "year": "2021-22",
+          "value": 0.37127
+        },
+        {
+          "year": "2022-23",
+          "value": 0.37699
+        },
+        {
+          "year": "2023-24",
+          "value": 0.3708
+        },
+        {
+          "year": "2024-25",
+          "value": 0.36781
+        }
+      ],
+      "p90_p10": [
+        {
+          "year": "2021-22",
+          "value": 4.5851
+        },
+        {
+          "year": "2022-23",
+          "value": 4.6343
+        },
+        {
+          "year": "2023-24",
+          "value": 4.572
+        },
+        {
+          "year": "2024-25",
+          "value": 4.5405
+        }
+      ]
+    }
   }
 }

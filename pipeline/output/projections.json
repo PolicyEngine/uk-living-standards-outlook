@@ -1,240 +1,1351 @@
 {
   "2024": {
-    "mean_income": 49449.9765625,
-    "median_income": 40578.59765625,
-    "mean_equivalised_income": 45771.69834730806,
-    "median_equivalised_income": 39617.30859375,
-    "households": 28874982.0,
     "people": 68929848.0,
+    "mean_equivalised_income_bhc": 45771.6953125,
+    "median_equivalised_income_bhc": 39601.18359375,
+    "decile_medians_bhc": [
+      16485.490234375,
+      24031.705078125,
+      28764.017578125,
+      32906.82421875,
+      37365.5859375,
+      41813.46875,
+      46698.3359375,
+      53537.078125,
+      62194.43359375,
+      88156.75
+    ],
+    "inequality_bhc": {
+      "gini": 0.3022222301461197,
+      "p90_p10": 3.346881086233558,
+      "top_bottom_quintile_median_ratio": 3.350701056407917
+    },
+    "mean_equivalised_income_ahc": 40316.7421875,
+    "median_equivalised_income_ahc": 34544.54296875,
+    "decile_medians_ahc": [
+      10850.490234375,
+      19413.349609375,
+      23970.8984375,
+      28248.091796875,
+      32423.392578125,
+      36790.5078125,
+      41259.58984375,
+      47688.01171875,
+      56697.7890625,
+      81021.421875
+    ],
+    "inequality_ahc": {
+      "gini": 0.3382474196426086,
+      "p90_p10": 4.041561000475794,
+      "top_bottom_quintile_median_ratio": 4.043867064294096
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.12192990630865097,
-        "children": 0.15660631656646729,
-        "working_age": 0.11549142748117447,
-        "pensioners": 0.11203478276729584
+        "children": 0.15788207948207855,
+        "working_age": 0.11420571804046631,
+        "pensioners": 0.10666597634553909
       },
       "absolute_ahc": {
         "all": 0.1519089788198471,
-        "children": 0.21222586929798126,
-        "working_age": 0.15068942308425903,
-        "pensioners": 0.10374922305345535
+        "children": 0.21513569355010986,
+        "working_age": 0.14605721831321716,
+        "pensioners": 0.09918531030416489
       },
       "relative_bhc": {
         "all": 0.14497871696949005,
-        "children": 0.18835170567035675,
-        "working_age": 0.13503524661064148,
-        "pensioners": 0.13897591829299927
+        "children": 0.19033677875995636,
+        "working_age": 0.13281507790088654,
+        "pensioners": 0.13381661474704742
       },
       "relative_ahc": {
         "all": 0.1805807501077652,
-        "children": 0.25717872381210327,
-        "working_age": 0.17487302422523499,
-        "pensioners": 0.1319963037967682
+        "children": 0.2596779465675354,
+        "working_age": 0.1693456619977951,
+        "pensioners": 0.12772484123706818
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 34398.7578125,
+      "below_middle_mean": 21834.79296875,
+      "above_middle_mean": 58444.14453125
+    },
+    "deep_poverty_ahc": {
+      "median": 34544.54296875,
+      "below_40pc": {
+        "rate": 0.07379511743783951,
+        "people_millions": 5.086686134338379
+      },
+      "below_50pc": {
+        "rate": 0.11718235909938812,
+        "people_millions": 8.077362060546875
+      },
+      "below_60pc": {
+        "rate": 0.18057170510292053,
+        "people_millions": 12.44678020477295
+      },
+      "check_in_relative_poverty_ahc": 0.1805807501077652
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.2596779465675354,
+        "one_child": 0.17960280179977417,
+        "two_children": 0.2083090990781784,
+        "three_plus_children": 0.4146932363510132,
+        "lone_parent": 0.37565138936042786,
+        "couple": 0.22309596836566925
+      },
+      "absolute_ahc": {
+        "all": 0.21513569355010986,
+        "one_child": 0.15148188173770905,
+        "two_children": 0.17247235774993896,
+        "three_plus_children": 0.3410746455192566,
+        "lone_parent": 0.3156987726688385,
+        "couple": 0.18341469764709473
+      },
+      "children_millions": {
+        "all": 14.35744857788086,
+        "one_child": 4.0748443603515625,
+        "two_children": 6.142268657684326,
+        "three_plus_children": 4.1403350830078125,
+        "lone_parent": 3.4428398609161377,
+        "couple": 10.914608001708984
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.5417782068252563,
+      "children_in_limit_affected_benefit_units_m": 1.544113278388977,
+      "children_in_uc_benefit_units_m": 5.513023853302002,
+      "children_in_uc_benefit_units_3plus_m": 2.452265501022339,
+      "relative_ahc_rate_children_in_limit_affected_bu": 0.6249410510063171,
+      "universal_credit_bn": 74.20845922393619,
+      "limit_affected_households_k": 436.8542785644531
     }
   },
   "2025": {
-    "mean_income": 51286.08984375,
-    "median_income": 42202.80078125,
-    "mean_equivalised_income": 47459.767807447075,
-    "median_equivalised_income": 41171.6484375,
-    "households": 29082884.0,
     "people": 69426144.0,
+    "mean_equivalised_income_bhc": 47459.765625,
+    "median_equivalised_income_bhc": 41169.76953125,
+    "decile_medians_bhc": [
+      17073.693359375,
+      24849.40625,
+      29755.21484375,
+      34154.2421875,
+      38627.94140625,
+      43319.25,
+      48432.546875,
+      55735.6328125,
+      64322.1171875,
+      91140.59375
+    ],
+    "inequality_bhc": {
+      "gini": 0.30308231425626353,
+      "p90_p10": 3.3715004492105014,
+      "top_bottom_quintile_median_ratio": 3.3742507587968213
+    },
+    "mean_equivalised_income_ahc": 41653.88671875,
+    "median_equivalised_income_ahc": 35735.7890625,
+    "decile_medians_ahc": [
+      10916.521484375,
+      19820.041015625,
+      24619.58984375,
+      29215.994140625,
+      33439.8125,
+      38098.00390625,
+      42783.67578125,
+      49346.77734375,
+      58589.26171875,
+      83785.9375
+    ],
+    "inequality_ahc": {
+      "gini": 0.3405889368376166,
+      "p90_p10": 4.0878544164378035,
+      "top_bottom_quintile_median_ratio": 4.089351774962125
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.12231851369142532,
-        "children": 0.16187188029289246,
-        "working_age": 0.11587975919246674,
-        "pensioners": 0.10762782394886017
+        "children": 0.16295017302036285,
+        "working_age": 0.1143079400062561,
+        "pensioners": 0.10266134142875671
       },
       "absolute_ahc": {
         "all": 0.15570741891860962,
-        "children": 0.22183498740196228,
-        "working_age": 0.15488693118095398,
-        "pensioners": 0.10133059322834015
+        "children": 0.2249448001384735,
+        "working_age": 0.14970917999744415,
+        "pensioners": 0.09659989178180695
       },
       "relative_bhc": {
         "all": 0.14782090485095978,
-        "children": 0.19591344892978668,
-        "working_age": 0.1373194307088852,
-        "pensioners": 0.13946236670017242
+        "children": 0.19767047464847565,
+        "working_age": 0.13480360805988312,
+        "pensioners": 0.13437923789024353
       },
       "relative_ahc": {
         "all": 0.18353712558746338,
-        "children": 0.26579055190086365,
-        "working_age": 0.1779768168926239,
-        "pensioners": 0.1282808780670166
+        "children": 0.26813510060310364,
+        "working_age": 0.17266075313091278,
+        "pensioners": 0.12318958342075348
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 35398.390625,
+      "below_middle_mean": 22334.951171875,
+      "above_middle_mean": 60498.31640625
+    },
+    "deep_poverty_ahc": {
+      "median": 35735.7890625,
+      "below_40pc": {
+        "rate": 0.07659684866666794,
+        "people_millions": 5.317823886871338
+      },
+      "below_50pc": {
+        "rate": 0.11888954788446426,
+        "people_millions": 8.254042625427246
+      },
+      "below_60pc": {
+        "rate": 0.183406263589859,
+        "people_millions": 12.733189582824707
+      },
+      "check_in_relative_poverty_ahc": 0.18353712558746338
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.26813510060310364,
+        "one_child": 0.18488115072250366,
+        "two_children": 0.21680720150470734,
+        "three_plus_children": 0.4262181520462036,
+        "lone_parent": 0.39096567034721375,
+        "couple": 0.22939011454582214
+      },
+      "absolute_ahc": {
+        "all": 0.2249448001384735,
+        "one_child": 0.1572520136833191,
+        "two_children": 0.17878836393356323,
+        "three_plus_children": 0.36004090309143066,
+        "lone_parent": 0.33049634099006653,
+        "couple": 0.19165022671222687
+      },
+      "children_millions": {
+        "all": 14.460822105407715,
+        "one_child": 4.104183197021484,
+        "two_children": 6.186492919921875,
+        "three_plus_children": 4.170145511627197,
+        "lone_parent": 3.467628240585327,
+        "couple": 10.993194580078125
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "poverty_by_group": {
+      "tenure": {
+        "mortgage": {
+          "relative_ahc": 0.09657324105501175,
+          "median_equivalised_income_bhc": 47280.296875,
+          "people_millions": 23.052583694458008,
+          "unweighted_households": 23109,
+          "unweighted_people": 68600
+        },
+        "owned_outright": {
+          "relative_ahc": 0.08931070566177368,
+          "median_equivalised_income_bhc": 41994.16015625,
+          "people_millions": 23.151630401611328,
+          "unweighted_households": 37727,
+          "unweighted_people": 77201
+        },
+        "private_rent": {
+          "relative_ahc": 0.34349846839904785,
+          "median_equivalised_income_bhc": 38000.86328125,
+          "people_millions": 12.259049415588379,
+          "unweighted_households": 8732,
+          "unweighted_people": 20388
+        },
+        "social_rent": {
+          "relative_ahc": 0.3865189254283905,
+          "median_equivalised_income_bhc": 31127.7421875,
+          "people_millions": 10.96288013458252,
+          "unweighted_households": 8622,
+          "unweighted_people": 17420
+        }
+      },
+      "family_type": {
+        "couple_no_children": {
+          "relative_ahc": 0.09515839070081711,
+          "median_equivalised_income_bhc": 51753.91015625,
+          "people_millions": 12.046438217163086,
+          "unweighted_households": 16286,
+          "unweighted_people": 32688
+        },
+        "couple_with_children": {
+          "relative_ahc": 0.20670925080776215,
+          "median_equivalised_income_bhc": 39903.28515625,
+          "people_millions": 23.558095932006836,
+          "unweighted_households": 17295,
+          "unweighted_people": 66870
+        },
+        "lone_parent": {
+          "relative_ahc": 0.3798247277736664,
+          "median_equivalised_income_bhc": 29277.6484375,
+          "people_millions": 5.523237228393555,
+          "unweighted_households": 3781,
+          "unweighted_people": 10132
+        },
+        "pensioner": {
+          "relative_ahc": 0.12366605550050735,
+          "median_equivalised_income_bhc": 37578.66015625,
+          "people_millions": 13.568490982055664,
+          "unweighted_households": 29234,
+          "unweighted_people": 46266
+        },
+        "single_no_children": {
+          "relative_ahc": 0.20030412077903748,
+          "median_equivalised_income_bhc": 42810.984375,
+          "people_millions": 14.729878425598145,
+          "unweighted_households": 21860,
+          "unweighted_people": 27653
+        }
+      },
+      "disability": {
+        "disabled_in_family": {
+          "relative_ahc": 0.15880033373832703,
+          "median_equivalised_income_bhc": 36797.5390625,
+          "people_millions": 13.122909545898438,
+          "unweighted_households": 14539,
+          "unweighted_people": 28397
+        },
+        "no_disabled_in_family": {
+          "relative_ahc": 0.18930268287658691,
+          "median_equivalised_income_bhc": 42662.296875,
+          "people_millions": 56.303226470947266,
+          "unweighted_households": 66474,
+          "unweighted_people": 155212
+        }
+      },
+      "region": {
+        "EAST_MIDLANDS": {
+          "relative_ahc": 0.1883085072040558,
+          "median_equivalised_income_bhc": 37434.6015625,
+          "people_millions": 5.094668388366699,
+          "unweighted_households": 4682,
+          "unweighted_people": 10870
+        },
+        "EAST_OF_ENGLAND": {
+          "relative_ahc": 0.14474916458129883,
+          "median_equivalised_income_bhc": 42867.515625,
+          "people_millions": 6.631353855133057,
+          "unweighted_households": 7153,
+          "unweighted_people": 17818
+        },
+        "LONDON": {
+          "relative_ahc": 0.19470611214637756,
+          "median_equivalised_income_bhc": 47043.15234375,
+          "people_millions": 9.098519325256348,
+          "unweighted_households": 8110,
+          "unweighted_people": 20148
+        },
+        "NORTHERN_IRELAND": {
+          "relative_ahc": 0.2483668029308319,
+          "median_equivalised_income_bhc": 34651.0078125,
+          "people_millions": 1.9369243383407593,
+          "unweighted_households": 6846,
+          "unweighted_people": 16024
+        },
+        "NORTH_EAST": {
+          "relative_ahc": 0.20948737859725952,
+          "median_equivalised_income_bhc": 36595.984375,
+          "people_millions": 2.7569820880889893,
+          "unweighted_households": 2964,
+          "unweighted_people": 6593
+        },
+        "NORTH_WEST": {
+          "relative_ahc": 0.19954638183116913,
+          "median_equivalised_income_bhc": 39979.26953125,
+          "people_millions": 7.749704360961914,
+          "unweighted_households": 6890,
+          "unweighted_people": 16633
+        },
+        "SCOTLAND": {
+          "relative_ahc": 0.18673677742481232,
+          "median_equivalised_income_bhc": 40563.8515625,
+          "people_millions": 5.543710708618164,
+          "unweighted_households": 7067,
+          "unweighted_people": 14825
+        },
+        "SOUTH_EAST": {
+          "relative_ahc": 0.15119346976280212,
+          "median_equivalised_income_bhc": 46467.953125,
+          "people_millions": 9.682028770446777,
+          "unweighted_households": 11478,
+          "unweighted_people": 29151
+        },
+        "SOUTH_WEST": {
+          "relative_ahc": 0.1712724268436432,
+          "median_equivalised_income_bhc": 40605.29296875,
+          "people_millions": 5.89101505279541,
+          "unweighted_households": 6710,
+          "unweighted_people": 14728
+        },
+        "WALES": {
+          "relative_ahc": 0.2217675894498825,
+          "median_equivalised_income_bhc": 37049.29296875,
+          "people_millions": 3.1758735179901123,
+          "unweighted_households": 5033,
+          "unweighted_people": 10963
+        },
+        "WEST_MIDLANDS": {
+          "relative_ahc": 0.20493534207344055,
+          "median_equivalised_income_bhc": 37801.30078125,
+          "people_millions": 6.2142767906188965,
+          "unweighted_households": 4563,
+          "unweighted_people": 10603
+        },
+        "YORKSHIRE": {
+          "relative_ahc": 0.169979065656662,
+          "median_equivalised_income_bhc": 38065.51171875,
+          "people_millions": 5.651083469390869,
+          "unweighted_households": 6694,
+          "unweighted_people": 15253
+        }
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.5997388958930969,
+      "children_in_limit_affected_benefit_units_m": 1.678855538368225,
+      "children_in_uc_benefit_units_m": 5.538084506988525,
+      "children_in_uc_benefit_units_3plus_m": 2.4665474891662598,
+      "relative_ahc_rate_children_in_limit_affected_bu": 0.6323248744010925,
+      "universal_credit_bn": 77.59511522879558,
+      "limit_affected_households_k": 472.02545166015625
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.26813510060310364,
+      "absolute_ahc_children": 0.2249448001384735,
+      "relative_ahc_by_family": {
+        "all": 0.26813510060310364,
+        "one_child": 0.18488115072250366,
+        "two_children": 0.21680720150470734,
+        "three_plus_children": 0.4262181520462036,
+        "lone_parent": 0.39096567034721375,
+        "couple": 0.22939011454582214
+      },
+      "median_equivalised_income_ahc": 35735.7890625,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.5997389554977417
     }
   },
   "2026": {
-    "mean_income": 52667.24609375,
-    "median_income": 43388.953125,
-    "mean_equivalised_income": 48751.238525850174,
-    "median_equivalised_income": 42309.6171875,
-    "households": 29193396.0,
     "people": 69689960.0,
+    "mean_equivalised_income_bhc": 48751.23828125,
+    "median_equivalised_income_bhc": 42309.6171875,
+    "decile_medians_bhc": [
+      17685.7265625,
+      25855.8828125,
+      30752.994140625,
+      35107.79296875,
+      39616.640625,
+      44458.4609375,
+      49778.9453125,
+      57045.75390625,
+      66151.234375,
+      93245.9921875
+    ],
+    "inequality_bhc": {
+      "gini": 0.30156527177131176,
+      "p90_p10": 3.3000661202699804,
+      "top_bottom_quintile_median_ratio": 3.30575060288662
+    },
+    "mean_equivalised_income_ahc": 42712.28515625,
+    "median_equivalised_income_ahc": 36534.86328125,
+    "decile_medians_ahc": [
+      11222.3701171875,
+      20561.60546875,
+      25359.15234375,
+      30048.763671875,
+      34272.296875,
+      39055.078125,
+      43935.4609375,
+      50618.59375,
+      60256.7578125,
+      85862.3984375
+    ],
+    "inequality_ahc": {
+      "gini": 0.3393802272464552,
+      "p90_p10": 3.9926684144409728,
+      "top_bottom_quintile_median_ratio": 3.9949332237756687
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.11498646438121796,
-        "children": 0.14037193357944489,
-        "working_age": 0.1104934811592102,
-        "pensioners": 0.10751435160636902
+        "children": 0.14204853773117065,
+        "working_age": 0.11072646081447601,
+        "pensioners": 0.098090261220932
       },
       "absolute_ahc": {
         "all": 0.150179922580719,
-        "children": 0.20455531775951385,
-        "working_age": 0.15179181098937988,
-        "pensioners": 0.09925087541341782
+        "children": 0.20794416964054108,
+        "working_age": 0.1481606811285019,
+        "pensioners": 0.08993200212717056
       },
       "relative_bhc": {
         "all": 0.14197885990142822,
-        "children": 0.17506949603557587,
-        "working_age": 0.1338014304637909,
-        "pensioners": 0.14096707105636597
+        "children": 0.17733575403690338,
+        "working_age": 0.13310794532299042,
+        "pensioners": 0.13120298087596893
       },
       "relative_ahc": {
         "all": 0.17833027243614197,
-        "children": 0.2499903291463852,
-        "working_age": 0.174616277217865,
-        "pensioners": 0.12839074432849884
+        "children": 0.2525309920310974,
+        "working_age": 0.17056891322135925,
+        "pensioners": 0.11860507726669312
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 36112.5703125,
+      "below_middle_mean": 22976.9453125,
+      "above_middle_mean": 61889.08203125
+    },
+    "deep_poverty_ahc": {
+      "median": 36534.86328125,
+      "below_40pc": {
+        "rate": 0.07526042312383652,
+        "people_millions": 5.244895935058594
+      },
+      "below_50pc": {
+        "rate": 0.11350727081298828,
+        "people_millions": 7.9103169441223145
+      },
+      "below_60pc": {
+        "rate": 0.17833027243614197,
+        "people_millions": 12.42782974243164
+      },
+      "check_in_relative_poverty_ahc": 0.17833027243614197
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.2525309920310974,
+        "one_child": 0.1848515421152115,
+        "two_children": 0.21603092551231384,
+        "three_plus_children": 0.3732885420322418,
+        "lone_parent": 0.36760061979293823,
+        "couple": 0.21623413264751434
+      },
+      "absolute_ahc": {
+        "all": 0.20794416964054108,
+        "one_child": 0.1584620177745819,
+        "two_children": 0.17504703998565674,
+        "three_plus_children": 0.30544722080230713,
+        "lone_parent": 0.3073805272579193,
+        "couple": 0.1765785664319992
+      },
+      "children_millions": {
+        "all": 14.51577377319336,
+        "one_child": 4.119779109954834,
+        "two_children": 6.210001468658447,
+        "three_plus_children": 4.1859917640686035,
+        "lone_parent": 3.480804920196533,
+        "couple": 11.034968376159668
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.0,
+      "children_in_limit_affected_benefit_units_m": 0.0,
+      "children_in_uc_benefit_units_m": 5.633704662322998,
+      "children_in_uc_benefit_units_3plus_m": 2.545994281768799,
+      "relative_ahc_rate_children_in_limit_affected_bu": null,
+      "universal_credit_bn": 80.36076090128012,
+      "limit_affected_households_k": 0.0
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.27221110463142395,
+      "absolute_ahc_children": 0.23231005668640137,
+      "relative_ahc_by_family": {
+        "all": 0.27221110463142395,
+        "one_child": 0.18458719551563263,
+        "two_children": 0.21603070199489594,
+        "three_plus_children": 0.4417937695980072,
+        "lone_parent": 0.39571040868759155,
+        "couple": 0.23325525224208832
+      },
+      "median_equivalised_income_ahc": 36500.44921875,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.7059634327888489
     }
   },
   "2027": {
-    "mean_income": 53659.0625,
-    "median_income": 44137.29296875,
-    "mean_equivalised_income": 49677.4534313782,
-    "median_equivalised_income": 43201.4921875,
-    "households": 29301416.0,
     "people": 69947808.0,
+    "mean_equivalised_income_bhc": 49677.45703125,
+    "median_equivalised_income_bhc": 43188.85546875,
+    "decile_medians_bhc": [
+      17819.244140625,
+      26288.5,
+      31279.822265625,
+      35758.31640625,
+      40362.79296875,
+      45307.046875,
+      50756.98828125,
+      58173.06640625,
+      67480.6171875,
+      95205.5625
+    ],
+    "inequality_bhc": {
+      "gini": 0.30249704365375873,
+      "p90_p10": 3.3082516094391043,
+      "top_bottom_quintile_median_ratio": 3.308627593738624
+    },
+    "mean_equivalised_income_ahc": 43352.72265625,
+    "median_equivalised_income_ahc": 36994.98828125,
+    "decile_medians_ahc": [
+      11283.47265625,
+      20892.076171875,
+      25701.29296875,
+      30424.744140625,
+      34880.875,
+      39669.86328125,
+      44484.046875,
+      51349.87109375,
+      61260.7109375,
+      87229.4609375
+    ],
+    "inequality_ahc": {
+      "gini": 0.34111090435543656,
+      "p90_p10": 4.018170666153952,
+      "top_bottom_quintile_median_ratio": 4.021202204993188
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.11730805784463882,
-        "children": 0.1416972577571869,
-        "working_age": 0.11199387907981873,
-        "pensioners": 0.11334515362977982
+        "children": 0.14333178102970123,
+        "working_age": 0.11375218629837036,
+        "pensioners": 0.0987459272146225
       },
       "absolute_ahc": {
         "all": 0.15132591128349304,
-        "children": 0.20519709587097168,
-        "working_age": 0.15137261152267456,
-        "pensioners": 0.1045919731259346
+        "children": 0.20728039741516113,
+        "working_age": 0.14970622956752777,
+        "pensioners": 0.08996155858039856
       },
       "relative_bhc": {
         "all": 0.14417199790477753,
-        "children": 0.17845124006271362,
-        "working_age": 0.13538585603237152,
-        "pensioners": 0.1433957815170288
+        "children": 0.18059685826301575,
+        "working_age": 0.1364528238773346,
+        "pensioners": 0.12795336544513702
       },
       "relative_ahc": {
         "all": 0.17776654660701752,
-        "children": 0.2477274090051651,
-        "working_age": 0.1740015745162964,
-        "pensioners": 0.12838363647460938
+        "children": 0.25065186619758606,
+        "working_age": 0.17095611989498138,
+        "pensioners": 0.11456957459449768
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 36813.05078125,
+      "below_middle_mean": 23257.22265625,
+      "above_middle_mean": 62916.78125
+    },
+    "deep_poverty_ahc": {
+      "median": 36994.98828125,
+      "below_40pc": {
+        "rate": 0.07634202390909195,
+        "people_millions": 5.339957237243652
+      },
+      "below_50pc": {
+        "rate": 0.11514770984649658,
+        "people_millions": 8.054329872131348
+      },
+      "below_60pc": {
+        "rate": 0.17776654660701752,
+        "people_millions": 12.434379577636719
+      },
+      "check_in_relative_poverty_ahc": 0.17776654660701752
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.25065186619758606,
+        "one_child": 0.1842757910490036,
+        "two_children": 0.21574905514717102,
+        "three_plus_children": 0.36775705218315125,
+        "lone_parent": 0.36175280809402466,
+        "couple": 0.21560683846473694
+      },
+      "absolute_ahc": {
+        "all": 0.20728039741516113,
+        "one_child": 0.16065891087055206,
+        "two_children": 0.1793898344039917,
+        "three_plus_children": 0.294540673494339,
+        "lone_parent": 0.30963343381881714,
+        "couple": 0.17499473690986633
+      },
+      "children_millions": {
+        "all": 14.569480895996094,
+        "one_child": 4.1350226402282715,
+        "two_children": 6.232978343963623,
+        "three_plus_children": 4.201479911804199,
+        "lone_parent": 3.4936840534210205,
+        "couple": 11.075798034667969
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.0,
+      "children_in_limit_affected_benefit_units_m": 0.0,
+      "children_in_uc_benefit_units_m": 5.662166118621826,
+      "children_in_uc_benefit_units_3plus_m": 2.5534565448760986,
+      "relative_ahc_rate_children_in_limit_affected_bu": null,
+      "universal_credit_bn": 82.24454897744,
+      "limit_affected_households_k": 0.0
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.27166739106178284,
+      "absolute_ahc_children": 0.23209330439567566,
+      "relative_ahc_by_family": {
+        "all": 0.27166739106178284,
+        "one_child": 0.18400654196739197,
+        "two_children": 0.21574905514717102,
+        "three_plus_children": 0.4408975839614868,
+        "lone_parent": 0.3934865891933441,
+        "couple": 0.23324143886566162
+      },
+      "median_equivalised_income_ahc": 36965.328125,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.7519083023071289
     }
   },
   "2028": {
-    "mean_income": 54588.828125,
-    "median_income": 44878.3046875,
-    "mean_equivalised_income": 50535.93737366019,
-    "median_equivalised_income": 43888.046875,
-    "households": 29418620.0,
     "people": 70227600.0,
+    "mean_equivalised_income_bhc": 50535.9375,
+    "median_equivalised_income_bhc": 43888.046875,
+    "decile_medians_bhc": [
+      18077.0234375,
+      26693.287109375,
+      31696.130859375,
+      36210.62890625,
+      41043.48046875,
+      46078.48046875,
+      51742.2890625,
+      59245.33984375,
+      68606.890625,
+      96780.4921875
+    ],
+    "inequality_bhc": {
+      "gini": 0.30349596849951244,
+      "p90_p10": 3.3181228328904173,
+      "top_bottom_quintile_median_ratio": 3.3217482275179036
+    },
+    "mean_equivalised_income_ahc": 44041.23828125,
+    "median_equivalised_income_ahc": 37661.46484375,
+    "decile_medians_ahc": [
+      11190.3505859375,
+      21177.400390625,
+      26096.537109375,
+      30846.44921875,
+      35461.4921875,
+      40332.3828125,
+      45252.06640625,
+      52293.24609375,
+      62303.06640625,
+      88608.0625
+    ],
+    "inequality_ahc": {
+      "gini": 0.34260754867503007,
+      "p90_p10": 4.028173085515146,
+      "top_bottom_quintile_median_ratio": 4.030572545207186
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.1178765669465065,
-        "children": 0.14083752036094666,
-        "working_age": 0.1121295839548111,
-        "pensioners": 0.11688194423913956
+        "children": 0.14249935746192932,
+        "working_age": 0.1147788017988205,
+        "pensioners": 0.09911857545375824
       },
       "absolute_ahc": {
         "all": 0.15385012328624725,
-        "children": 0.20995017886161804,
-        "working_age": 0.1531146764755249,
-        "pensioners": 0.10730535537004471
+        "children": 0.2118898332118988,
+        "working_age": 0.15200583636760712,
+        "pensioners": 0.0898076593875885
       },
       "relative_bhc": {
         "all": 0.1439441442489624,
-        "children": 0.17697489261627197,
-        "working_age": 0.13511084020137787,
-        "pensioners": 0.14420485496520996
+        "children": 0.17993192374706268,
+        "working_age": 0.13682503998279572,
+        "pensioners": 0.12594284117221832
       },
       "relative_ahc": {
         "all": 0.17844055593013763,
-        "children": 0.24702444672584534,
-        "working_age": 0.17454567551612854,
-        "pensioners": 0.13088834285736084
+        "children": 0.24997125566005707,
+        "working_age": 0.1722242534160614,
+        "pensioners": 0.1138373613357544
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 37345.6328125,
+      "below_middle_mean": 23514.34765625,
+      "above_middle_mean": 63991.93359375
+    },
+    "deep_poverty_ahc": {
+      "median": 37661.46484375,
+      "below_40pc": {
+        "rate": 0.07756255567073822,
+        "people_millions": 5.4470319747924805
+      },
+      "below_50pc": {
+        "rate": 0.11654125899076462,
+        "people_millions": 8.184412956237793
+      },
+      "below_60pc": {
+        "rate": 0.17844055593013763,
+        "people_millions": 12.531452178955078
+      },
+      "check_in_relative_poverty_ahc": 0.17844055593013763
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.24997125566005707,
+        "one_child": 0.1855059564113617,
+        "two_children": 0.21533536911010742,
+        "three_plus_children": 0.3647999167442322,
+        "lone_parent": 0.36052703857421875,
+        "couple": 0.21509821712970734
+      },
+      "absolute_ahc": {
+        "all": 0.2118898332118988,
+        "one_child": 0.1621752232313156,
+        "two_children": 0.18756859004497528,
+        "three_plus_children": 0.2968991696834564,
+        "lone_parent": 0.3225819170475006,
+        "couple": 0.17697377502918243
+      },
+      "children_millions": {
+        "all": 14.627758979797363,
+        "one_child": 4.151562690734863,
+        "two_children": 6.257909774780273,
+        "three_plus_children": 4.218286037445068,
+        "lone_parent": 3.5076584815979004,
+        "couple": 11.120100021362305
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.0,
+      "children_in_limit_affected_benefit_units_m": 0.0,
+      "children_in_uc_benefit_units_m": 5.6699957847595215,
+      "children_in_uc_benefit_units_3plus_m": 2.5571205615997314,
+      "relative_ahc_rate_children_in_limit_affected_bu": null,
+      "universal_credit_bn": 83.88727186394425,
+      "limit_affected_households_k": 0.0
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.276198148727417,
+      "absolute_ahc_children": 0.24404993653297424,
+      "relative_ahc_by_family": {
+        "all": 0.276198148727417,
+        "one_child": 0.18478086590766907,
+        "two_children": 0.21518005430698395,
+        "three_plus_children": 0.4566909074783325,
+        "lone_parent": 0.39608433842658997,
+        "couple": 0.23838193714618683
+      },
+      "median_equivalised_income_ahc": 37612.9765625,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.8377865552902222
     }
   },
   "2029": {
-    "mean_income": 55530.01953125,
-    "median_income": 45701.82421875,
-    "mean_equivalised_income": 51398.55445942221,
-    "median_equivalised_income": 44697.4609375,
-    "households": 29548062.0,
     "people": 70536600.0,
+    "mean_equivalised_income_bhc": 51398.5546875,
+    "median_equivalised_income_bhc": 44697.4609375,
+    "decile_medians_bhc": [
+      18206.181640625,
+      27142.962890625,
+      32282.29296875,
+      36831.59765625,
+      41721.265625,
+      46845.8203125,
+      52662.11328125,
+      60223.0546875,
+      69642.7890625,
+      98230.609375
+    ],
+    "inequality_bhc": {
+      "gini": 0.30365945257871907,
+      "p90_p10": 3.317703431794619,
+      "top_bottom_quintile_median_ratio": 3.317703431794619
+    },
+    "mean_equivalised_income_ahc": 44725.9140625,
+    "median_equivalised_income_ahc": 38174.80078125,
+    "decile_medians_ahc": [
+      11134.2001953125,
+      21365.697265625,
+      26438.177734375,
+      31259.73046875,
+      35872.01953125,
+      41031.5703125,
+      45878.65625,
+      53207.64453125,
+      63194.9296875,
+      89536.4609375
+    ],
+    "inequality_ahc": {
+      "gini": 0.3433400808313627,
+      "p90_p10": 4.0445750998741845,
+      "top_bottom_quintile_median_ratio": 4.046999278292125
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.1185218021273613,
-        "children": 0.14153102040290833,
-        "working_age": 0.11291778832674026,
-        "pensioners": 0.11696261912584305
+        "children": 0.1431708186864853,
+        "working_age": 0.11558068543672562,
+        "pensioners": 0.09916273504495621
       },
       "absolute_ahc": {
         "all": 0.157301127910614,
-        "children": 0.21546487510204315,
-        "working_age": 0.15703575313091278,
-        "pensioners": 0.10803437232971191
+        "children": 0.21851465106010437,
+        "working_age": 0.15517881512641907,
+        "pensioners": 0.09040016680955887
       },
       "relative_bhc": {
         "all": 0.14419269561767578,
-        "children": 0.17747056484222412,
-        "working_age": 0.13568206131458282,
-        "pensioners": 0.14295034110546112
+        "children": 0.18041184544563293,
+        "working_age": 0.13753636181354523,
+        "pensioners": 0.12422805279493332
       },
       "relative_ahc": {
         "all": 0.17837779223918915,
-        "children": 0.2474154829978943,
-        "working_age": 0.1749865561723709,
-        "pensioners": 0.12850399315357208
+        "children": 0.2503539025783539,
+        "working_age": 0.17255651950836182,
+        "pensioners": 0.111796535551548
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 37913.62109375,
+      "below_middle_mean": 23799.125,
+      "above_middle_mean": 64945.1171875
+    },
+    "deep_poverty_ahc": {
+      "median": 38174.80078125,
+      "below_40pc": {
+        "rate": 0.0779833272099495,
+        "people_millions": 5.500679016113281
+      },
+      "below_50pc": {
+        "rate": 0.11637897044420242,
+        "people_millions": 8.208976745605469
+      },
+      "below_60pc": {
+        "rate": 0.17837779223918915,
+        "people_millions": 12.582162857055664
+      },
+      "check_in_relative_poverty_ahc": 0.17837779223918915
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.2503539025783539,
+        "one_child": 0.18479950726032257,
+        "two_children": 0.21482454240322113,
+        "three_plus_children": 0.3675798177719116,
+        "lone_parent": 0.35753491520881653,
+        "couple": 0.21654532849788666
+      },
+      "absolute_ahc": {
+        "all": 0.21851465106010437,
+        "one_child": 0.16418510675430298,
+        "two_children": 0.19066625833511353,
+        "three_plus_children": 0.31329840421676636,
+        "lone_parent": 0.3280874788761139,
+        "couple": 0.18395161628723145
+      },
+      "children_millions": {
+        "all": 14.692119598388672,
+        "one_child": 4.169829845428467,
+        "two_children": 6.285445690155029,
+        "three_plus_children": 4.236846446990967,
+        "lone_parent": 3.52309250831604,
+        "couple": 11.169029235839844
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.0,
+      "children_in_limit_affected_benefit_units_m": 0.0,
+      "children_in_uc_benefit_units_m": 5.704802513122559,
+      "children_in_uc_benefit_units_3plus_m": 2.5682785511016846,
+      "relative_ahc_rate_children_in_limit_affected_bu": null,
+      "universal_credit_bn": 85.35146781654842,
+      "limit_affected_households_k": 0.0
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.2801395654678345,
+      "absolute_ahc_children": 0.25310012698173523,
+      "relative_ahc_by_family": {
+        "all": 0.2801395654678345,
+        "one_child": 0.18479950726032257,
+        "two_children": 0.21433758735656738,
+        "three_plus_children": 0.4715900123119354,
+        "lone_parent": 0.4069797098636627,
+        "couple": 0.24012984335422516
+      },
+      "median_equivalised_income_ahc": 38170.35546875,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.910671591758728
     }
   },
   "2030": {
-    "mean_income": 56510.4921875,
-    "median_income": 46450.48046875,
-    "mean_equivalised_income": 52303.978298218564,
-    "median_equivalised_income": 45305.1328125,
-    "households": 29681028.0,
     "people": 70854024.0,
+    "mean_equivalised_income_bhc": 52303.97265625,
+    "median_equivalised_income_bhc": 45302.17578125,
+    "decile_medians_bhc": [
+      18416.8125,
+      27442.498046875,
+      32682.609375,
+      37393.7734375,
+      42293.8671875,
+      47761.01953125,
+      53558.19921875,
+      61400.29296875,
+      70841.6171875,
+      100275.2109375
+    ],
+    "inequality_bhc": {
+      "gini": 0.3056142058218644,
+      "p90_p10": 3.356202237672484,
+      "top_bottom_quintile_median_ratio": 3.356202237672484
+    },
+    "mean_equivalised_income_ahc": 45418.78125,
+    "median_equivalised_income_ahc": 38770.21484375,
+    "decile_medians_ahc": [
+      10863.3564453125,
+      21325.58203125,
+      26620.189453125,
+      31467.283203125,
+      36392.03515625,
+      41503.30078125,
+      46653.30859375,
+      54173.640625,
+      64339.17578125,
+      90866.9453125
+    ],
+    "inequality_ahc": {
+      "gini": 0.34632968533727904,
+      "p90_p10": 4.092666531707938,
+      "top_bottom_quintile_median_ratio": 4.094341163694477
+    },
     "poverty": {
       "absolute_bhc": {
         "all": 0.12225308269262314,
-        "children": 0.14631995558738708,
-        "working_age": 0.11709688603878021,
-        "pensioners": 0.11871940642595291
+        "children": 0.1481238603591919,
+        "working_age": 0.11983687430620193,
+        "pensioners": 0.09949794411659241
       },
       "absolute_ahc": {
         "all": 0.1648598462343216,
-        "children": 0.23020175099372864,
-        "working_age": 0.16459877789020538,
-        "pensioners": 0.1094108521938324
+        "children": 0.2337113469839096,
+        "working_age": 0.16209326684474945,
+        "pensioners": 0.0909898653626442
       },
       "relative_bhc": {
         "all": 0.14533567428588867,
-        "children": 0.1823825091123581,
-        "working_age": 0.13719125092029572,
-        "pensioners": 0.1399202048778534
+        "children": 0.18427467346191406,
+        "working_age": 0.13892455399036407,
+        "pensioners": 0.1211652159690857
       },
       "relative_ahc": {
         "all": 0.18354831635951996,
-        "children": 0.2577590048313141,
-        "working_age": 0.1807955503463745,
-        "pensioners": 0.1283317655324936
+        "children": 0.2601074278354645,
+        "working_age": 0.1778552383184433,
+        "pensioners": 0.11091547459363937
       }
+    },
+    "non_pensioner_split_ahc": {
+      "non_pensioner_median": 38380.2578125,
+      "below_middle_mean": 23922.876953125,
+      "above_middle_mean": 66096.5625
+    },
+    "deep_poverty_ahc": {
+      "median": 38770.21484375,
+      "below_40pc": {
+        "rate": 0.07966640591621399,
+        "people_millions": 5.6446852684021
+      },
+      "below_50pc": {
+        "rate": 0.11981690675020218,
+        "people_millions": 8.489509582519531
+      },
+      "below_60pc": {
+        "rate": 0.18354831635951996,
+        "people_millions": 13.00513744354248
+      },
+      "check_in_relative_poverty_ahc": 0.18354831635951996
+    },
+    "child_poverty_by_family": {
+      "relative_ahc": {
+        "all": 0.2601074278354645,
+        "one_child": 0.1893434077501297,
+        "two_children": 0.21779575943946838,
+        "three_plus_children": 0.3925222158432007,
+        "lone_parent": 0.39010944962501526,
+        "couple": 0.21910029649734497
+      },
+      "absolute_ahc": {
+        "all": 0.2337113469839096,
+        "one_child": 0.16695772111415863,
+        "two_children": 0.20051327347755432,
+        "three_plus_children": 0.3486590087413788,
+        "lone_parent": 0.3543562591075897,
+        "couple": 0.19565576314926147
+      },
+      "children_millions": {
+        "all": 14.758234977722168,
+        "one_child": 4.188593864440918,
+        "two_children": 6.313729763031006,
+        "three_plus_children": 4.255911827087402,
+        "lone_parent": 3.5389463901519775,
+        "couple": 11.219289779663086
+      },
+      "unweighted_children": {
+        "all": 38901,
+        "one_child": 8538,
+        "two_children": 18738,
+        "three_plus_children": 11625,
+        "lone_parent": 6365,
+        "couple": 32536
+      }
+    },
+    "poverty_by_group": {
+      "tenure": {
+        "mortgage": {
+          "relative_ahc": 0.10235688090324402,
+          "median_equivalised_income_bhc": 51832.28515625,
+          "people_millions": 23.526704788208008,
+          "unweighted_households": 23109,
+          "unweighted_people": 68600
+        },
+        "owned_outright": {
+          "relative_ahc": 0.0868920385837555,
+          "median_equivalised_income_bhc": 46734.87890625,
+          "people_millions": 23.627784729003906,
+          "unweighted_households": 37727,
+          "unweighted_people": 77201
+        },
+        "private_rent": {
+          "relative_ahc": 0.33445805311203003,
+          "median_equivalised_income_bhc": 41269.18359375,
+          "people_millions": 12.511178016662598,
+          "unweighted_households": 8732,
+          "unweighted_people": 20388
+        },
+        "social_rent": {
+          "relative_ahc": 0.3896450102329254,
+          "median_equivalised_income_bhc": 33992.9765625,
+          "people_millions": 11.188352584838867,
+          "unweighted_households": 8622,
+          "unweighted_people": 17420
+        }
+      },
+      "family_type": {
+        "couple_no_children": {
+          "relative_ahc": 0.10108193755149841,
+          "median_equivalised_income_bhc": 56661.71875,
+          "people_millions": 12.772960662841797,
+          "unweighted_households": 17163,
+          "unweighted_people": 34442
+        },
+        "couple_with_children": {
+          "relative_ahc": 0.19979733228683472,
+          "median_equivalised_income_bhc": 43905.91796875,
+          "people_millions": 24.07623291015625,
+          "unweighted_households": 17369,
+          "unweighted_people": 67092
+        },
+        "lone_parent": {
+          "relative_ahc": 0.3795589506626129,
+          "median_equivalised_income_bhc": 32431.27734375,
+          "people_millions": 5.637396812438965,
+          "unweighted_households": 3783,
+          "unweighted_people": 10138
+        },
+        "pensioner": {
+          "relative_ahc": 0.11380542814731598,
+          "median_equivalised_income_bhc": 41559.7578125,
+          "people_millions": 13.073777198791504,
+          "unweighted_households": 27641,
+          "unweighted_people": 43609
+        },
+        "single_no_children": {
+          "relative_ahc": 0.2142106145620346,
+          "median_equivalised_income_bhc": 47056.33984375,
+          "people_millions": 15.293655395507812,
+          "unweighted_households": 22410,
+          "unweighted_people": 28328
+        }
+      },
+      "disability": {
+        "disabled_in_family": {
+          "relative_ahc": 0.17811331152915955,
+          "median_equivalised_income_bhc": 39635.70703125,
+          "people_millions": 13.39280891418457,
+          "unweighted_households": 14539,
+          "unweighted_people": 28397
+        },
+        "no_disabled_in_family": {
+          "relative_ahc": 0.18481510877609253,
+          "median_equivalised_income_bhc": 47200.35546875,
+          "people_millions": 57.46120834350586,
+          "unweighted_households": 66474,
+          "unweighted_people": 155212
+        }
+      },
+      "region": {
+        "EAST_MIDLANDS": {
+          "relative_ahc": 0.18927909433841705,
+          "median_equivalised_income_bhc": 40699.16796875,
+          "people_millions": 5.19944953918457,
+          "unweighted_households": 4682,
+          "unweighted_people": 10870
+        },
+        "EAST_OF_ENGLAND": {
+          "relative_ahc": 0.13005436956882477,
+          "median_equivalised_income_bhc": 47316.6484375,
+          "people_millions": 6.7677412033081055,
+          "unweighted_households": 7153,
+          "unweighted_people": 17818
+        },
+        "LONDON": {
+          "relative_ahc": 0.20013071596622467,
+          "median_equivalised_income_bhc": 51664.1015625,
+          "people_millions": 9.28564739227295,
+          "unweighted_households": 8110,
+          "unweighted_people": 20148
+        },
+        "NORTHERN_IRELAND": {
+          "relative_ahc": 0.2419643998146057,
+          "median_equivalised_income_bhc": 38222.703125,
+          "people_millions": 1.9767608642578125,
+          "unweighted_households": 6846,
+          "unweighted_people": 16024
+        },
+        "NORTH_EAST": {
+          "relative_ahc": 0.21349945664405823,
+          "median_equivalised_income_bhc": 40034.0234375,
+          "people_millions": 2.8136839866638184,
+          "unweighted_households": 2964,
+          "unweighted_people": 6593
+        },
+        "NORTH_WEST": {
+          "relative_ahc": 0.19925335049629211,
+          "median_equivalised_income_bhc": 44013.984375,
+          "people_millions": 7.909091949462891,
+          "unweighted_households": 6890,
+          "unweighted_people": 16633
+        },
+        "SCOTLAND": {
+          "relative_ahc": 0.1841944456100464,
+          "median_equivalised_income_bhc": 45138.02734375,
+          "people_millions": 5.6577277183532715,
+          "unweighted_households": 7067,
+          "unweighted_people": 14825
+        },
+        "SOUTH_EAST": {
+          "relative_ahc": 0.1558467000722885,
+          "median_equivalised_income_bhc": 51463.1875,
+          "people_millions": 9.881157875061035,
+          "unweighted_households": 11478,
+          "unweighted_people": 29151
+        },
+        "SOUTH_WEST": {
+          "relative_ahc": 0.1681552529335022,
+          "median_equivalised_income_bhc": 44666.953125,
+          "people_millions": 6.012174606323242,
+          "unweighted_households": 6710,
+          "unweighted_people": 14728
+        },
+        "WALES": {
+          "relative_ahc": 0.219306081533432,
+          "median_equivalised_income_bhc": 39835.6015625,
+          "people_millions": 3.2411913871765137,
+          "unweighted_households": 5033,
+          "unweighted_people": 10963
+        },
+        "WEST_MIDLANDS": {
+          "relative_ahc": 0.20447544753551483,
+          "median_equivalised_income_bhc": 41222.45703125,
+          "people_millions": 6.342085838317871,
+          "unweighted_households": 4563,
+          "unweighted_people": 10603
+        },
+        "YORKSHIRE": {
+          "relative_ahc": 0.17805065214633942,
+          "median_equivalised_income_bhc": 41644.8828125,
+          "people_millions": 5.767308712005615,
+          "unweighted_households": 6694,
+          "unweighted_people": 15253
+        }
+      }
+    },
+    "diagnostics": {
+      "children_not_receiving_uc_child_element_m": 0.0,
+      "children_in_limit_affected_benefit_units_m": 0.0,
+      "children_in_uc_benefit_units_m": 5.716564178466797,
+      "children_in_uc_benefit_units_3plus_m": 2.5795042514801025,
+      "relative_ahc_rate_children_in_limit_affected_bu": null,
+      "universal_credit_bn": 82.96272248379857,
+      "limit_affected_households_k": 0.0
+    },
+    "two_child_limit_kept": {
+      "relative_ahc_children": 0.2851720452308655,
+      "absolute_ahc_children": 0.2594313323497772,
+      "relative_ahc_by_family": {
+        "all": 0.2851720452308655,
+        "one_child": 0.1893434077501297,
+        "two_children": 0.21777629852294922,
+        "three_plus_children": 0.4794676899909973,
+        "lone_parent": 0.42074471712112427,
+        "couple": 0.24240776896476746
+      },
+      "median_equivalised_income_ahc": 38753.60546875,
+      "uc_child_limit_param": 2.0,
+      "children_not_receiving_uc_child_element_m": 0.9728752970695496
     }
   }
 }
