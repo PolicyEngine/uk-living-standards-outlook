@@ -60,6 +60,13 @@ def main(dataset_path: str) -> None:
         mean_income = float((hh_income * hh_weight).sum() / hh_weight.sum())
         median_income = weighted_median(hh_income, hh_weight)
 
+        # Equivalised income on the HBAI basis: each household's equivalised
+        # BHC net income, weighted by its members (HBAI's unit is the person).
+        eq_income = sim.calculate("equiv_hbai_household_net_income", year).values
+        eq_weight = hh_weight * sim.calculate("household_count_people", year).values
+        mean_eq = float((eq_income * eq_weight).sum() / eq_weight.sum())
+        median_eq = weighted_median(eq_income, eq_weight)
+
         age = sim.calculate("age", year).values
         p_weight = sim.calculate("person_weight", year).values
         groups = {
@@ -78,12 +85,15 @@ def main(dataset_path: str) -> None:
         results[str(year)] = {
             "mean_income": mean_income,
             "median_income": median_income,
+            "mean_equivalised_income": mean_eq,
+            "median_equivalised_income": median_eq,
             "households": float(hh_weight.sum()),
             "people": float(p_weight.sum()),
             "poverty": poverty,
         }
         print(
             f"{year}: mean £{mean_income:,.0f} median £{median_income:,.0f} "
+            f"equiv mean £{mean_eq:,.0f} median £{median_eq:,.0f} "
             + " ".join(f"{k}={v['all']:.3f}" for k, v in poverty.items())
             + f" ({time.time() - t0:.0f}s)",
             flush=True,

@@ -2,6 +2,8 @@
   "2024": {
     "mean_income": 49449.9765625,
     "median_income": 40578.59765625,
+    "mean_equivalised_income": 45771.69834730806,
+    "median_equivalised_income": 39617.30859375,
     "households": 28874982.0,
     "people": 68929848.0,
     "poverty": {
@@ -34,6 +36,8 @@
   "2025": {
     "mean_income": 51286.08984375,
     "median_income": 42202.80078125,
+    "mean_equivalised_income": 47459.767807447075,
+    "median_equivalised_income": 41171.6484375,
     "households": 29082884.0,
     "people": 69426144.0,
     "poverty": {
@@ -66,6 +70,8 @@
   "2026": {
     "mean_income": 52667.24609375,
     "median_income": 43388.953125,
+    "mean_equivalised_income": 48751.238525850174,
+    "median_equivalised_income": 42309.6171875,
     "households": 29193396.0,
     "people": 69689960.0,
     "poverty": {
@@ -98,6 +104,8 @@
   "2027": {
     "mean_income": 53659.0625,
     "median_income": 44137.29296875,
+    "mean_equivalised_income": 49677.4534313782,
+    "median_equivalised_income": 43201.4921875,
     "households": 29301416.0,
     "people": 69947808.0,
     "poverty": {
@@ -130,6 +138,8 @@
   "2028": {
     "mean_income": 54588.828125,
     "median_income": 44878.3046875,
+    "mean_equivalised_income": 50535.93737366019,
+    "median_equivalised_income": 43888.046875,
     "households": 29418620.0,
     "people": 70227600.0,
     "poverty": {
@@ -162,6 +172,8 @@
   "2029": {
     "mean_income": 55530.01953125,
     "median_income": 45701.82421875,
+    "mean_equivalised_income": 51398.55445942221,
+    "median_equivalised_income": 44697.4609375,
     "households": 29548062.0,
     "people": 70536600.0,
     "poverty": {
@@ -194,6 +206,8 @@
   "2030": {
     "mean_income": 56510.4921875,
     "median_income": 46450.48046875,
+    "mean_equivalised_income": 52303.978298218564,
+    "median_equivalised_income": 45305.1328125,
     "households": 29681028.0,
     "people": 70854024.0,
     "poverty": {

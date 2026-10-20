@@ -84,8 +84,22 @@ def main(dataset_path: str, tag: str) -> None:
             }
             for y in years
         ]
-        for m in ("mean_income", "median_income")
+        for m in ("mean_income", "median_income", "mean_equivalised_income", "median_equivalised_income")
     }
+
+    # HBAI equivalised income outturn (Table 1.2b) is GBP per week in average
+    # 2024/25 prices. Annualise (x 52), recover approximate cash values with
+    # the same OBR CPI index, then express in 2025-26 prices.
+    hbai_base = cpi_index("2024-01-01")
+    income_outturn = {}
+    for m, rows in hbai["income"].items():
+        series = []
+        for r in rows:
+            y = int(r["year"][:4])
+            annual_2425 = r["weekly_2024_25_prices"] * 52
+            nominal = annual_2425 * cpi_index(f"{y}-01-01") / hbai_base
+            series.append({"year": r["year"], "nominal": round(nominal), "real": round(real(nominal, y))})
+        income_outturn[m] = series
 
     measures = ["absolute_bhc", "absolute_ahc", "relative_bhc", "relative_ahc"]
     groups = ["all", "children", "working_age", "pensioners"]
@@ -131,6 +145,12 @@ def main(dataset_path: str, tag: str) -> None:
                 "hf_repo": "policyengine/populace-uk-private",
             },
             "real_price_base": fy(PRICE_BASE_YEAR),
+            "units": {
+                "mean_income": "£ per household per year",
+                "median_income": "£ per household per year",
+                "mean_equivalised_income": "£ per person per year, equivalised",
+                "median_equivalised_income": "£ per person per year, equivalised",
+            },
             "deflator": (
                 "OBR CPI index (gov.economic_assumptions.indices.obr.consumer_price_index, "
                 f"OBR EFO March 2026, policyengine-uk {version('policyengine-uk')}), "
@@ -144,6 +164,8 @@ def main(dataset_path: str, tag: str) -> None:
             "method": {
                 "mean_income": "Household-weighted mean of hbai_household_net_income (total household net income / number of households; not equivalised)",
                 "median_income": "Household-weighted median of hbai_household_net_income (not equivalised)",
+                "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household_weight x household_count_people), as in HBAI",
+                "median_equivalised_income": "Person-weighted median of equiv_hbai_household_net_income (BHC), as in HBAI",
                 "poverty": "Person-weighted share of people in households with in_poverty_bhc / in_poverty_ahc (absolute, 60% of FYE 2025 median held in real terms) and in_relative_poverty_bhc / in_relative_poverty_ahc (60% of contemporary median)",
                 "groups": "children: age < 18; working_age: 16 <= age < 65; pensioners: age >= 65 (copied from PolicyEngine/scottish-budget-dashboard)",
                 "source_repos": [
@@ -154,7 +176,8 @@ def main(dataset_path: str, tag: str) -> None:
             "notes": [
                 "National figures are unvalidated under this engine (Microcosm, demo only).",
                 "Projections are a current-law baseline: no Autumn Budget 2026 measures are modelled.",
-                "Income outturn is left empty. DWP HBAI publishes income levels only on an equivalised, per-person basis (and mean unequivalised household income only as a growth rate, Table 1.2a); ONS Average household income is also equivalised. Neither matches the projected concept (unequivalised mean/median household net income), so no outturn series is shown rather than mixing concepts.",
+                "Equivalised income outturn is HBAI Table 1.2b (BHC median and population mean, £ per week in 2024/25 prices) x 52. HBAI publishes these only in real terms, so the nominal values are recovered with the OBR CPI index used for the deflator; they approximate HBAI's own deflator, and the real 2025-26-price values preserve HBAI's year-on-year real changes exactly.",
+                "Household (unequivalised) income outturn is left empty. DWP HBAI publishes income levels only on an equivalised, per-person basis (and mean unequivalised household income only as a growth rate, Table 1.2a); ONS Average household income is also equivalised. Neither matches the projected concept (unequivalised mean/median household net income), so no outturn series is shown rather than mixing concepts.",
                 "Poverty outturn is the HBAI admin-linked series from 2021-22; HBAI anchors the absolute line to FYE 2025, so absolute and relative rates coincide in 2024-25.",
                 "Age groups differ from HBAI: HBAI children are dependent children (under 16, or 16-19 in non-advanced education), working-age adults are below State Pension age and pensioners are at or above it. The projection uses age bands (under 18, 16-64, 65+), so 16-17 year olds count in both children and working age.",
                 "The engine's 2024-25 median equivalised income (BHC) is about £762 a week against HBAI's £719, so with the absolute line fixed at HBAI's level the projected absolute rates sit well below outturn; relative rates are closer.",
@@ -163,8 +186,13 @@ def main(dataset_path: str, tag: str) -> None:
             ],
         },
         "living_standards": {
-            "metrics": {"mean_income": "Mean income", "median_income": "Median income"},
-            "outturn": {"mean_income": [], "median_income": []},
+            "metrics": {
+                "mean_income": "Mean income",
+                "median_income": "Median income",
+                "mean_equivalised_income": "Mean equivalised income (BHC)",
+                "median_equivalised_income": "Median equivalised income (BHC)",
+            },
+            "outturn": {"mean_income": [], "median_income": [], **income_outturn},
             "projection": living,
         },
         "poverty": {

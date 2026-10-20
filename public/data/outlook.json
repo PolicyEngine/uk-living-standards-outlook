@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-20T13:09:51+00:00",
+    "generated_at": "2026-10-20T13:14:23+00:00",
     "policyengine": "6.8.0",
     "policyengine_uk": "2.130.1",
     "dataset": {
@@ -10,12 +10,20 @@
       "hf_repo": "policyengine/populace-uk-private"
     },
     "real_price_base": "2025-26",
+    "units": {
+      "mean_income": "\u00a3 per household per year",
+      "median_income": "\u00a3 per household per year",
+      "mean_equivalised_income": "\u00a3 per person per year, equivalised",
+      "median_equivalised_income": "\u00a3 per person per year, equivalised"
+    },
     "deflator": "OBR CPI index (gov.economic_assumptions.indices.obr.consumer_price_index, OBR EFO March 2026, policyengine-uk 2.130.1), calendar-year value Y applied to fiscal year Y-(Y+1), rebased to 2025-26 = 1",
-    "outturn_source": "Households Below Average Income: FYE 1995 to FYE 2025 (DWP, 26 March 2026), tables 1.3a, 1.4a, 1.5a, 1.6a: https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
+    "outturn_source": "Households Below Average Income: FYE 1995 to FYE 2025 (DWP, 26 March 2026), tables 1.2b (BHC block), 1.3a, 1.4a, 1.5a, 1.6a: https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
     "outturn_file_sha256": "38586ace5e06ca0029f9b5345a6047c54143ee03c644a2c0553d77813ca27a21",
     "method": {
       "mean_income": "Household-weighted mean of hbai_household_net_income (total household net income / number of households; not equivalised)",
       "median_income": "Household-weighted median of hbai_household_net_income (not equivalised)",
+      "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household_weight x household_count_people), as in HBAI",
+      "median_equivalised_income": "Person-weighted median of equiv_hbai_household_net_income (BHC), as in HBAI",
       "poverty": "Person-weighted share of people in households with in_poverty_bhc / in_poverty_ahc (absolute, 60% of FYE 2025 median held in real terms) and in_relative_poverty_bhc / in_relative_poverty_ahc (60% of contemporary median)",
       "groups": "children: age < 18; working_age: 16 <= age < 65; pensioners: age >= 65 (copied from PolicyEngine/scottish-budget-dashboard)",
       "source_repos": [
@@ -26,7 +34,8 @@
     "notes": [
       "National figures are unvalidated under this engine (Microcosm, demo only).",
       "Projections are a current-law baseline: no Autumn Budget 2026 measures are modelled.",
-      "Income outturn is left empty. DWP HBAI publishes income levels only on an equivalised, per-person basis (and mean unequivalised household income only as a growth rate, Table 1.2a); ONS Average household income is also equivalised. Neither matches the projected concept (unequivalised mean/median household net income), so no outturn series is shown rather than mixing concepts.",
+      "Equivalised income outturn is HBAI Table 1.2b (BHC median and population mean, \u00a3 per week in 2024/25 prices) x 52. HBAI publishes these only in real terms, so the nominal values are recovered with the OBR CPI index used for the deflator; they approximate HBAI's own deflator, and the real 2025-26-price values preserve HBAI's year-on-year real changes exactly.",
+      "Household (unequivalised) income outturn is left empty. DWP HBAI publishes income levels only on an equivalised, per-person basis (and mean unequivalised household income only as a growth rate, Table 1.2a); ONS Average household income is also equivalised. Neither matches the projected concept (unequivalised mean/median household net income), so no outturn series is shown rather than mixing concepts.",
       "Poverty outturn is the HBAI admin-linked series from 2021-22; HBAI anchors the absolute line to FYE 2025, so absolute and relative rates coincide in 2024-25.",
       "Age groups differ from HBAI: HBAI children are dependent children (under 16, or 16-19 in non-advanced education), working-age adults are below State Pension age and pensioners are at or above it. The projection uses age bands (under 18, 16-64, 65+), so 16-17 year olds count in both children and working age.",
       "The engine's 2024-25 median equivalised income (BHC) is about \u00a3762 a week against HBAI's \u00a3719, so with the absolute line fixed at HBAI's level the projected absolute rates sit well below outturn; relative rates are closer.",
@@ -37,11 +46,57 @@
   "living_standards": {
     "metrics": {
       "mean_income": "Mean income",
-      "median_income": "Median income"
+      "median_income": "Median income",
+      "mean_equivalised_income": "Mean equivalised income (BHC)",
+      "median_equivalised_income": "Median equivalised income (BHC)"
     },
     "outturn": {
       "mean_income": [],
-      "median_income": []
+      "median_income": [],
+      "median_equivalised_income": [
+        {
+          "year": "2021-22",
+          "nominal": 30555,
+          "real": 37900
+        },
+        {
+          "year": "2022-23",
+          "nominal": 32921,
+          "real": 37439
+        },
+        {
+          "year": "2023-24",
+          "nominal": 34889,
+          "real": 36977
+        },
+        {
+          "year": "2024-25",
+          "nominal": 37413,
+          "real": 38685
+        }
+      ],
+      "mean_equivalised_income": [
+        {
+          "year": "2021-22",
+          "nominal": 37003,
+          "real": 45897
+        },
+        {
+          "year": "2022-23",
+          "nominal": 40063,
+          "real": 45560
+        },
+        {
+          "year": "2023-24",
+          "nominal": 42214,
+          "real": 44741
+        },
+        {
+          "year": "2024-25",
+          "nominal": 44459,
+          "real": 45971
+        }
+      ]
     },
     "projection": {
       "mean_income": [
@@ -116,6 +171,80 @@
           "year": "2030-31",
           "nominal": 46450,
           "real": 41949
+        }
+      ],
+      "mean_equivalised_income": [
+        {
+          "year": "2024-25",
+          "nominal": 45772,
+          "real": 47328
+        },
+        {
+          "year": "2025-26",
+          "nominal": 47460,
+          "real": 47460
+        },
+        {
+          "year": "2026-27",
+          "nominal": 48751,
+          "real": 47655
+        },
+        {
+          "year": "2027-28",
+          "nominal": 49677,
+          "real": 47609
+        },
+        {
+          "year": "2028-29",
+          "nominal": 50536,
+          "real": 47482
+        },
+        {
+          "year": "2029-30",
+          "nominal": 51399,
+          "real": 47345
+        },
+        {
+          "year": "2030-31",
+          "nominal": 52304,
+          "real": 47235
+        }
+      ],
+      "median_equivalised_income": [
+        {
+          "year": "2024-25",
+          "nominal": 39617,
+          "real": 40964
+        },
+        {
+          "year": "2025-26",
+          "nominal": 41172,
+          "real": 41172
+        },
+        {
+          "year": "2026-27",
+          "nominal": 42310,
+          "real": 41358
+        },
+        {
+          "year": "2027-28",
+          "nominal": 43201,
+          "real": 41402
+        },
+        {
+          "year": "2028-29",
+          "nominal": 43888,
+          "real": 41236
+        },
+        {
+          "year": "2029-30",
+          "nominal": 44697,
+          "real": 41173
+        },
+        {
+          "year": "2030-31",
+          "nominal": 45305,
+          "real": 40914
         }
       ]
     }
