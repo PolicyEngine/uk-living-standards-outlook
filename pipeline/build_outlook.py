@@ -48,6 +48,35 @@ SECTIONS = [
 ]
 
 
+# OBR EFO March 2026 detailed forecast tables, economy (published 3 March 2026;
+# still the latest OBR forecast until the 28 October 2026 EFO). Every OBR series
+# below is the calendar-year row of the table: growth in the annual average,
+# not fiscal year and not Q4 on Q4. Checked against the xlsx on 20 Oct 2026.
+EFO = "OBR EFO March 2026, economy detailed forecast tables"
+SOURCES = {
+    "consumer_price_index": f"{EFO}, Table 1.7, CPI (calendar year), rounded to 1 d.p. as in Table A.1",
+    "cpih": f"{EFO}, Table 1.7, CPIH (calendar year)",
+    "consumer_price_index_ahc": (
+        "PolicyEngine derivation from OBR March 2026 CPI and rents (not an OBR series; "
+        "ONS ad hoc 2863 definition, excluding rents, maintenance and water); 2027 onwards held at 1.9%"
+    ),
+    "rpi": f"{EFO}, Table 1.7, RPI (calendar year), rounded to 1 d.p. as in Table A.1",
+    "average_earnings": (
+        f"{EFO}, Table 1.6, average weekly earnings growth (wages and salaries per employee, "
+        "calendar year), rounded to 1 d.p. as in Table A.1"
+    ),
+    "non_labour_income": f"{EFO}, Table 1.12, growth in non-labour income (calendar year)",
+    "house_prices": f"{EFO}, Table 1.16, house price index growth (calendar year), rounded to 1 d.p.",
+    "rent": f"{EFO}, Table 1.7, actual rents for housing (ONS D7GQ, calendar year)",
+    "social_rent": "England social rent policy cap (CPI + 1%, MHCLG policy statement on rents for social housing); not an OBR forecast",
+    "mortgage_interest": (
+        f"{EFO}, Table 1.7, mortgage interest payments (calendar year), 2026-2029; "
+        "OBR stops forecasting this series after 2030 Q1, so the 2030 value (5.5%) is "
+        "carried over from policyengine-uk's November 2025 update, not an OBR March 2026 figure"
+    ),
+}
+
+
 def fy(year: int) -> str:
     return f"{year}-{str(year + 1)[-2:]}"
 
@@ -121,12 +150,11 @@ def main(dataset_path: str, tag: str) -> None:
                 {"year": str(y), "value": round(float(node(f"{y}-01-01")), 4)}
                 for y in FORECAST_YEARS
             ]
-            refs = node.metadata.get("reference", [])
             out_series.append({
                 "key": key,
                 "label": label,
                 "parameter": f"gov.economic_assumptions.yoy_growth.obr.{leaf}",
-                "source": refs[0]["title"] if refs else None,
+                "source": SOURCES[leaf],
                 "pre": pre,
                 "post": [dict(p) for p in pre],
             })
@@ -182,7 +210,9 @@ def main(dataset_path: str, tag: str) -> None:
                 "Age groups differ from HBAI: HBAI children are dependent children (under 16, or 16-19 in non-advanced education), working-age adults are below State Pension age and pensioners are at or above it. The projection uses age bands (under 18, 16-64, 65+), so 16-17 year olds count in both children and working age.",
                 "The engine's 2024-25 median equivalised income (BHC) is about £762 a week against HBAI's £719, so with the absolute line fixed at HBAI's level the projected absolute rates sit well below outturn; relative rates are closer.",
                 "Rent is ONS series D7GQ (private and social combined); social rent is the England rent policy cap, not an OBR forecast (the pinned package has 4.8% for 2026, against 4.4% in the uk-spring-statement-2026 March 2026 snapshot).",
-                "The Autumn Budget 2026 OBR forecast is not yet published: post equals pre.",
+                "Forecast years are calendar years: each OBR series is year-on-year growth in the calendar-year annual average (the calendar-year rows of the OBR March 2026 economy detailed forecast tables), not fiscal years and not Q4 on Q4. The real-terms deflator applies calendar-year CPI to the fiscal year that starts in it (OBR CPI is 2.3% in 2026 but 2.0% in 2026-27).",
+                "Checked against the OBR March 2026 economy tables (20 Oct 2026): CPI, CPIH, RPI, earnings, non-labour income, house prices and rent match to rounding. CPI after housing costs is a PolicyEngine derivation, not an OBR series. Mortgage interest for 2030 is not an OBR March 2026 figure (OBR stops forecasting it after 2030 Q1).",
+                "The Autumn Budget 2026 OBR forecast (due 28 October 2026) is not yet published: post equals pre.",
             ],
         },
         "living_standards": {
@@ -213,6 +243,7 @@ def main(dataset_path: str, tag: str) -> None:
         },
         "forecast": {
             "pre_label": "OBR March 2026 (pre-Budget)",
+            "basis": "Calendar year, growth in annual average",
             "post_label": "Budget forecast",
             "post_published": False,
             "headline": ["cpi", "rpi", "earnings"],

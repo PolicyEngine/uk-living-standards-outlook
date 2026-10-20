@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-20T13:14:23+00:00",
+    "generated_at": "2026-10-20T13:36:04+00:00",
     "policyengine": "6.8.0",
     "policyengine_uk": "2.130.1",
     "dataset": {
@@ -40,7 +40,9 @@
       "Age groups differ from HBAI: HBAI children are dependent children (under 16, or 16-19 in non-advanced education), working-age adults are below State Pension age and pensioners are at or above it. The projection uses age bands (under 18, 16-64, 65+), so 16-17 year olds count in both children and working age.",
       "The engine's 2024-25 median equivalised income (BHC) is about \u00a3762 a week against HBAI's \u00a3719, so with the absolute line fixed at HBAI's level the projected absolute rates sit well below outturn; relative rates are closer.",
       "Rent is ONS series D7GQ (private and social combined); social rent is the England rent policy cap, not an OBR forecast (the pinned package has 4.8% for 2026, against 4.4% in the uk-spring-statement-2026 March 2026 snapshot).",
-      "The Autumn Budget 2026 OBR forecast is not yet published: post equals pre."
+      "Forecast years are calendar years: each OBR series is year-on-year growth in the calendar-year annual average (the calendar-year rows of the OBR March 2026 economy detailed forecast tables), not fiscal years and not Q4 on Q4. The real-terms deflator applies calendar-year CPI to the fiscal year that starts in it (OBR CPI is 2.3% in 2026 but 2.0% in 2026-27).",
+      "Checked against the OBR March 2026 economy tables (20 Oct 2026): CPI, CPIH, RPI, earnings, non-labour income, house prices and rent match to rounding. CPI after housing costs is a PolicyEngine derivation, not an OBR series. Mortgage interest for 2030 is not an OBR March 2026 figure (OBR stops forecasting it after 2030 Q1).",
+      "The Autumn Budget 2026 OBR forecast (due 28 October 2026) is not yet published: post equals pre."
     ]
   },
   "living_standards": {
@@ -1053,6 +1055,7 @@
   },
   "forecast": {
     "pre_label": "OBR March 2026 (pre-Budget)",
+    "basis": "Calendar year, growth in annual average",
     "post_label": "Budget forecast",
     "post_published": false,
     "headline": [
@@ -1068,7 +1071,7 @@
             "key": "cpi",
             "label": "CPI inflation",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.consumer_price_index",
-            "source": "OBR EFO March 2026 (Table A.1)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.7, CPI (calendar year), rounded to 1 d.p. as in Table A.1",
             "pre": [
               {
                 "year": "2026",
@@ -1118,7 +1121,7 @@
             "key": "cpih",
             "label": "CPIH inflation",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.cpih",
-            "source": "OBR EFO March 2026 (detailed forecast tables, economy, Table 1.7)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.7, CPIH (calendar year)",
             "pre": [
               {
                 "year": "2026",
@@ -1168,7 +1171,7 @@
             "key": "cpi_ahc",
             "label": "CPI (after housing costs)",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.consumer_price_index_ahc",
-            "source": "OBR EFO March 2026",
+            "source": "PolicyEngine derivation from OBR March 2026 CPI and rents (not an OBR series; ONS ad hoc 2863 definition, excluding rents, maintenance and water); 2027 onwards held at 1.9%",
             "pre": [
               {
                 "year": "2026",
@@ -1218,7 +1221,7 @@
             "key": "rpi",
             "label": "RPI inflation",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.rpi",
-            "source": "OBR EFO March 2026 (Table A.1)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.7, RPI (calendar year), rounded to 1 d.p. as in Table A.1",
             "pre": [
               {
                 "year": "2026",
@@ -1273,7 +1276,7 @@
             "key": "earnings",
             "label": "Earnings growth",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.average_earnings",
-            "source": "OBR EFO March 2026 (Table A.1)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.6, average weekly earnings growth (wages and salaries per employee, calendar year), rounded to 1 d.p. as in Table A.1",
             "pre": [
               {
                 "year": "2026",
@@ -1323,7 +1326,7 @@
             "key": "non_labour_income",
             "label": "Non-labour income growth",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.non_labour_income",
-            "source": "OBR EFO March 2026 (detailed forecast tables, economy, Table 1.12)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.12, growth in non-labour income (calendar year)",
             "pre": [
               {
                 "year": "2026",
@@ -1378,7 +1381,7 @@
             "key": "house_prices",
             "label": "House price growth",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.house_prices",
-            "source": "OBR EFO March 2026 (Table A.1)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.16, house price index growth (calendar year), rounded to 1 d.p.",
             "pre": [
               {
                 "year": "2026",
@@ -1428,7 +1431,7 @@
             "key": "rent",
             "label": "Rent growth (private and social, ONS D7GQ)",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.rent",
-            "source": "OBR EFO March 2026 (detailed forecast tables, economy, Table 1.7)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.7, actual rents for housing (ONS D7GQ, calendar year)",
             "pre": [
               {
                 "year": "2026",
@@ -1478,7 +1481,7 @@
             "key": "social_rent",
             "label": "Social rent growth (England rent policy cap)",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.social_rent",
-            "source": "Registered provider social housing stock and rents in England, 2021 to 2022",
+            "source": "England social rent policy cap (CPI + 1%, MHCLG policy statement on rents for social housing); not an OBR forecast",
             "pre": [
               {
                 "year": "2026",
@@ -1528,7 +1531,7 @@
             "key": "mortgage_interest",
             "label": "Mortgage interest growth",
             "parameter": "gov.economic_assumptions.yoy_growth.obr.mortgage_interest",
-            "source": "OBR EFO March 2026 (detailed forecast tables, economy, Table 1.7)",
+            "source": "OBR EFO March 2026, economy detailed forecast tables, Table 1.7, mortgage interest payments (calendar year), 2026-2029; OBR stops forecasting this series after 2030 Q1, so the 2030 value (5.5%) is carried over from policyengine-uk's November 2025 update, not an OBR March 2026 figure",
             "pre": [
               {
                 "year": "2026",
