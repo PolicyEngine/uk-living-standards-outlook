@@ -28,7 +28,7 @@ OUT = ROOT / "public" / "data" / "outlook.json"
 
 PRICE_BASE_YEAR = 2025  # fiscal 2025-26
 PROJECTION_START = 2025  # 2024-25 is run only for meta.validation_2024_25
-HEADLINE_END_YEAR = 2029  # 2030-31 has the UC health element step (see YEAR_2030_NOTE)
+HEADLINE_END_YEAR = 2029  # 2030-31 hit by pe-uk 2.130.1 UC health element bug (#2282, fixed in 2.134.4)
 MIN_HOUSEHOLDS = 100  # suppress poverty_by_group cells below this unweighted count
 FORECAST_YEARS = range(2026, 2031)
 
@@ -411,10 +411,7 @@ def main(dataset_path: str, tag: str) -> None:
             },
             "real_price_base": fy(PRICE_BASE_YEAR),
             "headline_end_year": fy(HEADLINE_END_YEAR),
-            "headline_end_year_note": (
-                "Headline comparisons end in 2029-30 because the engine applies the existing-claimant UC health element "
-                "protection only to 2029, so 2030-31 has a step that is under investigation."
-            ),
+            "headline_end_year_note": HEADLINE_NOTE,
             "units": {
                 "mean_equivalised_income": "£ per person per year, equivalised",
                 "median_equivalised_income": "£ per person per year, equivalised",
@@ -509,9 +506,13 @@ def main(dataset_path: str, tag: str) -> None:
     print(f"Wrote {OUT}")
 
 
+HEADLINE_NOTE = (
+    "Headlines end in 2029-30: policyengine-uk 2.130.1 ends the UC health element protection in 2030, "
+    "a bug fixed in 2.134.4 that this engine pin predates."
+)
 YEAR_2030_NOTE = (
-    "2030-31 contains a baseline discontinuity: the engine applies the UC health element protection only to 2026-27 to 2029-30, "
-    "so in 2030-31 most recipients drop to the new-claimant rate and the UC health element for UC recipients falls from about £12bn to £8bn."
+    "2030-31 is distorted by a policyengine-uk 2.130.1 bug that ends the UC health element protection in 2030 "
+    "(fixed in 2.134.4), so use 2029-30 for headlines."
 )
 
 NOTES = [
@@ -521,7 +522,7 @@ NOTES = [
     "Poverty and inequality outturn is the HBAI admin-linked series, which starts in 2021-22.",
     "The model's 2024-25 median income is about 6% above HBAI's, so projected absolute poverty sits below outturn.",
     "OBR series are calendar years; CPI after housing costs and social rent are PolicyEngine derivations, not OBR forecasts.",
-    "2030-31 has a model step: the UC health element loses its pre-2026 protection, so incomes of lower-income households and poverty jump.",
+    HEADLINE_NOTE,
     "The Autumn Budget 2026 OBR forecast is due on 28 October 2026; until then the post-Budget series repeat the pre-Budget ones.",
 ]
 
