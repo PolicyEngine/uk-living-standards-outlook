@@ -183,7 +183,7 @@ function LivingStandardsCard({ living, meta }) {
       ) : (
         <D3LineChart
           data={chartData}
-          yLabel={`${units || "Household income"}${realSuffix}`}
+          yLabel={`${units ? units.split(",")[0] : "Household income"}${realSuffix}`}
           yFormat={yDomain[1] >= 10000 ? formatPoundsKAxis : formatPoundsWholeAxis}
           yDomain={yDomain}
           viewMode={effectiveView}

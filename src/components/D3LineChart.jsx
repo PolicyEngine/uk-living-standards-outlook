@@ -53,7 +53,7 @@ export default function D3LineChart({
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const margin = { top: 24, right: 24, bottom: 48, left: 64 };
+    const margin = { top: 24, right: 32, bottom: 48, left: 64 };
     const width = dimensions.width - margin.left - margin.right;
     const chartHeight = dimensions.height - margin.top - margin.bottom;
 
