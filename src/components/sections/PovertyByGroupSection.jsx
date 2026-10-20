@@ -1,48 +1,63 @@
 "use client";
 
 // Poverty and income by group: one breakdown at a time, a dot plot of
-// 2025-26 against the headline end year (poverty_by_group).
+// 2025-26 (grey) to the headline end year (teal), with an arrow for the
+// direction, the values and a change chip per row, and a dashed line for all
+// people (poverty_by_group).
 
 import { useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
-import { PALETTE, niceAxis } from "../../lib/baseline";
-import { changeVerb, fyDash, formatPct, formatPounds, headlineYear } from "../../lib/outlook";
+import { niceAxis, rangeAxis } from "../../lib/baseline";
+import { formatOneDp, formatPct, formatPounds, fyDash, headlineYear } from "../../lib/outlook";
 import { PeSource } from "../../lib/sources";
 
 const MEASURES = {
   relative_ahc: {
     label: "Relative poverty (AHC)",
+    title: "Poverty",
+    noun: "relative poverty rate",
     pick: (c) => (c.relative_ahc == null ? null : c.relative_ahc * 100),
-    format: (v) => formatPct(v),
+    all: (data, year) => {
+      const r = (data.poverty?.projection?.relative_ahc?.all || []).find((d) => d.year === year);
+      return r?.rate == null ? null : r.rate * 100;
+    },
+    format: formatPct,
     tick: (v) => `${v}%`,
-    change: (a, b) => changeVerb(b - a, "pp"),
+    change: (a, b) => b - a,
+    changeLabel: (d) => `${d > 0 ? "+" : "−"}${formatOneDp(Math.abs(d))}pp`,
+    // A fall in poverty is good (teal); a rise is orange.
+    good: (d) => d < 0,
   },
   median_equivalised_income_bhc: {
     label: "Median income (BHC, real)",
+    title: "Median income",
+    noun: "median income",
     pick: (c) => c.median_equivalised_income_bhc?.real ?? null,
-    format: (v) => formatPounds(v),
+    all: (data, year) =>
+      (data.living_standards?.projection?.median_equivalised_income || []).find((d) => d.year === year)?.real ?? null,
+    format: formatPounds,
     tick: (v) => formatPounds(v),
-    change: (a, b) => changeVerb(((b - a) / a) * 100, "%"),
+    change: (a, b) => ((b - a) / a) * 100,
+    changeLabel: (d) => `${d > 0 ? "+" : "−"}${formatOneDp(Math.abs(d))}%`,
+    good: (d) => d > 0,
   },
 };
 
-/** Group names as plural nouns for sentences ("highest among lone parents"). */
+/** Row labels as plural, sentence-case nouns. Regions keep their names. */
 const PLURAL = {
-  owned_outright: "outright owners",
-  mortgage: "people with a mortgage",
-  social_rent: "social renters",
-  private_rent: "private renters",
-  lone_parent: "lone parents",
-  couple_with_children: "couples with children",
-  single_no_children: "single people without children",
-  couple_no_children: "couples without children",
-  pensioner: "pensioner families",
-  disabled_in_family: "families with a disability benefit recipient",
-  no_disabled_in_family: "families without a disability benefit recipient",
+  owned_outright: "Outright owners",
+  mortgage: "Mortgage holders",
+  social_rent: "Social renters",
+  private_rent: "Private renters",
+  lone_parent: "Lone parents",
+  couple_with_children: "Couples with children",
+  single_no_children: "Single adults without children",
+  couple_no_children: "Couples without children",
+  pensioner: "Pensioner families",
+  disabled_in_family: "Families with a disability benefit recipient",
+  no_disabled_in_family: "Families without a disability benefit recipient",
 };
-const among = (breakdown, r) => (breakdown === "region" ? `in ${r.label}` : `among ${PLURAL[r.id] || r.label.toLowerCase()}`);
-const forGroup = (breakdown, r) => (breakdown === "region" ? r.label : PLURAL[r.id] || r.label.toLowerCase());
 
 export default function PovertyByGroupSection({ data }) {
   const pbg = data.poverty_by_group;
@@ -53,45 +68,44 @@ export default function PovertyByGroupSection({ data }) {
   const from = pbg.years[0];
   const to = pbg.years.includes(headlineYear(data)) ? headlineYear(data) : pbg.years[pbg.years.length - 1];
   const b = pbg.breakdowns[breakdown];
+  const isRegion = breakdown === "region";
 
   const rows = Object.entries(b.groups)
     .map(([id, label]) => {
       const cells = b.cells[id] || {};
       const a = cells[from] && !cells[from].suppressed ? m.pick(cells[from]) : null;
       const z = cells[to] && !cells[to].suppressed ? m.pick(cells[to]) : null;
-      return { id, label, a, z };
+      return { id, label: PLURAL[id] || label, a, z, d: a != null && z != null ? m.change(a, z) : null };
     })
     .filter((r) => r.a != null || r.z != null)
     .sort((x, y) => (y.z ?? y.a) - (x.z ?? x.a));
-  const axis = niceAxis(Math.max(...rows.flatMap((r) => [r.a ?? 0, r.z ?? 0])));
-  const max = axis.domain[1];
-  const pos = (v) => `${(v / max) * 100}%`;
+  const allValue = m.all(data, to);
+  const values = [...rows.flatMap((r) => [r.a, r.z]), allValue].filter((v) => v != null);
+  // Rates from zero; incomes over their range, so the dots spread out.
+  const axis = measure === "relative_ahc" ? niceAxis(Math.max(...values)) : rangeAxis(values, { pad: 0.08 });
+  const [x0, x1] = axis.domain;
+  const pct = (v) => ((v - x0) / (x1 - x0)) * 100;
+  const pos = (v) => `${pct(v)}%`;
 
-  const moved = rows
-    .filter((r) => r.a != null && r.z != null)
-    .map((r) => ({ ...r, d: measure === "relative_ahc" ? r.z - r.a : (r.z - r.a) / r.a }))
-    .sort((x, y) => Math.abs(y.d) - Math.abs(x.d))[0];
   const top = rows[0];
+  const verb = (d) => (Math.abs(d) < 0.05 ? "unchanged" : `${d > 0 ? "up" : "down"} ${m.changeLabel(d).slice(1)}`);
+  const lead = top && (
+    <p className="chart-summary">
+      {top.label} {isRegion ? "has" : "have"} the highest {m.noun} ({m.format(top.z ?? top.a)} in {fyDash(to)})
+      {top.d != null && (
+        <>
+          , <strong>{verb(top.d)}</strong> since {fyDash(from)}
+        </>
+      )}
+      .
+    </p>
+  );
 
   return (
     <ChartCard
-      title={`By ${b.label.toLowerCase()}`}
+      title={`${m.title} by ${b.label.toLowerCase()}`}
       description={`Relative poverty: share of people below 60% of current median income after housing costs. Median income is per person, adjusted for household size, in ${fyDash(data.meta.real_price_base)} prices. Family type is at benefit-unit level; a pensioner family has someone at or above State Pension age. Disability means someone in the family receives DLA, PIP or similar, narrower than the self-reported definition in official statistics, and disability benefits count as income. Regions are single-year model estimates (official statistics use three-year averages).`}
-      summary={
-        top && (
-          <p className="chart-summary">
-            {m.label.replace(/ \(.*\)/, "")} is highest {among(breakdown, top)}, at {m.format(top.z ?? top.a)} in{" "}
-            {fyDash(to)}
-            {moved && m.change(moved.a, moved.z) ? (
-              <>
-                ; the biggest change since {fyDash(from)} is for {forGroup(breakdown, moved)}, whose{" "}
-                {measure === "relative_ahc" ? "rate" : "median income"} <strong>{m.change(moved.a, moved.z)}</strong>
-              </>
-            ) : null}
-            .
-          </p>
-        )
-      }
+      summary={lead}
       source={<PeSource />}
       controls={
         <>
@@ -113,49 +127,76 @@ export default function PovertyByGroupSection({ data }) {
         </>
       }
     >
-      <div className="dot-plot" role="table" aria-label={`${m.label} by ${b.label.toLowerCase()}, ${fyDash(from)} and ${fyDash(to)}`}>
-        <div className="dot-plot-legend" aria-hidden="true">
-          <span>
-            <i style={{ background: PALETTE.grey }} /> {fyDash(from)}
+      <div
+        className={`dot-plot${isRegion ? " compact" : ""}`}
+        role="table"
+        aria-label={`${m.label} by ${b.label.toLowerCase()}, ${fyDash(from)} and ${fyDash(to)}`}
+      >
+        <div className="dot-head" aria-hidden="true">
+          <span className="dot-label" />
+          <span className="dot-plot-area">
+            {allValue != null && (
+              <span className="dot-all-label" style={{ left: pos(allValue) }}>
+                All people {m.format(allValue)}
+              </span>
+            )}
           </span>
-          <span>
-            <i style={{ background: PALETTE.teal }} /> {fyDash(to)}
+          <span className="dot-legend">
+            <span>
+              <i className="from" /> {fyDash(from)}
+            </span>
+            <span>
+              <i className="to" /> {fyDash(to)}
+            </span>
           </span>
         </div>
         {rows.map((r) => {
+          const both = r.a != null && r.z != null;
           const lo = Math.min(r.a ?? r.z, r.z ?? r.a);
           const hi = Math.max(r.a ?? r.z, r.z ?? r.a);
+          const rising = both && r.z > r.a;
+          const tone = r.d == null || Math.abs(r.d) < 0.05 ? "flat" : m.good(r.d) ? "good" : "bad";
           return (
             <div className="dot-row" role="row" key={r.id}>
               <span className="dot-label" role="rowheader">
                 {r.label}
               </span>
-              <span className="dot-track" role="cell" aria-label={`${fyDash(from)} ${r.a == null ? "n/a" : m.format(r.a)}, ${fyDash(to)} ${r.z == null ? "n/a" : m.format(r.z)}`}>
-                <span className="dot-link" style={{ left: pos(lo), width: `calc(${pos(hi)} - ${pos(lo)})` }} />
+              <span className="dot-plot-area" role="cell" aria-label={`${fyDash(from)} ${r.a == null ? "n/a" : m.format(r.a)}, ${fyDash(to)} ${r.z == null ? "n/a" : m.format(r.z)}`}>
+                {axis.ticks.map((t) => (
+                  <span key={t} className="dot-grid" style={{ left: pos(t) }} />
+                ))}
+                {allValue != null && <span className="dot-all" style={{ left: pos(allValue) }} />}
+                {both && (
+                  <span className="dot-link" style={{ left: pos(lo), width: `${pct(hi) - pct(lo)}%` }}>
+                    {pct(hi) - pct(lo) > 6 && <span className={`dot-arrow ${rising ? "right" : "left"}`} />}
+                  </span>
+                )}
                 {r.a != null && <span className="dot from" style={{ left: pos(r.a) }} title={`${fyDash(from)}: ${m.format(r.a)}`} />}
                 {r.z != null && <span className="dot to" style={{ left: pos(r.z) }} title={`${fyDash(to)}: ${m.format(r.z)}`} />}
               </span>
-              <span className="dot-value" role="cell">
-                {r.z == null ? "–" : m.format(r.z)}
+              <span className="dot-values" role="cell">
+                <span className="dot-nums">
+                  {r.a == null ? "–" : m.format(r.a)} → {r.z == null ? "–" : m.format(r.z)}
+                </span>
+                {r.d != null && <span className={`dot-chip ${tone}`}>{m.changeLabel(r.d)}</span>}
               </span>
             </div>
           );
         })}
         <div className="dot-row dot-axis" aria-hidden="true">
           <span className="dot-label" />
-          <span className="dot-track">
+          <span className="dot-plot-area">
             {axis.ticks.map((t) => (
               <span key={t} className="dot-tick" style={{ left: pos(t) }}>
                 {m.tick(t)}
               </span>
             ))}
           </span>
-          <span className="dot-value" />
+          <span className="dot-values" />
         </div>
       </div>
     </ChartCard>
   );
 }
 
-// Rendered only when outlook.json has this block (App.jsx Row).
 PovertyByGroupSection.requires = "poverty_by_group";

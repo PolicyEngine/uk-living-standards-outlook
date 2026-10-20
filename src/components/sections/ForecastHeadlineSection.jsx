@@ -1,6 +1,14 @@
 // Headline forecast figures as AB26 .key-metric tiles.
 
 import { HERO_YEAR, changeClass, pctLabel, ppLabel, toRows } from "../../lib/forecast";
+import { ObrSource } from "../../lib/sources";
+
+// ONS series pages for the tile names (checked 20 Oct 2026).
+const ONS_SERIES = {
+  cpi: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23",
+  rpi: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23",
+  earnings: "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/kab9/lms",
+};
 
 export default function ForecastHeadlineSection({ data }) {
   const forecast = data.forecast;
@@ -24,7 +32,15 @@ export default function ForecastHeadlineSection({ data }) {
     <div className="key-metrics-row three-up">
       {cards.map((card) => (
         <div key={card.key} className="key-metric">
-          <div className="metric-label">{card.label}</div>
+          <div className="metric-label">
+            {ONS_SERIES[card.key] ? (
+              <a href={ONS_SERIES[card.key]} target="_blank" rel="noopener noreferrer" title="ONS series">
+                {card.label}
+              </a>
+            ) : (
+              card.label
+            )}
+          </div>
           {published ? (
             <>
               <div className="metric-number">
@@ -38,6 +54,9 @@ export default function ForecastHeadlineSection({ data }) {
               <div className="metric-sub">Budget revision pending</div>
             </>
           )}
+          <p className="metric-source">
+            <ObrSource />
+          </p>
         </div>
       ))}
     </div>

@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import { TABS, FOOTER_ROWS } from "./components/sections";
 import { fyDash, loadOutlook } from "./lib/outlook";
+import { Note } from "./lib/sources";
 
 function Row({ row, data }) {
   if (row.requires && !data[row.requires]) return null;
@@ -40,7 +41,7 @@ function Row({ row, data }) {
           </div>
         ),
       )}
-      {foot && <p className="section-foot">{fyDash(foot)}</p>}
+      {foot && <Note>{fyDash(foot)}</Note>}
     </section>
   );
 }

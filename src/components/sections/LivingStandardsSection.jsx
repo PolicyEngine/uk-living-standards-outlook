@@ -28,7 +28,7 @@ import {
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
-import { HbaiSource } from "../../lib/sources";
+import { HbaiSource, Note } from "../../lib/sources";
 
 /** meta.units[metric] may be a string or an object with a label/unit field. */
 function unitFor(meta, metric) {
@@ -159,7 +159,7 @@ export default function LivingStandardsSection({ data }) {
           />
         </>
       }
-      footer={noOutturn && <p className="chart-note">{NO_OFFICIAL_SERIES}.</p>}
+      footer={noOutturn && <Note>{NO_OFFICIAL_SERIES}.</Note>}
     >
       {chartData.length === 0 ? (
         <div className="chart-empty">No data for this metric.</div>

@@ -9,29 +9,55 @@ export const OBR_EFO_TITLE = "Economic and fiscal outlook – March 2026";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" };
 
+const Label = () => <span className="chart-source-label">Source</span>;
+
 export const HbaiSource = () => (
   <>
-    Source: DWP,{" "}
+    <Label />
     <a href={HBAI_URL} {...ext}>
-      {HBAI_TITLE}
+      DWP, Households Below Average Income
     </a>{" "}
-    (March 2026); PolicyEngine projections.
+    (March 2026) · PolicyEngine projections
   </>
 );
 
 export const ObrSource = () => (
   <>
-    Source: Office for Budget Responsibility,{" "}
+    <Label />
     <a href={OBR_EFO_URL} {...ext}>
-      {OBR_EFO_TITLE}
-    </a>
-    .
+      OBR, Economic and fiscal outlook
+    </a>{" "}
+    (March 2026)
   </>
 );
 
-export const PeDerivedSource = () => <>Source: PolicyEngine calculation from ONS and OBR data.</>;
+export const PeDerivedSource = () => (
+  <>
+    <Label />
+    PolicyEngine calculation from ONS and OBR data
+  </>
+);
 
-export const PeSource = () => <>Source: PolicyEngine projections (policyengine-uk on Microcosm data).</>;
+export const PeSource = () => (
+  <>
+    <Label />
+    PolicyEngine projections
+  </>
+);
+
+/** A reading caveat: small teal-grey box with an ⓘ, above the source row. */
+export function Note({ children }) {
+  return (
+    <p className="chart-note">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+      <span>{children}</span>
+    </p>
+  );
+}
 
 /** Spell out "HBAI" in text from outlook.json. */
 export function plainWords(text) {

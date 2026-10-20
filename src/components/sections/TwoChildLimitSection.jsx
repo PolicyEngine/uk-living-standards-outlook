@@ -9,7 +9,7 @@ import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
 import { PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
 import { formatOneDp, fyDash, fyLabel, formatPct, formatPctAxis, headlineYear } from "../../lib/outlook";
-import { PeSource, plainWords } from "../../lib/sources";
+import { PeSource, plainWords, Note } from "../../lib/sources";
 
 export default function TwoChildLimitSection({ data }) {
   const cp = data.child_poverty_by_family;
@@ -67,10 +67,10 @@ export default function TwoChildLimitSection({ data }) {
       }
       footer={
         fall != null && (
-          <p className="chart-note">
+          <Note>
             Our {fyDash(fallYear)} fall ({formatOneDp(fall)}pp) is smaller than DWP and RF&apos;s (about 3pp) because
             other changes offset part of the gain; see ⓘ.
-          </p>
+          </Note>
         )
       }
       source={<PeSource />}

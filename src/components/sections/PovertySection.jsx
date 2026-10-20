@@ -19,7 +19,7 @@ import {
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
-import { HbaiSource } from "../../lib/sources";
+import { HbaiSource, Note } from "../../lib/sources";
 
 const GROUP_SUFFIX = {
   all: "",
@@ -125,9 +125,9 @@ export default function PovertySection({ data }) {
         !visibleEmpty &&
         noOutturn &&
         viewMode === "both" && (
-          <p className="chart-note">
+          <Note>
             No official outturn series for {groupName} on this measure; projection only.
-          </p>
+          </Note>
         )
       }
     >
