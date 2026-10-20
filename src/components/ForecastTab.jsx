@@ -7,7 +7,7 @@
 // unpublished (forecast.post_published === false) only the pre line is drawn
 // and the post column / change are shown as pending.
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LineChart,
   Line,
@@ -16,7 +16,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
 import { colors } from "@policyengine/ui-kit/legacy/tokens/colors";
 import { chartColors } from "@policyengine/ui-kit/legacy/charts";
@@ -28,6 +27,26 @@ const pctLabel = (v) => (v == null ? "—" : `${formatOneDp(v)}%`);
 const ppLabel = (v) => (v == null ? "—" : `${v > 0 ? "+" : ""}${formatOneDp(v)}pp`);
 const changeClass = (v) =>
   v == null || Math.abs(v) < 0.05 ? "change-zero" : v > 0 ? "change-positive" : "change-negative";
+
+/**
+ * Measure the card width ourselves instead of using Recharts'
+ * ResponsiveContainer, which intermittently measured a near-zero size in the
+ * static export and drew a tiny chart.
+ */
+function useWidth() {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => setWidth(Math.floor(el.getBoundingClientRect().width));
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, width];
+}
 
 /** Join pre/post into rows of { year, previous, updated, change } in percent. */
 function toRows(series, published) {
@@ -45,6 +64,7 @@ function toRows(series, published) {
 }
 
 function ForecastLineChart({ rows, title, published, preLabel, postLabel }) {
+  const [boxRef, boxWidth] = useWidth();
   if (!rows.length) return null;
 
   // Only one line while unpublished: draw it teal so it does not read as the
@@ -67,9 +87,9 @@ function ForecastLineChart({ rows, title, published, preLabel, postLabel }) {
     <div className="section-card">
       <h3>{title}</h3>
       <p className="card-unit">Annual growth rate (%)</p>
-      <div style={{ width: "100%", height: 280 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={rows} margin={{ top: 8, right: 24, left: 8, bottom: 8 }}>
+      <div ref={boxRef} style={{ width: "100%", height: 280 }}>
+        {boxWidth > 0 && (
+          <LineChart width={boxWidth} height={280} data={rows} margin={{ top: 8, right: 24, left: 8, bottom: 8 }}>
             <CartesianGrid strokeDasharray="3 3" stroke={colors.border.light} />
             <XAxis dataKey="year" tick={{ fontSize: 12, fill: colors.gray[500] }} tickLine={false} />
             <YAxis
@@ -116,7 +136,7 @@ function ForecastLineChart({ rows, title, published, preLabel, postLabel }) {
               />
             )}
           </LineChart>
-        </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

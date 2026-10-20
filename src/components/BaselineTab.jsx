@@ -92,7 +92,11 @@ function mergeSeries(outturn, projection, pick) {
 
 function LivingStandardsCard({ living, meta }) {
   const metricIds = Object.keys(living.metrics);
-  const [metric, setMetric] = useState(metricIds[0]);
+  // Default to a metric with official history so both lines show, as on the reference page.
+  const defaultMetric = metricIds.includes("median_equivalised_income")
+    ? "median_equivalised_income"
+    : metricIds.find((id) => (living.outturn?.[id] || []).length > 0) || metricIds[0];
+  const [metric, setMetric] = useState(defaultMetric);
   const [adjustment, setAdjustment] = useState("nominal");
   const [viewMode, setViewMode] = useState("both");
 
