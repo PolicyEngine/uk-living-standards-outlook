@@ -1,0 +1,324 @@
+/* Demo-only styles. Everything here reuses the values of the
+   uk-autumn-budget-dashboard-2026 components it names, so the two dashboards
+   read as siblings. Shared shell styles are in globals.css (copied verbatim). */
+
+/* Fallback for --pe-font-family-primary, which AB26 takes from the
+   design-system tokens.css on unpkg; same value, so it only matters offline. */
+:root {
+  --pe-font-family-primary: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Chart card: as .budgetary-impact-chart / .employment-income-chart. Inside a
+   .charts-grid or .hero-chart, globals.css gives it the 20px radius and the
+   layered shadow. */
+.chart-card {
+  background: white;
+  padding: 16px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h2 {
+  margin: 0 0 6px 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.chart-card .chart-description {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Computed callout: as .region-showing. */
+.chart-summary {
+  margin: 12px 0 0 0;
+  padding: 8px 12px;
+  background: #f0fdfa;
+  border-left: 3px solid #319795;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.chart-summary strong {
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.chart-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px 0;
+}
+
+.chart-area {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Empty state and footnote: as .region-note. */
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  margin-top: 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 16px;
+}
+
+.chart-note {
+  margin: 8px 0 0 0;
+  color: #666;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Disabled state for the segmented toggle (OutcomeToggle has none). */
+.outcome-toggle-button:disabled,
+.outcome-toggle-button:disabled:hover {
+  background: transparent;
+  color: #9ca3af;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-color: rgba(156, 163, 175, 0.7);
+}
+
+/* Option text in the dropdown can be longer than a year. */
+.year-selector .year-dropdown {
+  left: 0;
+  right: auto;
+  min-width: 100%;
+  width: max-content;
+}
+
+.year-selector .year-option {
+  display: block;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.year-selector-button {
+  font-family: inherit;
+  font-size: 0.875rem;
+  padding: 6px 12px;
+}
+
+/* Page notices: sample-data banner (amber, as the OBR columns in
+   OBRComparisonTable) and the forecast status notice (teal, as
+   .region-showing). */
+.page-notice {
+  margin: 0 0 24px 0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 3px solid #319795;
+  background: #f0fdfa;
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 960px;
+}
+
+.page-notice strong {
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.page-notice.warning {
+  background: #fffbeb;
+  border-left-color: #d97706;
+}
+
+.page-notice.warning strong {
+  color: #92400e;
+}
+
+.dashboard-loading {
+  margin: 0;
+  padding: 48px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  text-align: center;
+  opacity: 0;
+  animation: dashboard-loading-in 0s linear 300ms forwards;
+}
+
+@keyframes dashboard-loading-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Sections stack with the 24px rhythm of the AB26 results column. */
+.dashboard-section + .dashboard-section {
+  margin-top: 24px;
+}
+
+.section-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px 0;
+}
+
+.section-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-toolbar .section-heading {
+  margin: 0;
+}
+
+/* Headline tiles: .key-metric, three across. */
+.key-metrics-row.three-up {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 0;
+}
+
+.metric-sub {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pe-gray-500);
+}
+
+.metric-sub.change-positive {
+  color: #0f766e;
+}
+
+.metric-sub.change-negative {
+  color: #b91c1c;
+}
+
+/* Forecast table: as .comparison-table in OBRComparisonTable.css. */
+.comparison-table-wrapper {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 10px 12px;
+  text-align: right;
+  border: 1px solid #e5e7eb;
+}
+
+.comparison-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  text-align: left;
+}
+
+.comparison-table td {
+  font-variant-numeric: tabular-nums;
+  color: #374151;
+}
+
+.comparison-table td.pending {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.comparison-table td.change-positive {
+  color: #0f766e;
+}
+
+.comparison-table td.change-negative {
+  color: #b91c1c;
+}
+
+/* "About this data" accordion: .policy-details-footer, with the metadata as a
+   definition list. */
+.meta-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 20px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--pe-gray-600);
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.meta-list dt {
+  font-weight: 600;
+  color: var(--pe-gray-800);
+}
+
+.meta-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.meta-list a,
+.policy-detail a {
+  color: var(--pe-teal-600);
+}
+
+.meta-notes {
+  list-style: none;
+}
+
+.meta-notes .policy-detail {
+  font-size: 0.875rem;
+  padding: 10px 0;
+}
+
+@media (max-width: 1024px) {
+  .key-metrics-row.three-up {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .meta-list {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .meta-list dd {
+    margin-bottom: 8px;
+  }
+
+  .chart-card {
+    padding: 12px;
+  }
+}
+
+/* Two tab labels must fit one line each at phone width. */
+@media (max-width: 480px) {
+  .tab-button {
+    gap: 6px;
+    padding: 12px 8px;
+    white-space: nowrap;
+  }
+}

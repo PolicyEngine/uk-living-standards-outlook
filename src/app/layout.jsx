@@ -1,7 +1,10 @@
+// Mirrors PolicyEngine/uk-autumn-budget-dashboard-2026 src/app/layout.tsx:
+// ui-kit shell, design-system tokens and Inter.
 import { PolicyEngineShell } from "@policyengine/ui-kit/layout";
 import "@policyengine/ui-kit/styles.css";
 
 import "./globals.css";
+import "./demo.css";
 
 export const metadata = {
   title: "UK living standards outlook (demo) | PolicyEngine",
@@ -11,19 +14,19 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#2C7A7B",
   width: "device-width",
-  initialScale: 1,
+  initialScale: 1.0,
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en-GB">
       <head>
+        <link rel="stylesheet" href="https://unpkg.com/@policyengine/design-system/dist/tokens.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

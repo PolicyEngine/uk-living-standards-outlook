@@ -1,8 +1,0 @@
-@import "tailwindcss";
-@import "@policyengine/ui-kit/theme.css";
-@import "../src/styles/index.css";
-@import "../src/styles/App.css";
-@import "../src/styles/Dashboard.css";
-@import "../src/components/D3LineChart.css";
-@import "../src/styles/Forecast.css";
-@import "../src/styles/Demo.css";
