@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-20T13:53:38+00:00",
+    "generated_at": "2026-10-20T13:55:46+00:00",
     "policyengine": "6.8.0",
     "policyengine_uk": "2.130.1",
     "dataset": {
@@ -10,6 +10,8 @@
       "hf_repo": "policyengine/populace-uk-private"
     },
     "real_price_base": "2025-26",
+    "headline_end_year": "2029-30",
+    "headline_end_year_note": "Headline comparisons end in 2029-30 because the engine applies the existing-claimant UC health element protection only to 2029, so 2030-31 has a step that is under investigation.",
     "units": {
       "mean_equivalised_income": "\u00a3 per person per year, equivalised",
       "median_equivalised_income": "\u00a3 per person per year, equivalised",
@@ -2946,6 +2948,7 @@
   "poverty_by_group": {
     "years": [
       "2025-26",
+      "2029-30",
       "2030-31"
     ],
     "measures": {
@@ -2974,6 +2977,16 @@
               "unweighted_households": 37727,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.08741,
+              "median_equivalised_income_bhc": {
+                "nominal": 45733,
+                "real": 42127
+              },
+              "people_millions": 23.522,
+              "unweighted_households": 37727,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.08689,
               "median_equivalised_income_bhc": {
@@ -2993,6 +3006,16 @@
                 "real": 47280
               },
               "people_millions": 23.053,
+              "unweighted_households": 23109,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.09974,
+              "median_equivalised_income_bhc": {
+                "nominal": 50857,
+                "real": 46847
+              },
+              "people_millions": 23.421,
               "unweighted_households": 23109,
               "suppressed": false
             },
@@ -3018,6 +3041,16 @@
               "unweighted_households": 8622,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.36599,
+              "median_equivalised_income_bhc": {
+                "nominal": 34083,
+                "real": 31395
+              },
+              "people_millions": 11.138,
+              "unweighted_households": 8622,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.38965,
               "median_equivalised_income_bhc": {
@@ -3037,6 +3070,16 @@
                 "real": 38001
               },
               "people_millions": 12.259,
+              "unweighted_households": 8732,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.33026,
+              "median_equivalised_income_bhc": {
+                "nominal": 40613,
+                "real": 37411
+              },
+              "people_millions": 12.455,
               "unweighted_households": 8732,
               "suppressed": false
             },
@@ -3074,6 +3117,16 @@
               "unweighted_households": 3781,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.35145,
+              "median_equivalised_income_bhc": {
+                "nominal": 32483,
+                "real": 29921
+              },
+              "people_millions": 5.612,
+              "unweighted_households": 3783,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.37956,
               "median_equivalised_income_bhc": {
@@ -3094,6 +3147,16 @@
               },
               "people_millions": 23.558,
               "unweighted_households": 17295,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.19718,
+              "median_equivalised_income_bhc": {
+                "nominal": 43205,
+                "real": 39798
+              },
+              "people_millions": 23.968,
+              "unweighted_households": 17369,
               "suppressed": false
             },
             "2030-31": {
@@ -3118,6 +3181,16 @@
               "unweighted_households": 21860,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.20524,
+              "median_equivalised_income_bhc": {
+                "nominal": 46060,
+                "real": 42428
+              },
+              "people_millions": 15.225,
+              "unweighted_households": 22410,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.21421,
               "median_equivalised_income_bhc": {
@@ -3140,6 +3213,16 @@
               "unweighted_households": 16286,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.0997,
+              "median_equivalised_income_bhc": {
+                "nominal": 55671,
+                "real": 51281
+              },
+              "people_millions": 12.716,
+              "unweighted_households": 17163,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.10108,
               "median_equivalised_income_bhc": {
@@ -3160,6 +3243,16 @@
               },
               "people_millions": 13.568,
               "unweighted_households": 29234,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.11457,
+              "median_equivalised_income_bhc": {
+                "nominal": 40710,
+                "real": 37499
+              },
+              "people_millions": 13.015,
+              "unweighted_households": 27641,
               "suppressed": false
             },
             "2030-31": {
@@ -3193,6 +3286,16 @@
               "unweighted_households": 14539,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.15244,
+              "median_equivalised_income_bhc": {
+                "nominal": 39251,
+                "real": 36156
+              },
+              "people_millions": 13.333,
+              "unweighted_households": 14539,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.17811,
               "median_equivalised_income_bhc": {
@@ -3212,6 +3315,16 @@
                 "real": 42662
               },
               "people_millions": 56.303,
+              "unweighted_households": 66474,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.18442,
+              "median_equivalised_income_bhc": {
+                "nominal": 46225,
+                "real": 42580
+              },
+              "people_millions": 57.204,
               "unweighted_households": 66474,
               "suppressed": false
             },
@@ -3256,6 +3369,16 @@
               "unweighted_households": 2964,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.20892,
+              "median_equivalised_income_bhc": {
+                "nominal": 39316,
+                "real": 36215
+              },
+              "people_millions": 2.801,
+              "unweighted_households": 2964,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.2135,
               "median_equivalised_income_bhc": {
@@ -3275,6 +3398,16 @@
                 "real": 39979
               },
               "people_millions": 7.75,
+              "unweighted_households": 6890,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.19567,
+              "median_equivalised_income_bhc": {
+                "nominal": 43197,
+                "real": 39791
+              },
+              "people_millions": 7.874,
               "unweighted_households": 6890,
               "suppressed": false
             },
@@ -3300,6 +3433,16 @@
               "unweighted_households": 6694,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.17107,
+              "median_equivalised_income_bhc": {
+                "nominal": 41167,
+                "real": 37921
+              },
+              "people_millions": 5.741,
+              "unweighted_households": 6694,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.17805,
               "median_equivalised_income_bhc": {
@@ -3319,6 +3462,16 @@
                 "real": 37435
               },
               "people_millions": 5.095,
+              "unweighted_households": 4682,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.18397,
+              "median_equivalised_income_bhc": {
+                "nominal": 40441,
+                "real": 37252
+              },
+              "people_millions": 5.176,
               "unweighted_households": 4682,
               "suppressed": false
             },
@@ -3344,6 +3497,16 @@
               "unweighted_households": 4563,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.19152,
+              "median_equivalised_income_bhc": {
+                "nominal": 40724,
+                "real": 37512
+              },
+              "people_millions": 6.314,
+              "unweighted_households": 4563,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.20448,
               "median_equivalised_income_bhc": {
@@ -3363,6 +3526,16 @@
                 "real": 42868
               },
               "people_millions": 6.631,
+              "unweighted_households": 7153,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.12957,
+              "median_equivalised_income_bhc": {
+                "nominal": 46225,
+                "real": 42580
+              },
+              "people_millions": 6.737,
               "unweighted_households": 7153,
               "suppressed": false
             },
@@ -3388,6 +3561,16 @@
               "unweighted_households": 8110,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.19219,
+              "median_equivalised_income_bhc": {
+                "nominal": 50709,
+                "real": 46710
+              },
+              "people_millions": 9.244,
+              "unweighted_households": 8110,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.20013,
               "median_equivalised_income_bhc": {
@@ -3407,6 +3590,16 @@
                 "real": 46468
               },
               "people_millions": 9.682,
+              "unweighted_households": 11478,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.15311,
+              "median_equivalised_income_bhc": {
+                "nominal": 50462,
+                "real": 46483
+              },
+              "people_millions": 9.837,
               "unweighted_households": 11478,
               "suppressed": false
             },
@@ -3432,6 +3625,16 @@
               "unweighted_households": 6710,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.16029,
+              "median_equivalised_income_bhc": {
+                "nominal": 44206,
+                "real": 40720
+              },
+              "people_millions": 5.985,
+              "unweighted_households": 6710,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.16816,
               "median_equivalised_income_bhc": {
@@ -3451,6 +3654,16 @@
                 "real": 37049
               },
               "people_millions": 3.176,
+              "unweighted_households": 5033,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.21784,
+              "median_equivalised_income_bhc": {
+                "nominal": 39340,
+                "real": 36238
+              },
+              "people_millions": 3.227,
               "unweighted_households": 5033,
               "suppressed": false
             },
@@ -3476,6 +3689,16 @@
               "unweighted_households": 7067,
               "suppressed": false
             },
+            "2029-30": {
+              "relative_ahc": 0.18123,
+              "median_equivalised_income_bhc": {
+                "nominal": 44392,
+                "real": 40892
+              },
+              "people_millions": 5.632,
+              "unweighted_households": 7067,
+              "suppressed": false
+            },
             "2030-31": {
               "relative_ahc": 0.18419,
               "median_equivalised_income_bhc": {
@@ -3495,6 +3718,16 @@
                 "real": 34651
               },
               "people_millions": 1.937,
+              "unweighted_households": 6846,
+              "suppressed": false
+            },
+            "2029-30": {
+              "relative_ahc": 0.24081,
+              "median_equivalised_income_bhc": {
+                "nominal": 37494,
+                "real": 34537
+              },
+              "people_millions": 1.968,
               "unweighted_households": 6846,
               "suppressed": false
             },

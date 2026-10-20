@@ -51,7 +51,7 @@ import policyengine as pe
 warnings.filterwarnings("ignore", message="Accessing .values on a MicroSeries")
 
 YEARS = list(range(2024, 2031))  # fiscal 2024-25 .. 2030-31 (2024-25 for validation)
-GROUP_YEARS = (2025, 2030)  # poverty_by_group snapshot years
+GROUP_YEARS = (2025, 2029, 2030)  # poverty_by_group snapshot years (2029-30 = headline end year)
 OUT = Path(__file__).parent / "output" / "projections.json"
 
 POVERTY_VARS = {

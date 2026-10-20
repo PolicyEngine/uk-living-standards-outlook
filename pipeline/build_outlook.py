@@ -28,6 +28,7 @@ OUT = ROOT / "public" / "data" / "outlook.json"
 
 PRICE_BASE_YEAR = 2025  # fiscal 2025-26
 PROJECTION_START = 2025  # 2024-25 is run only for meta.validation_2024_25
+HEADLINE_END_YEAR = 2029  # 2030-31 has the UC health element step (see YEAR_2030_NOTE)
 MIN_HOUSEHOLDS = 100  # suppress poverty_by_group cells below this unweighted count
 FORECAST_YEARS = range(2026, 2031)
 
@@ -409,6 +410,11 @@ def main(dataset_path: str, tag: str) -> None:
                 "hf_repo": "policyengine/populace-uk-private",
             },
             "real_price_base": fy(PRICE_BASE_YEAR),
+            "headline_end_year": fy(HEADLINE_END_YEAR),
+            "headline_end_year_note": (
+                "Headline comparisons end in 2029-30 because the engine applies the existing-claimant UC health element "
+                "protection only to 2029, so 2030-31 has a step that is under investigation."
+            ),
             "units": {
                 "mean_equivalised_income": "£ per person per year, equivalised",
                 "median_equivalised_income": "£ per person per year, equivalised",

@@ -1006,6 +1006,177 @@
         "couple": 32536
       }
     },
+    "poverty_by_group": {
+      "tenure": {
+        "mortgage": {
+          "relative_ahc": 0.09974133968353271,
+          "median_equivalised_income_bhc": 50857.359375,
+          "people_millions": 23.421306610107422,
+          "unweighted_households": 23109,
+          "unweighted_people": 68600
+        },
+        "owned_outright": {
+          "relative_ahc": 0.0874141976237297,
+          "median_equivalised_income_bhc": 45733.00390625,
+          "people_millions": 23.52193832397461,
+          "unweighted_households": 37727,
+          "unweighted_people": 77201
+        },
+        "private_rent": {
+          "relative_ahc": 0.33026328682899475,
+          "median_equivalised_income_bhc": 40613.390625,
+          "people_millions": 12.455129623413086,
+          "unweighted_households": 8732,
+          "unweighted_people": 20388
+        },
+        "social_rent": {
+          "relative_ahc": 0.36598876118659973,
+          "median_equivalised_income_bhc": 34082.70703125,
+          "people_millions": 11.138229370117188,
+          "unweighted_households": 8622,
+          "unweighted_people": 17420
+        }
+      },
+      "family_type": {
+        "couple_no_children": {
+          "relative_ahc": 0.09969595819711685,
+          "median_equivalised_income_bhc": 55670.58203125,
+          "people_millions": 12.715740203857422,
+          "unweighted_households": 17163,
+          "unweighted_people": 34442
+        },
+        "couple_with_children": {
+          "relative_ahc": 0.19718068838119507,
+          "median_equivalised_income_bhc": 43205.078125,
+          "people_millions": 23.968374252319336,
+          "unweighted_households": 17369,
+          "unweighted_people": 67092
+        },
+        "lone_parent": {
+          "relative_ahc": 0.35145023465156555,
+          "median_equivalised_income_bhc": 32482.892578125,
+          "people_millions": 5.612142086029053,
+          "unweighted_households": 3783,
+          "unweighted_people": 10138
+        },
+        "pensioner": {
+          "relative_ahc": 0.11457108706235886,
+          "median_equivalised_income_bhc": 40709.6640625,
+          "people_millions": 13.015207290649414,
+          "unweighted_households": 27641,
+          "unweighted_people": 43609
+        },
+        "single_no_children": {
+          "relative_ahc": 0.2052394300699234,
+          "median_equivalised_income_bhc": 46060.27734375,
+          "people_millions": 15.225141525268555,
+          "unweighted_households": 22410,
+          "unweighted_people": 28328
+        }
+      },
+      "disability": {
+        "disabled_in_family": {
+          "relative_ahc": 0.15244118869304657,
+          "median_equivalised_income_bhc": 39250.97265625,
+          "people_millions": 13.332810401916504,
+          "unweighted_households": 14539,
+          "unweighted_people": 28397
+        },
+        "no_disabled_in_family": {
+          "relative_ahc": 0.18442296981811523,
+          "median_equivalised_income_bhc": 46224.77734375,
+          "people_millions": 57.203792572021484,
+          "unweighted_households": 66474,
+          "unweighted_people": 155212
+        }
+      },
+      "region": {
+        "EAST_MIDLANDS": {
+          "relative_ahc": 0.18397270143032074,
+          "median_equivalised_income_bhc": 40440.93359375,
+          "people_millions": 5.176156997680664,
+          "unweighted_households": 4682,
+          "unweighted_people": 10870
+        },
+        "EAST_OF_ENGLAND": {
+          "relative_ahc": 0.12957176566123962,
+          "median_equivalised_income_bhc": 46224.77734375,
+          "people_millions": 6.737421989440918,
+          "unweighted_households": 7153,
+          "unweighted_people": 17818
+        },
+        "LONDON": {
+          "relative_ahc": 0.19218918681144714,
+          "median_equivalised_income_bhc": 50709.015625,
+          "people_millions": 9.244050025939941,
+          "unweighted_households": 8110,
+          "unweighted_people": 20148
+        },
+        "NORTHERN_IRELAND": {
+          "relative_ahc": 0.24080988764762878,
+          "median_equivalised_income_bhc": 37494.04296875,
+          "people_millions": 1.9679054021835327,
+          "unweighted_households": 6846,
+          "unweighted_people": 16024
+        },
+        "NORTH_EAST": {
+          "relative_ahc": 0.20891670882701874,
+          "median_equivalised_income_bhc": 39315.51171875,
+          "people_millions": 2.801079273223877,
+          "unweighted_households": 2964,
+          "unweighted_people": 6593
+        },
+        "NORTH_WEST": {
+          "relative_ahc": 0.19566857814788818,
+          "median_equivalised_income_bhc": 43197.0390625,
+          "people_millions": 7.873660087585449,
+          "unweighted_households": 6890,
+          "unweighted_people": 16633
+        },
+        "SCOTLAND": {
+          "relative_ahc": 0.18123456835746765,
+          "median_equivalised_income_bhc": 44392.19921875,
+          "people_millions": 5.632381439208984,
+          "unweighted_households": 7067,
+          "unweighted_people": 14825
+        },
+        "SOUTH_EAST": {
+          "relative_ahc": 0.15310509502887726,
+          "median_equivalised_income_bhc": 50462.23046875,
+          "people_millions": 9.836891174316406,
+          "unweighted_households": 11478,
+          "unweighted_people": 29151
+        },
+        "SOUTH_WEST": {
+          "relative_ahc": 0.1602942794561386,
+          "median_equivalised_income_bhc": 44206.47265625,
+          "people_millions": 5.985240936279297,
+          "unweighted_households": 6710,
+          "unweighted_people": 14728
+        },
+        "WALES": {
+          "relative_ahc": 0.2178443819284439,
+          "median_equivalised_income_bhc": 39339.81640625,
+          "people_millions": 3.2266716957092285,
+          "unweighted_households": 5033,
+          "unweighted_people": 10963
+        },
+        "WEST_MIDLANDS": {
+          "relative_ahc": 0.1915246844291687,
+          "median_equivalised_income_bhc": 40723.71875,
+          "people_millions": 6.313673973083496,
+          "unweighted_households": 4563,
+          "unweighted_people": 10603
+        },
+        "YORKSHIRE": {
+          "relative_ahc": 0.17107059061527252,
+          "median_equivalised_income_bhc": 41167.15625,
+          "people_millions": 5.741471290588379,
+          "unweighted_households": 6694,
+          "unweighted_people": 15253
+        }
+      }
+    },
     "diagnostics": {
       "children_not_receiving_uc_child_element_m": 0.0,
       "children_in_limit_affected_benefit_units_m": 0.0,

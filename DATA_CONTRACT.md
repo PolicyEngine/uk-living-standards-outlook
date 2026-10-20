@@ -13,6 +13,8 @@ Years are UK fiscal years as strings, e.g. `"2024-25"`. Rates are fractions (0.1
     "real_price_base": "2025-26",
     "deflator": "name of the index used for real terms",
     "outturn_source": "HBAI release name + URL",
+    "headline_end_year": "2029-30",
+    "headline_end_year_note": "one sentence: why headline comparisons stop at 2029-30",
     "method": {"<series key>": "how it is computed (variables, weights, parameters)"},
     "comparators": {"income_by_decile": "RF LSO 2026 ...", "child_poverty": "...", "deep_poverty": "..."},
     "validation_2024_25": {"median_equivalised_income_weekly": {"bhc": {"model": 762, "hbai": 719}}, "relative_ahc": {}, "gini": {}, "p90_p10": {}},
@@ -106,10 +108,10 @@ JRF-style very deep poverty: people below 40% (and 50%) of the model's own media
 ```
 
 ### `poverty_by_group`
-Relative AHC poverty and median equivalised BHC income by tenure, family type, disability and region, for 2025-26 and 2030-31.
+Relative AHC poverty and median equivalised BHC income by tenure, family type, disability and region, for 2025-26, 2029-30 and 2030-31.
 ```json
 {
-  "years": ["2025-26", "2030-31"],
+  "years": ["2025-26", "2029-30", "2030-31"],
   "measures": {"relative_ahc": "...", "median_equivalised_income_bhc": "..."},
   "min_unweighted_households": 100,
   "breakdowns": {
@@ -134,3 +136,6 @@ OBR real household disposable income per person (national accounts), fiscal year
 }
 ```
 `growth` is year-on-year (fraction); `type` is `"outturn"` up to 2024-25 and `"forecast"` after; `source_row` is the Excel row in Table 1.5.
+
+### `meta.headline_end_year` (20 October 2026)
+`"2029-30"`. Headline comparisons (cumulative growth, start-to-end changes, group snapshots) should end here. Yearly series still run to 2030-31, but that year contains a model step: the engine applies the existing-claimant UC health element protection only to 2029 (under investigation). To get growth to the headline year, use `income_by_decile.<basis>.by_year` for 2029-30; `cumulative_growth_to_end` still runs to `end_year` (2030-31).
