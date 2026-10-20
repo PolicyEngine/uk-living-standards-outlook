@@ -6,9 +6,8 @@
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
-import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
-import { fyLabel, formatOneDp, formatPct, formatPctAxis } from "../../lib/outlook";
+import { fyDash, fyLabel, formatOneDp, formatPct, formatPctAxis } from "../../lib/outlook";
 import {
   EMPTY,
   VIEW_OPTIONS,
@@ -71,7 +70,7 @@ export default function PovertySection({ data }) {
         <p className="chart-summary">
           The {GROUP_PHRASE[group] ?? ""}poverty rate is forecast to{" "}
           <strong>{dir ? `${dir} by ${formatOneDp(Math.abs(pp))}pp` : "stay flat"}</strong> from{" "}
-          {formatPct(a)} in {first.year} to {formatPct(b)} by {last.year}.
+          {formatPct(a)} in {fyDash(first.year)} to {formatPct(b)} by {fyDash(last.year)}.
         </p>
       );
     }
@@ -97,18 +96,20 @@ export default function PovertySection({ data }) {
       controls={
         <>
           <Dropdown
+            fieldLabel="Measure"
             label="Poverty measure"
             value={measure}
             onChange={setMeasure}
             options={measureIds.map((id) => ({ id, label: poverty.measures[id] }))}
           />
           <Dropdown
+            fieldLabel="Group"
             label="Population group"
             value={group}
             onChange={setGroup}
             options={groupIds.map((id) => ({ id, label: poverty.groups[id] }))}
           />
-          <SegmentedToggle label="Series shown" value={viewMode} onChange={setViewMode} options={VIEW_OPTIONS} />
+          <Dropdown fieldLabel="Period" label="Series shown" value={viewMode} onChange={setViewMode} options={VIEW_OPTIONS} />
         </>
       }
       footer={

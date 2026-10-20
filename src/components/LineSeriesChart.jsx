@@ -37,6 +37,17 @@ export default function LineSeriesChart({
   const narrow = width > 0 && width < NARROW;
   const visible = series.filter((s) => !s.hidden);
 
+  // Year ticks: every year when there is room; every other year on narrow
+  // charts; rotated when a straight label would collide with its neighbour.
+  const yAxisWidth = narrow ? 58 : 70;
+  const margin = { top: 20, right: narrow ? 12 : 30, left: narrow ? 0 : 20, bottom: 10 };
+  const plotWidth = Math.max(0, width - yAxisWidth - margin.left - margin.right);
+  const perTick = data.length ? plotWidth / data.length : plotWidth;
+  const longest = Math.max(1, ...data.map((d) => String(xFormat(d[xKey])).length));
+  const labelWidth = longest * 6.6 + 10;
+  const tickInterval = narrow && data.length > 6 ? 1 : 0;
+  const rotate = perTick * (tickInterval + 1) < labelWidth;
+
   return (
     <div ref={ref} style={{ width: "100%", height }}>
       {width > 0 && (
@@ -44,22 +55,25 @@ export default function LineSeriesChart({
           width={width}
           height={height}
           data={data}
-          margin={{ top: 20, right: narrow ? 12 : 30, left: narrow ? 0 : 20, bottom: 10 }}
+          margin={margin}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
             dataKey={xKey}
             tickFormatter={xFormat}
             tick={{ fontSize: 11, fill: "#666" }}
-            interval="preserveStartEnd"
-            minTickGap={narrow ? 12 : 4}
+            interval={tickInterval}
+            angle={rotate ? -40 : 0}
+            textAnchor={rotate ? "end" : "middle"}
+            height={rotate ? Math.ceil(longest * 6.6 * 0.64 + 20) : 30}
+            tickMargin={rotate ? 4 : 6}
           />
           <YAxis
             domain={yDomain}
             ticks={yTicks}
             tickFormatter={yFormat}
             tick={{ fontSize: 11, fill: "#666" }}
-            width={narrow ? 58 : 70}
+            width={yAxisWidth}
             allowDecimals
             label={{
               value: yLabel,

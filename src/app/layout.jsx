@@ -1,7 +1,10 @@
 // Mirrors PolicyEngine/uk-autumn-budget-dashboard-2026 src/app/layout.tsx:
-// ui-kit shell, design-system tokens and Inter.
+// ui-kit shell (site nav), design-system tokens and Inter. The footer is the
+// compact one the published UK dashboards use (SiteFooter).
 import { PolicyEngineShell } from "@policyengine/ui-kit/layout";
 import "@policyengine/ui-kit/styles.css";
+
+import SiteFooter from "@/components/SiteFooter";
 
 import "./globals.css";
 import "./demo.css";
@@ -31,7 +34,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <PolicyEngineShell country="uk">{children}</PolicyEngineShell>
+        <PolicyEngineShell country="uk" showFooter={false}>
+          {children}
+          <SiteFooter />
+        </PolicyEngineShell>
       </body>
     </html>
   );

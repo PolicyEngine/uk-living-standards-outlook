@@ -62,12 +62,16 @@ export default function ChartCard({
           </button>
         )}
       </div>
-      {summary}
-      {controls && <div className="chart-controls">{controls}</div>}
+      {/* Every slot always renders, so two-up cards share subgrid rows
+          (header, summary, controls, chart, footer) and line up. */}
+      <div className="chart-slot chart-slot-summary">{summary}</div>
+      <div className="chart-slot chart-slot-controls">
+        {controls && <div className="chart-controls">{controls}</div>}
+      </div>
       <div ref={chartRef} className="chart-area">
         {children}
       </div>
-      {footer}
+      <div className="chart-slot chart-slot-footer">{footer}</div>
     </div>
   );
 }

@@ -52,17 +52,87 @@
   font-weight: 600;
 }
 
+/* Card controls: one row of equal-height labelled select boxes (as the
+   targeted-energy-discount dashboard's control panel), wrapping on phones. */
 .chart-controls {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0 4px 0;
+  gap: 12px;
+  margin: 16px 0 8px 0;
+}
+
+.control-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 96px;
+  min-width: 0;
+}
+
+.control-field.wide {
+  flex: 2 1 220px;
+}
+
+.control-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.control-field .year-selector {
+  display: block;
+  width: 100%;
+}
+
+.control-field .year-selector-button {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.control-field .year-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.year-selector .year-option:disabled,
+.year-selector .year-option:disabled:hover {
+  color: #9ca3af;
+  background: none;
+  cursor: not-allowed;
+}
+
+/* Two-up cards share the grid's rows (header, summary, controls, chart,
+   footer), so titles, callouts, control rows, chart tops and x axes line up.
+   Every ChartCard renders all five slots, empty or not. */
+.charts-grid > .chart-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 5;
+  row-gap: 0;
+  margin-bottom: 24px;
+}
+
+/* The parent's row gap would land between the subgrid rows too, so cards are
+   spaced by their bottom margin instead (the last row's is cancelled). */
+.charts-grid:has(> .chart-card) {
+  row-gap: 0;
+  margin-bottom: -24px;
+}
+
+.chart-slot:empty {
+  display: block;
 }
 
 .chart-area {
   width: 100%;
   min-width: 0;
+  margin-top: 8px;
 }
 
 /* Empty state and footnote: as .region-note. */
@@ -284,13 +354,86 @@
   color: var(--pe-teal-600);
 }
 
-.meta-notes {
-  list-style: none;
+.about-data .meta-list {
+  font-size: 0.8125rem;
+  gap: 4px 16px;
+  padding-bottom: 12px;
 }
 
-.meta-notes .policy-detail {
+.meta-notes {
+  margin: 12px 0 0 0;
+  padding-left: 18px;
+  list-style: disc;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--pe-gray-500);
+}
+
+.meta-notes li + li {
+  margin-top: 4px;
+}
+
+.technical-notes {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--pe-gray-500);
+}
+
+.technical-notes summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--pe-gray-600);
+}
+
+.technical-notes .meta-notes {
+  margin-top: 8px;
+}
+
+/* Compact site footer (see SiteFooter.jsx): one row on desktop. */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: linear-gradient(to right, #234e52, #2c7a7b);
+}
+
+.site-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
+
+.site-footer-logo img {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+}
+
+.site-footer-links a {
+  color: white;
   font-size: 0.875rem;
-  padding: 10px 0;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-footer-links a:hover {
+  opacity: 0.8;
+}
+
+.site-footer-copy {
+  margin: 0 0 0 auto;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 @media (max-width: 1024px) {
@@ -299,7 +442,27 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .site-footer-inner {
+    padding: 20px 24px;
+  }
+}
+
 @media (max-width: 768px) {
+  .site-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+  }
+
+  .site-footer-links {
+    gap: 6px 16px;
+  }
+
+  .site-footer-copy {
+    margin: 0;
+  }
+
   .meta-list {
     grid-template-columns: 1fr;
     gap: 2px;
@@ -314,8 +477,17 @@
   }
 }
 
-/* Two tab labels must fit one line each at phone width. */
+/* Two tab labels must fit one line each at phone width. Control boxes go two
+   per row (the wide measure box gets its own row) so no label is cut. */
 @media (max-width: 480px) {
+  .control-field {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .control-field.wide {
+    flex-basis: 100%;
+  }
+
   .tab-button {
     gap: 6px;
     padding: 12px 8px;

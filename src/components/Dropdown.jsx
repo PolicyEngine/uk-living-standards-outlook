@@ -3,9 +3,10 @@ import "./YearSelector.css";
 
 /**
  * Single-choice dropdown. Markup and CSS are AB26's YearSelector, generalised
- * from years to any { id, label } options.
+ * from years to any { id, label, disabled?, title? } options. With
+ * fieldLabel, it renders as a labelled control box (small muted label above).
  */
-export default function Dropdown({ options, value, onChange, label }) {
+export default function Dropdown({ options, value, onChange, label, fieldLabel, wide = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
 
@@ -26,7 +27,7 @@ export default function Dropdown({ options, value, onChange, label }) {
 
   const current = options.find((o) => o.id === value);
 
-  return (
+  const box = (
     <div className="year-selector" ref={ref}>
       <button
         type="button"
@@ -60,8 +61,12 @@ export default function Dropdown({ options, value, onChange, label }) {
               type="button"
               role="option"
               aria-selected={opt.id === value}
+              aria-disabled={opt.disabled || undefined}
+              disabled={opt.disabled}
+              title={opt.title}
               className={`year-option ${opt.id === value ? "selected" : ""}`}
               onClick={() => {
+                if (opt.disabled) return;
                 onChange(opt.id);
                 setIsOpen(false);
               }}
@@ -71,6 +76,14 @@ export default function Dropdown({ options, value, onChange, label }) {
           ))}
         </div>
       )}
+    </div>
+  );
+
+  if (!fieldLabel) return box;
+  return (
+    <div className={`control-field${wide ? " wide" : ""}`}>
+      <span className="control-label">{fieldLabel}</span>
+      {box}
     </div>
   );
 }

@@ -6,9 +6,9 @@
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
-import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
 import {
+  fyDash,
   fyLabel,
   formatOneDp,
   formatPounds,
@@ -75,7 +75,7 @@ export default function LivingStandardsSection({ data }) {
   const axis = niceAxis(Math.max(...chartData.flatMap((d) => [d.historical ?? 0, d.projection ?? 0])));
   const yMax = axis.domain[1];
 
-  const priceBase = meta.real_price_base;
+  const priceBase = fyDash(meta.real_price_base);
   const label = living.metrics[metric];
   const units = unitFor(meta, metric);
   const realSuffix = adjustment === "real" ? `, ${priceBase} prices` : "";
@@ -96,7 +96,7 @@ export default function LivingStandardsSection({ data }) {
           {label}
           {qualifiers.length ? ` (${qualifiers.join(", ")})` : ""} is forecast to{" "}
           <strong>{dir ? `${dir} by ${formatOneDp(Math.abs(pct))}%` : "stay flat"}</strong> from{" "}
-          {formatPounds(a)} in {first.year} to {formatPounds(b)} by {last.year}.
+          {formatPounds(a)} in {fyDash(first.year)} to {formatPounds(b)} by {fyDash(last.year)}.
         </p>
       );
     }
@@ -119,12 +119,15 @@ export default function LivingStandardsSection({ data }) {
       controls={
         <>
           <Dropdown
+            fieldLabel="Measure"
+            wide
             label="Income metric"
             value={metric}
             onChange={setMetric}
             options={metricIds.map((id) => ({ id, label: living.metrics[id] }))}
           />
-          <SegmentedToggle
+          <Dropdown
+            fieldLabel="Prices"
             label="Price basis"
             value={adjustment}
             onChange={setAdjustment}
@@ -133,7 +136,8 @@ export default function LivingStandardsSection({ data }) {
               { id: "real", label: "Real" },
             ]}
           />
-          <SegmentedToggle
+          <Dropdown
+            fieldLabel="Period"
             label="Series shown"
             value={effectiveView}
             onChange={setViewMode}
