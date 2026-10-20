@@ -6,3 +6,5 @@ screenshots/
 .venv/
 __pycache__/
 pipeline/data/*.ods
+.vercel
+.env*
