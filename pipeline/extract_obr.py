@@ -24,7 +24,7 @@ import pandas as pd
 URL = "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-economy/"
 OUT = Path(__file__).parent / "data" / "obr_rhdi.json"
 YEARS = [f"{y}-{str(y + 1)[-2:]}" for y in range(2021, 2031)]
-LAST_OUTTURN = "2024-25"  # ONS data run to 2025Q3; 2025-26 includes forecast quarters
+LAST_OUTTURN = "2024-25"  # 2025-26 onwards include OBR forecast quarters
 
 
 def main(path: str) -> None:

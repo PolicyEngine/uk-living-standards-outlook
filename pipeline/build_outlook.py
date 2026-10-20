@@ -192,6 +192,8 @@ def main(dataset_path: str, tag: str) -> None:
         "notes": [
             "Deciles are re-ranked each year, so growth compares the same position in the distribution, not the same people.",
             "The split uses the median of non-pensioners only; RF splits at the whole-population median, so its groups differ slightly.",
+            "The bottom AHC decile median is about £11,000 and moves a lot with small income changes; RF drops the bottom 5% for this reason.",
+            YEAR_2030_NOTE,
         ],
     }
 
@@ -332,6 +334,7 @@ def main(dataset_path: str, tag: str) -> None:
             "Disability benefits count as income, which is why the disability-benefit group can show lower poverty than in HBAI.",
             "Family type is at benefit-unit level; a pensioner family is any benefit unit with someone at or above State Pension age.",
             "Regional figures are single-year model estimates; HBAI uses three-year averages for regions.",
+            YEAR_2030_NOTE,
         ],
     }
 
@@ -500,14 +503,19 @@ def main(dataset_path: str, tag: str) -> None:
     print(f"Wrote {OUT}")
 
 
+YEAR_2030_NOTE = (
+    "2030-31 contains a baseline discontinuity: the engine applies the UC health element protection only to 2026-27 to 2029-30, "
+    "so in 2030-31 most recipients drop to the new-claimant rate and the UC health element for UC recipients falls from about £12bn to £8bn."
+)
+
 NOTES = [
     "Model figures are unvalidated demo output from the Microcosm dataset.",
     "Projections are a current-law baseline: no Autumn Budget 2026 measures are modelled.",
     "Income outturn is HBAI, published in real terms; nominal values are recovered with OBR CPI (BHC) and CPI after housing costs (AHC).",
     "Poverty and inequality outturn is the HBAI admin-linked series, which starts in 2021-22.",
     "The model's 2024-25 median income is about 6% above HBAI's, so projected absolute poverty sits below outturn.",
-    "OBR forecast series are calendar years; incomes and poverty are fiscal years.",
-    "CPI after housing costs and social rent are PolicyEngine derivations, not OBR forecasts.",
+    "OBR series are calendar years; CPI after housing costs and social rent are PolicyEngine derivations, not OBR forecasts.",
+    "2030-31 has a model step: the UC health element loses its pre-2026 protection, so incomes of lower-income households and poverty jump.",
     "The Autumn Budget 2026 OBR forecast is due on 28 October 2026; until then the post-Budget series repeat the pre-Budget ones.",
 ]
 
@@ -528,6 +536,8 @@ def two_child_notes(proj: dict) -> list[str]:
         f"Coverage is not the gap: in 2025-26 the model has {d['limit_affected_households_k']:.0f}k affected households and {d['children_in_limit_affected_benefit_units_m']:.2f}m children in them, close to DWP's 470k and 1.7m.",
         f"The policy effect grows to {effect29:.1f} points ({effect29 / 100 * kids * 1000:.0f}k children) by 2029-30, near DWP's 450k, as more children born after April 2017 would have been affected.",
         f"Most affected children stay below the line after the gain ({d['relative_ahc_rate_children_in_limit_affected_bu'] * 100:.0f}% were in relative AHC poverty in 2025-26), and model levels sit below HBAI's.",
+        "Sources: Save the Children on DWP April 2025 statistics (469,780 households, 1.67m children); DWP, Removing the two-child limit on Universal Credit: impact on low-income poverty levels (450,000 children, FYE 2030).",
+        YEAR_2030_NOTE,
     ]
 
 
