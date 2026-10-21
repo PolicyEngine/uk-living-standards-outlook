@@ -576,14 +576,16 @@ def absolute_poverty_note(validation: dict) -> str:
 
 
 def inequality_note(v: dict, hbai: dict) -> str:
-    hb = lambda series: next(r for r in series if r["year"] == "2024-25")["value"]  # noqa: E731
-    gap = (hb(hbai["inequality"]["bhc"]["gini"]) - v["inequality_bhc"]["gini"]) * 100
+    hb = lambda basis, m: next(r for r in hbai["inequality"][basis][m] if r["year"] == "2024-25")["value"]  # noqa: E731
+    gap = {b: (hb(b, "gini") - v[f"inequality_{b}"]["gini"]) * 100 for b in ("bhc", "ahc")}
+    ratio = {b: f"{v[f'inequality_{b}']['p90_p10']:.2f} against {hb(b, 'p90_p10'):.2f}" for b in ("bhc", "ahc")}
     return (
         "Read the projection as a change, not a level. "
-        f"Our Gini is about {gap:.1f} points below official figures in 2024-25. Our data have fewer very low incomes, "
-        "and we treat very high incomes differently from the SPI-based adjustment in HBAI. The 90:10 ratio is low "
-        f"({v['inequality_bhc']['p90_p10']:.2f} against {hb(hbai['inequality']['bhc']['p90_p10']):.2f}) because the "
-        "bottom tenth is too high, not because the top is too low."
+        f"Our Gini is about {gap['bhc']:.1f} points below official figures in 2024-25 before housing costs "
+        f"({gap['ahc']:.1f} after). Our data have fewer very low incomes, and we treat very high incomes differently "
+        "from the SPI-based adjustment in HBAI. The 90:10 ratio is low "
+        f"({ratio['bhc']} before housing costs, {ratio['ahc']} after) because the bottom tenth is too high, "
+        "not because the top is too low."
     )
 
 

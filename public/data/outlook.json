@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-21T09:28:53+00:00",
+    "generated_at": "2026-10-21T11:15:11+00:00",
     "policyengine": "6.8.0",
     "policyengine_uk": "2.130.1",
     "dataset": {
@@ -2722,7 +2722,7 @@
     },
     "notes": [
       "Outturn is HBAI Table 1.2b: Gini, and the ratio of top to bottom quintile medians, which is the 90th over the 10th percentile.",
-      "Read the projection as a change, not a level. Our Gini is about 2.5 points below official figures in 2024-25. Our data have fewer very low incomes, and we treat very high incomes differently from the SPI-based adjustment in HBAI. The 90:10 ratio is low (3.35 against 3.71) because the bottom tenth is too high, not because the top is too low."
+      "Read the projection as a change, not a level. Our Gini is about 2.5 points below official figures in 2024-25 before housing costs (3.0 after). Our data have fewer very low incomes, and we treat very high incomes differently from the SPI-based adjustment in HBAI. The 90:10 ratio is low (3.35 against 3.71 before housing costs, 4.04 against 4.54 after) because the bottom tenth is too high, not because the top is too low."
     ]
   },
   "deep_poverty": {
