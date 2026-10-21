@@ -1,5 +1,7 @@
 # Living standards outlooks: what peers publish, and what this dashboard should add
 
+> **Superseded (21 October 2026).** This note predates the pre-Budget review in issue #1. Section 1 and several figures are stale: the page now draws the model's 2024-25 point next to HBAI, defaults incomes to real terms, stops at 2029-30, and drops the disability and region views. Read issue #1 and `DATA_CONTRACT.md` for the current state; this file is kept as a record.
+
 Prepared 20 October 2026 for the baseline view of PolicyEngine's Autumn Budget 2026 (28 October 2026) dashboard.
 Scope: read-only review. Nothing in the dashboard or pipeline was changed.
 
@@ -167,7 +169,7 @@ How peers handle forecasts and outturn: the norm is a solid line for outturn, th
 
 The ranking rule: a metric is ranked high when it is (i) published by at least two of the bodies above, (ii) computable on the existing baseline with policyengine-uk 2.130.1, and (iii) useful on Budget day, when the post-Budget run replaces the pre-Budget one.
 
-Variable names below were checked against the installed package at `.venv/lib/python3.*/site-packages/policyengine_uk`. Input-variable presence (`tenure_type`, `region`, `is_disabled_for_benefits`, `hours_worked`, `employment_income`, `rent`, PIP/DLA categories) was checked in a local copy of `microcosm_uk_2024_25.h5` (`~/drill2-data`), not the exact tag the demo uses. Re-confirm on tag `...20261019T083323Z-6cba5d71` before shipping.
+Variable names below were checked against the installed package at `.venv/lib/python3.*/site-packages/policyengine_uk`. Input-variable presence (`tenure_type`, `region`, `is_disabled_for_benefits`, `hours_worked`, `employment_income`, `rent`, PIP/DLA categories) was checked in a local copy of `microcosm_uk_2024_25.h5` from an earlier build, not the exact tag the demo uses. Re-confirm on tag `...20261019T083323Z-6cba5d71` before shipping.
 
 ### Top 6
 
