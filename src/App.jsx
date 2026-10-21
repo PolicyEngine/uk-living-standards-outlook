@@ -13,7 +13,8 @@ import { Note } from "./lib/sources";
 
 function Row({ row, data }) {
   if (row.requires && !data[row.requires]) return null;
-  const foot = row.foot ? row.foot(data) : null;
+  // foot: one note or a list of notes, each said once under the row.
+  const foot = [].concat(row.foot ? row.foot(data) : []).filter(Boolean);
   // blocks: each is [A, B] (two-up, rows shared so the cards line up) or [A]
   // (full width). A plain { section } row is one full-width block.
   // Cards whose outlook.json block is missing (e.g. the sample file) are
@@ -41,7 +42,9 @@ function Row({ row, data }) {
           </div>
         ),
       )}
-      {foot && <Note>{fyDash(foot)}</Note>}
+      {foot.map((f) => (
+        <Note key={f}>{fyDash(f)}</Note>
+      ))}
     </section>
   );
 }

@@ -32,7 +32,8 @@ export default function DecileGrowthSection({ data }) {
   return (
     <ChartCard
       title="Income growth by decile"
-      description={`${dec.statistic.replace(/(\d{4})-(\d{2})/g, "$1–$2")}. Deciles are re-ranked each year, so this compares positions in the distribution, not the same people. The bottom AHC decile (about £11,000) moves a lot with small income changes.`}
+      description={`${dec.statistic.replace(/(\d{4})-(\d{2})/g, "$1–$2")}. Deciles are re-ranked each year, so this compares positions in the distribution, not the same people.`}
+      notes={(dec.notes || []).filter((n) => /lowest tenth/i.test(n))}
       summary={
         <p className="chart-summary">
           From {fyDash(first.year)} to {fyDash(end.year)}, real median income ({basisShort}) in the lowest-income

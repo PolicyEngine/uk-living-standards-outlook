@@ -3,11 +3,12 @@
 import { HERO_YEAR, changeClass, pctLabel, ppLabel, toRows } from "../../lib/forecast";
 import { ObrSource } from "../../lib/sources";
 
-// ONS series pages for the tile names (checked 20 Oct 2026).
+// ONS series pages for the tile names (checked 20 Oct 2026). Earnings is not
+// linked: the tile is OBR's calendar-year average earnings growth, and ONS
+// KAB9 is a level series, not that growth rate; the tile's source is the OBR.
 const ONS_SERIES = {
   cpi: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23",
   rpi: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23",
-  earnings: "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/kab9/lms",
 };
 
 export default function ForecastHeadlineSection({ data }) {

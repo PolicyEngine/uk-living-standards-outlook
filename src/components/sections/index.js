@@ -18,6 +18,7 @@ import ForecastHeadlineSection from "./ForecastHeadlineSection";
 import ForecastSeriesSection from "./ForecastSeriesSection";
 import RhdiSection from "./RhdiSection";
 import AboutDataSection from "./AboutDataSection";
+import CaveatsSection from "./CaveatsSection";
 
 export const TABS = [
   {
@@ -31,14 +32,15 @@ export const TABS = [
         <path d="M8 17v-3" />
       </>
     ),
-    intro: () => (
+    intro: (data) => (
       <>
         Projections of UK household incomes and poverty under current legislated policy: the baseline against which
         Autumn Budget 2026 measures are scored. A demo of the{" "}
         <a href="https://policyengine.org" target="_blank" rel="noopener noreferrer">
           PolicyEngine
         </a>{" "}
-        baseline for the Autumn Budget 2026.
+        baseline for the Autumn Budget 2026. Pre-Budget baseline: OBR March 2026 forecast and policyengine-uk{" "}
+        {data?.meta?.policyengine_uk || ""}. Budget measures are not modelled.
       </>
     ),
     rows: [
@@ -49,8 +51,9 @@ export const TABS = [
           [LivingStandardsSection, DecileGrowthSection],
           [NonPensionerSplitSection, InequalitySection],
         ],
-        // Said once, under the first section whose headlines stop there.
-        foot: (d) => d.meta?.headline_end_year_note,
+        // Said once, under the first section whose charts stop there, and
+        // under the cards that use CPI after housing costs.
+        foot: (d) => [d.meta?.headline_end_year_note, d.meta?.cpi_ahc_note],
       },
       {
         id: "poverty",
@@ -62,6 +65,11 @@ export const TABS = [
         heading: "Child poverty",
         requires: "child_poverty_by_family",
         blocks: [[ChildPovertyFamilySection, TwoChildLimitSection]],
+      },
+      {
+        id: "caveats",
+        heading: "What the baseline leaves out",
+        section: CaveatsSection,
       },
     ],
   },

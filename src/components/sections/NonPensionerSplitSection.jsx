@@ -7,7 +7,8 @@ import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
-import { PALETTE, joinSeries, niceAxis, rangeAxis } from "../../lib/baseline";
+import { DASH, PALETTE, joinSeries, niceAxis, rangeAxis } from "../../lib/baseline";
+import { dashOf } from "../LineSeriesChart";
 import {
   changeVerb,
   fyDash,
@@ -45,27 +46,32 @@ export default function NonPensionerSplitSection({ data }) {
   const base = data.meta.real_price_base;
 
   const series = [
-    { key: "lower", name: "Lower-income half", colour: PALETTE.amber, dashed: true },
-    { key: "upper", name: "Higher-income half", colour: PALETTE.teal, dashed: true },
+    { key: "lower", name: "Lower-income half", colour: PALETTE.amber, dash: DASH.dot },
+    { key: "upper", name: "Higher-income half", colour: PALETTE.teal, dash: DASH.long },
   ];
 
   return (
     <ChartCard
       title="Non-pensioner income halves"
-      description={`${split.statistic.replace(/(\d{4})-(\d{2})/g, "$1–$2")}. Halves split at the non-pensioner median; the Resolution Foundation splits at the whole-population median, so its groups differ slightly.`}
+      description={`${split.statistic.replace(/(\d{4})-(\d{2})/g, "$1–$2")}. People in families with no pensioner, split at their own median.`}
+      notes={[
+        ...(data.income_by_decile.notes || []).filter((n) => /halves/i.test(n)),
+        view === "level" && data.meta.units?.mean_equivalised_income_ahc && `Incomes are in ${data.meta.units.mean_equivalised_income_ahc}.`,
+      ]}
       summary={
         sl &&
         su && (
           <p className="chart-summary">
-            From {fyDash(sl[0].year)} to {fyDash(sl[1].year)}, real income (AHC) of the lower-income half of
-            non-pensioners <strong>{say(pct(sl))}</strong>; the higher-income half <strong>{say(pct(su))}</strong>.
+            From {fyDash(sl[0].year)} to {fyDash(sl[1].year)}, real mean income (AHC) of the lower-income half of
+            non-pensioners <strong>{say(pct(sl))}</strong>; that of the higher-income half{" "}
+            <strong>{say(pct(su))}</strong>.
           </p>
         )
       }
       source={<PeSource />}
       exportOptions={{
         filename: `non-pensioner-halves-${view}`,
-        legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
+        legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line", dash: dashOf(s) })),
       }}
       controls={
         <Dropdown
@@ -86,7 +92,7 @@ export default function NonPensionerSplitSection({ data }) {
         xFormat={fyLabel}
         yFormat={view === "change" ? pctTick : formatPoundsKAxis}
         tooltipFormat={view === "change" ? signed : formatPounds}
-        yLabel={view === "change" ? "Real change (%)" : "£ per person per year"}
+        yLabel={view === "change" ? "Real change in mean (%)" : `£ a year, ${fyDash(base)} prices`}
         yDomain={axis.domain}
         yTicks={axis.ticks}
       />

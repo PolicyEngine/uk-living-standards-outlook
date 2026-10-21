@@ -7,10 +7,11 @@ import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
-import { changeVerb, fyDash, fyLabel, formatPct, formatPctAxis, headlineSpan } from "../../lib/outlook";
+import { changeVerb, fyDash, fyLabel, formatPct, formatPctAxis, headlineSpan, round1 } from "../../lib/outlook";
 import {
   EMPTY,
   VIEW_OPTIONS,
+  chartEndYear,
   legendItemsFor,
   lineSeries,
   mergeSeries,
@@ -39,8 +40,8 @@ export default function PovertySection({ data }) {
   const startYear = useMemo(() => projectionStartYear(data), [data]);
   const outturn = poverty.outturn?.[measure]?.[group] || EMPTY;
   const projection = useMemo(
-    () => trimProjection(poverty.projection?.[measure]?.[group], startYear),
-    [poverty, measure, group, startYear],
+    () => trimProjection(poverty.projection?.[measure]?.[group], startYear, chartEndYear(data)),
+    [poverty, measure, group, startYear, data],
   );
 
   const chartData = useMemo(
@@ -62,8 +63,8 @@ export default function PovertySection({ data }) {
   const span = headlineSpan(projection, data);
   if (span && span[0].rate != null && span[1].rate != null) {
     const [first, last] = span;
-    const a = first.rate * 100;
-    const b = last.rate * 100;
+    const a = round1(first.rate * 100);
+    const b = round1(last.rate * 100);
     const verb = changeVerb(b - a, "pp");
     const kind = isAbsolute ? "Absolute" : "Relative";
     const line = isAbsolute ? "fixed real-terms line" : "60% of current median";
@@ -91,7 +92,7 @@ export default function PovertySection({ data }) {
 
   const description = `${
     isAbsolute
-      ? "Absolute poverty measures income below a fixed line (60% of a base-year median) held constant in real terms."
+      ? "Absolute poverty measures income below a fixed line (60% of the 2024–25 median) held constant in real terms."
       : "Relative poverty measures income below 60% of the contemporary median income."
   } ${isAHC ? "After housing costs." : "Before housing costs."}`;
 
@@ -121,6 +122,7 @@ export default function PovertySection({ data }) {
           <Dropdown fieldLabel="Period" label="Series shown" value={viewMode} onChange={setViewMode} options={VIEW_OPTIONS} />
         </>
       }
+      notes={poverty.notes}
       footer={
         !visibleEmpty &&
         noOutturn &&
