@@ -322,6 +322,11 @@ a.headline-tile:focus-visible {
   border-radius: 2px;
 }
 
+/* The first section sits closer to the nav above it. */
+.results-container > .dashboard-section.has-heading:first-child {
+  margin-top: 32px;
+}
+
 .section-block + .section-block {
   margin-top: 8px;
 }

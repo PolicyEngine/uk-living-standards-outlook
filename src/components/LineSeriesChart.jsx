@@ -110,7 +110,7 @@ export default function LineSeriesChart({
 
   const yAxisWidth = narrow ? 44 : 52;
   const margin = { top: 22, right: edgeRoom(labels), left: 0, bottom: 4 };
-  const xAxis = yearAxisProps({ width, count: data.length, labels, yAxisWidth, margin });
+  const xAxis = yearAxisProps({ width, count: data.length, labels, yAxisWidth, margin, values: data.map((d) => d[xKey]) });
   const last = data.length ? data[data.length - 1][xKey] : null;
   const shade = projectionFrom != null && last != null && projectionFrom !== last;
 

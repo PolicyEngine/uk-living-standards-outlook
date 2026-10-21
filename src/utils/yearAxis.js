@@ -6,14 +6,17 @@
 
 export const labelWidthOf = (labels) => Math.max(1, ...labels.map((l) => String(l).length)) * 6.4 + 8;
 
-export function yearAxisProps({ width, count, labels, yAxisWidth, margin }) {
+export function yearAxisProps({ width, count, labels, yAxisWidth, margin, values }) {
   const plotWidth = Math.max(0, width - yAxisWidth - margin.left - margin.right);
   const perTick = count > 1 ? plotWidth / (count - 1) : plotWidth;
   const labelWidth = labelWidthOf(labels);
   let interval = 0;
   while (perTick * (interval + 1) < labelWidth && interval < count) interval += 1;
+  // Count the skipped labels back from the end, so the last year always shows.
+  const ticks = values && interval > 0 ? values.filter((_, i) => (count - 1 - i) % (interval + 1) === 0) : undefined;
   return {
-    interval,
+    interval: ticks ? 0 : interval,
+    ticks,
     height: 26,
     tickMargin: 8,
     tickLine: false,

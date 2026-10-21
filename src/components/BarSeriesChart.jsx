@@ -42,6 +42,7 @@ export default function BarSeriesChart({
     labels: data.map((d) => xFormat(d[xKey])),
     yAxisWidth,
     margin,
+    values: xKey === "year" ? data.map((d) => d[xKey]) : undefined,
   });
   const items = (keyItems || series.map((s) => ({ label: s.name, colour: s.colour }))).map((k) => ({
     ...k,
@@ -61,6 +62,7 @@ export default function BarSeriesChart({
               stroke={AXIS}
               {...xAxis}
               interval={xKey === "year" ? xAxis.interval : 0}
+              ticks={xAxis.ticks}
               label={
                 xLabel
                   ? { value: xLabel, position: "insideBottom", offset: -2, style: { fill: "#6b7280", fontSize: 11 } }
