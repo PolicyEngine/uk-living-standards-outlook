@@ -22,8 +22,12 @@ export const LEGEND_HEIGHT = 56;
  * BudgetaryImpactChart): grid 3 3 #e0e0e0, 11px #666 ticks, 12px/500 #374151
  * axis label, bottom legend clear of the PolicyEngine logo.
  *
- * series: [{ key, name, colour, dashed?, hidden? }]
+ * series: [{ key, name, colour, dashed?, dash?, hidden? }]. `dash` is an SVG
+ * dash pattern (see DASH in lib/baseline); `dashed` alone means "8 4". Lines
+ * on one chart should differ in pattern as well as colour.
  */
+export const dashOf = (s) => s.dash ?? (s.dashed ? "8 4" : undefined);
+
 export { NARROW };
 
 export default function LineSeriesChart({
@@ -117,7 +121,7 @@ export default function LineSeriesChart({
               value: s.name,
               type: "line",
               color: s.colour,
-              payload: { strokeDasharray: s.dashed ? "8 4" : "0" },
+              payload: { strokeDasharray: dashOf(s) || "0" },
             }))}
             formatter={(value) => (
               <span style={{ fontSize: "12px", fontWeight: 500, color: "#374151" }}>{value}</span>
@@ -131,7 +135,7 @@ export default function LineSeriesChart({
               name={s.name}
               stroke={s.colour}
               strokeWidth={3}
-              strokeDasharray={s.dashed ? "8 4" : undefined}
+              strokeDasharray={dashOf(s)}
               dot={{ r: 3, fill: s.colour, stroke: s.colour, strokeWidth: 1 }}
               activeDot={{ r: 5 }}
               connectNulls={false}

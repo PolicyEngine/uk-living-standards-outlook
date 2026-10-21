@@ -10,27 +10,44 @@ export const PROJECTION_COLOUR = "#319795";
 export const VIEW_OPTIONS = [
   { id: "outturn", label: "Outturn" },
   { id: "both", label: "Both" },
-  { id: "forecast", label: "Forecast" },
+  { id: "forecast", label: "Projection" },
 ];
+
+/** SVG dash patterns, so lines differ by pattern as well as colour. */
+export const DASH = {
+  solid: undefined,
+  long: "8 4",
+  dot: "2 4",
+  dashDot: "12 4 2 4",
+  short: "4 4",
+};
 
 export const NO_OFFICIAL_SERIES = "No official series on this definition";
 
 /**
- * First projection year the charts show: the year after the latest HBAI
- * outturn year anywhere in the file (2025-26 with the current data). The
- * engine's own estimate for outturn years is not drawn; the footer notes how
- * it compares with HBAI.
+ * First projection year the charts show: the latest HBAI outturn year
+ * anywhere in the file (2024-25 with the current data). The model's own point
+ * for that year is drawn next to the official one, so the level gap shows
+ * within one year instead of as a one-year change; earlier model years are
+ * not drawn. Headline changes still start at meta.headline_start_year.
  */
 export function projectionStartYear(data) {
   let last = -Infinity;
   const scan = (rows) => (rows || []).forEach((d) => (last = Math.max(last, fyStart(d.year))));
   Object.values(data?.living_standards?.outturn || {}).forEach(scan);
   Object.values(data?.poverty?.outturn || {}).forEach((byGroup) => Object.values(byGroup || {}).forEach(scan));
-  return Number.isFinite(last) ? last + 1 : -Infinity;
+  return Number.isFinite(last) ? last : -Infinity;
 }
 
-/** Drop projection rows before the first non-outturn year. */
-export const trimProjection = (rows, startYear) => (rows || EMPTY).filter((d) => fyStart(d.year) >= startYear);
+/**
+ * Projection rows from startYear to the headline end year (2029-30): the
+ * 2030-31 model year is distorted (meta.headline_end_year_note).
+ */
+export const trimProjection = (rows, startYear, endYear = Infinity) =>
+  (rows || EMPTY).filter((d) => fyStart(d.year) >= startYear && fyStart(d.year) <= endYear);
+
+/** Last year any model chart draws: meta.headline_end_year, as a number. */
+export const chartEndYear = (data) => (data?.meta?.headline_end_year ? fyStart(data.meta.headline_end_year) : Infinity);
 
 /** Merge outturn + projection rows into { year, historical, projection }. */
 export function mergeSeries(outturn, projection, pick) {
@@ -64,13 +81,14 @@ export function lineSeries(viewMode, hasOutturn = true) {
       key: "historical",
       name: "Official: DWP Households Below Average Income",
       colour: OUTTURN_COLOUR,
+      dash: DASH.solid,
       hidden: viewMode === "forecast" || !hasOutturn,
     },
     {
       key: "projection",
       name: "Baseline (projection)",
       colour: PROJECTION_COLOUR,
-      dashed: true,
+      dash: DASH.long,
       hidden: viewMode === "outturn",
     },
   ];
@@ -79,7 +97,7 @@ export function lineSeries(viewMode, hasOutturn = true) {
 export function legendItemsFor(viewMode, hasOutturn = true) {
   return lineSeries(viewMode, hasOutturn)
     .filter((s) => !s.hidden)
-    .map((s) => ({ color: s.colour, label: s.name, type: "line" }));
+    .map((s) => ({ color: s.colour, label: s.name, type: "line", dash: s.dash }));
 }
 
 /**
