@@ -102,6 +102,9 @@ export function changeVerb(delta, unit) {
   return `${delta > 0 ? "rises" : "falls"} ${formatOneDp(Math.abs(delta))}${unit}`;
 }
 
+/** "rises 10.0%" -> "rises": the direction alone, for a figure the headline strip already gives. */
+export const directionOf = (verb) => (verb ? verb.split(" ")[0] : "stays flat");
+
 /** Section notes minus the 2030-31 UC step, which meta.headline_end_year_note states once. */
 export const sectionNotes = (notes) =>
   (notes || []).filter((n) => !/baseline discontinuity|UC health element protection|^Series end in/i.test(n));

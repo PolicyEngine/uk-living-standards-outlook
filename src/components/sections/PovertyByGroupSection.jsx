@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import ChartCard from "../ChartCard";
-import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import { niceAxis, rangeAxis } from "../../lib/baseline";
 import { formatOneDp, formatPct, formatPounds, fyDash, headlineYear, round1 } from "../../lib/outlook";
 import { PeSource } from "../../lib/sources";
@@ -112,17 +112,16 @@ export default function PovertyByGroupSection({ data }) {
       source={<PeSource />}
       controls={
         <>
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Breakdown"
             label="Breakdown"
             value={breakdown}
             onChange={setBreakdown}
             options={breakdownIds.map((id) => ({ id, label: pbg.breakdowns[id].label }))}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Measure"
             label="Measure"
-            wide
             value={measure}
             onChange={setMeasure}
             options={Object.entries(MEASURES).map(([id, x]) => ({ id, label: x.label }))}

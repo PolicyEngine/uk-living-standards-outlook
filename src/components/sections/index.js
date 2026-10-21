@@ -83,7 +83,8 @@ export const TABS = [
         : "The OBR economic forecast behind the baseline. This shows the OBR March 2026 (pre-Budget) forecast; each chart will add the Autumn Budget 2026 forecast once the OBR publishes it on 28 October.",
     requires: "forecast",
     rows: [
-      { id: "headline", section: ForecastHeadlineSection },
+      // lead: drawn above the section nav, as the Baseline tab's headline strip.
+      { id: "headline", lead: true, section: ForecastHeadlineSection },
       { id: "series", spaced: true, section: ForecastSeriesSection },
       { id: "rhdi", heading: "Household income", requires: "obr_rhdi", section: RhdiSection },
     ],

@@ -47,9 +47,13 @@ export default function ChartCard({
   const chartRef = useRef(null);
 
   const handleExport = async () => {
+    // The y-axis unit is drawn in HTML above the plot, so carry it into the
+    // exported file's description.
+    const unit = chartRef.current?.querySelector(".chart-unit")?.textContent;
+    const text = typeof description === "string" ? description : "";
     await exportChartAsSvg(chartRef, exportOptions.filename, {
       title,
-      description: typeof description === "string" ? description : "",
+      description: unit ? `${text} Vertical axis: ${unit}.`.trim() : text,
       legendItems: exportOptions.legendItems || [],
       logo: CHART_LOGO,
     });
@@ -58,10 +62,10 @@ export default function ChartCard({
   return (
     <div className={`chart-card ${className}`}>
       <div className="chart-header">
-        <h2>
+        <h3>
           {title}
           <InfoTip text={description} />
-        </h2>
+        </h3>
         {exportOptions && (
           <button
             className="export-button"

@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
-import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
 import { DASH, PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
 import { dashOf } from "../LineSeriesChart";
@@ -77,8 +77,9 @@ export default function ChildPovertyFamilySection({ data }) {
         ranked.length > 0 && (
           <p className="chart-summary">
             In {fyDash(all.year)}, {kind} child poverty (AHC) is highest for children in{" "}
-            <strong>{ranked[0][2]}</strong> at {formatPct(ranked[0][1] * 100)}, against {formatPct(all.rate * 100)} for
-            all children.
+            <strong>{ranked[0][2]}</strong> at {formatPct(ranked[0][1] * 100)}
+            {/* The all-children relative rate is in the headline strip. */}
+            {measure === "relative_ahc" ? "." : `, against ${formatPct(all.rate * 100)} for all children.`}
           </p>
         )
       }
@@ -89,14 +90,14 @@ export default function ChildPovertyFamilySection({ data }) {
       }}
       controls={
         <>
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Measure"
             label="Poverty measure"
             value={measure}
             onChange={setMeasure}
             options={measureIds.map((id) => ({ id, label: cp.measures[id] }))}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Split by"
             label="Split by"
             value={split}

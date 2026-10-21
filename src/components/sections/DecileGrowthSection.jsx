@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import ChartCard from "../ChartCard";
-import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import BarSeriesChart from "../BarSeriesChart";
 import { PALETTE, rangeAxis } from "../../lib/baseline";
 import { changeVerb, fyDash, formatOneDp, headlineYear } from "../../lib/outlook";
@@ -49,12 +49,12 @@ export default function DecileGrowthSection({ data }) {
         ],
       }}
       controls={
-        <Dropdown
+        <SegmentedToggle
           fieldLabel="Housing costs"
           label="Housing costs"
           value={basis}
           onChange={setBasis}
-          options={Object.keys(dec.bases).map((id) => ({ id, label: id === "bhc" ? "Before (BHC)" : "After (AHC)" }))}
+          options={Object.keys(dec.bases).map((id) => ({ id, label: id.toUpperCase(), title: id === "bhc" ? "Before housing costs" : "After housing costs" }))}
         />
       }
     >
@@ -64,9 +64,9 @@ export default function DecileGrowthSection({ data }) {
         xLabel="Income decile (1 = lowest)"
         series={[{ key: "growth", name: `Real change, ${fyDash(first.year)} to ${fyDash(end.year)}`, colour: PALETTE.teal }]}
         signColours={{ positive: PALETTE.teal, negative: PALETTE.amber }}
-        legendPayload={[
-          { value: "Rise", type: "square", color: PALETTE.teal },
-          { value: "Fall", type: "square", color: PALETTE.amber },
+        keyItems={[
+          { label: "Rise", colour: PALETTE.teal },
+          { label: "Fall", colour: PALETTE.amber },
         ]}
         yFormat={pctTick}
         tooltipFormat={signed}

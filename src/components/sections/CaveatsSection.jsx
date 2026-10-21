@@ -11,7 +11,7 @@ export default function CaveatsSection({ data }) {
   const caveats = data.meta?.caveats || [];
   if (!caveats.length) return null;
   return (
-    <div className="chart-card caveats-card">
+    <div className="caveats">
       <ul className="meta-notes">
         {caveats.map((c) => (
           <li key={c}>{fyDash(plainWords(c))}</li>

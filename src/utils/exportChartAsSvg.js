@@ -402,7 +402,8 @@ export async function exportChartAsSvg(
   const originalLegendWrapper = svgElement
     .closest(".recharts-wrapper")
     ?.querySelector(".recharts-legend-wrapper");
-  let originalLegendHeight = 60; // Default fallback
+  // Charts draw their key in HTML above the plot, so usually there is none.
+  let originalLegendHeight = 0;
   if (originalLegendWrapper) {
     const legendRect = originalLegendWrapper.getBoundingClientRect();
     originalLegendHeight = legendRect.height;

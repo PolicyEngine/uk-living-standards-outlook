@@ -6,8 +6,9 @@
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
-import { changeVerb, fyDash, fyLabel, formatPct, formatPctAxis, headlineSpan, round1 } from "../../lib/outlook";
+import { changeVerb, directionOf, fyDash, fyLabel, formatPct, formatPctAxis, headlineSpan, round1 } from "../../lib/outlook";
 import {
   EMPTY,
   VIEW_OPTIONS,
@@ -17,10 +18,12 @@ import {
   mergeSeries,
   niceAxis,
   projectionStartYear,
+  shadeFrom,
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
 import { HbaiSource, Note } from "../../lib/sources";
+import { inStrip } from "../../lib/headline";
 
 const GROUP_SUFFIX = {
   all: "",
@@ -71,7 +74,12 @@ export default function PovertySection({ data }) {
     summary = (
       <p className="chart-summary">
         {kind} poverty{GROUP_SUFFIX[group] ?? ""} ({isAHC ? "AHC" : "BHC"}, {line}){" "}
-        {verb ? (
+        {inStrip("poverty", { measure, group }) ? (
+          // The headline strip gives this selection's figures.
+          <>
+            <strong>{directionOf(verb)}</strong> from {fyDash(first.year)} to {fyDash(last.year)}.
+          </>
+        ) : verb ? (
           <>
             <strong>{verb}</strong>, from {formatPct(a)} in {fyDash(first.year)} to {formatPct(b)} by{" "}
             {fyDash(last.year)}.
@@ -119,7 +127,7 @@ export default function PovertySection({ data }) {
             onChange={setGroup}
             options={groupIds.map((id) => ({ id, label: poverty.groups[id] }))}
           />
-          <Dropdown fieldLabel="Period" label="Series shown" value={viewMode} onChange={setViewMode} options={VIEW_OPTIONS} />
+          <SegmentedToggle fieldLabel="Period" label="Series shown" value={viewMode} onChange={setViewMode} options={VIEW_OPTIONS} />
         </>
       }
       notes={poverty.notes}
@@ -149,6 +157,7 @@ export default function PovertySection({ data }) {
           yLabel="Poverty rate"
           yDomain={axis.domain}
           yTicks={axis.ticks}
+          projectionFrom={shadeFrom(chartData, viewMode, !noOutturn)}
         />
       )}
     </ChartCard>

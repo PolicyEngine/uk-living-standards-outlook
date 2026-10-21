@@ -31,8 +31,8 @@ export default function RhdiSection({ data }) {
   const verb = a && b ? changeVerb(((b.value - a.value) / a.value) * 100, "%") : null;
   const axis = rangeAxis(rows.flatMap((d) => [d.outturn, d.forecast]), { pad: 0.3 });
   const series = [
-    { key: "outturn", name: "Outturn (ONS)", colour: PALETTE.grey },
-    { key: "forecast", name: "OBR March 2026 forecast", colour: PALETTE.teal, dashed: true },
+    { key: "outturn", name: "Outturn (ONS)", label: "Outturn (ONS)", colour: PALETTE.grey },
+    { key: "forecast", name: "OBR March 2026 forecast", label: "OBR forecast", colour: PALETTE.teal, dashed: true },
   ];
 
   return (
@@ -65,6 +65,8 @@ export default function RhdiSection({ data }) {
         yLabel="£ per person, 2023 prices"
         yDomain={axis.domain}
         yTicks={axis.ticks}
+        projectionLabel="Forecast"
+        projectionFrom={r.series.filter((d) => d.type === "outturn").map((d) => fyStart(d.year)).slice(-1)[0]}
       />
     </ChartCard>
   );

@@ -91,6 +91,9 @@ function ForecastTableCard({ series, published, preLabel, postLabel }) {
   );
 }
 
+/** Anchor id for a forecast section heading (also used by the section nav). */
+export const sectionId = (title) => `forecast-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`;
+
 export default function ForecastSeriesSection({ data }) {
   const [viewMode, setViewMode] = useState("chart");
   const forecast = data.forecast;
@@ -100,7 +103,7 @@ export default function ForecastSeriesSection({ data }) {
   return (
     <div>
       {forecast.sections.map((section, i) => (
-        <div key={section.title} className="series-block">
+        <div key={section.title} id={sectionId(section.title)} className="series-block">
           <div className="section-toolbar">
             <h2 className="section-heading">{section.title}</h2>
             {i === 0 && (

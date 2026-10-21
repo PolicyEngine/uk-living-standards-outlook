@@ -1,112 +1,640 @@
-/* Demo-only styles. Everything here reuses the values of the
-   uk-autumn-budget-dashboard-2026 components it names, so the two dashboards
-   read as siblings. Shared shell styles are in globals.css (copied verbatim). */
+/* Page and component styles. Editorial layout: white page, a compact header,
+   a headline strip, a sticky section nav, and open (unboxed) chart cards
+   separated by thin rules. PolicyEngine teal and Inter throughout. */
 
-/* Fallback for --pe-font-family-primary, which AB26 takes from the
-   design-system tokens.css on unpkg; same value, so it only matters offline. */
+/* Fallback for --pe-font-family-primary, which the design-system tokens.css on
+   unpkg sets; same value, so it only matters offline. */
 :root {
   --pe-font-family-primary: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --page-max: 1200px;
+  --gutter: 40px;
+  --ink: #111827;
+  --body: #374151;
+  --muted: #6b7280;
+  --rule: #e5e7eb;
+  --rule-light: #f0f2f4;
+  --teal: #319795;
+  --teal-ink: #1d6f6d;
 }
 
-/* Chart card: as .budgetary-impact-chart / .employment-income-chart. Inside a
-   .charts-grid or .hero-chart, globals.css gives it the 20px radius and the
-   layered shadow. */
+.app {
+  min-height: 100vh;
+  background: var(--pe-surface);
+  font-family: var(--pe-font-family);
+  color: var(--body);
+}
+
+/* Only the section nav is sticky: the ui-kit site nav (PolicyEngineShell
+   renders it with an inline position:sticky) scrolls away normally. */
+.min-h-screen.flex.flex-col > div:first-child[style*="sticky"] {
+  position: relative !important;
+}
+
+.page-inner,
+.main-content {
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* ---------- Header: title, then underline tabs ---------- */
+
+.page-header {
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, #f3f8f8 0%, #ffffff 100%);
+}
+
+.page-header h1 {
+  padding-top: 36px;
+  margin: 0 0 20px 0;
+  font-size: clamp(1.6rem, 3vw, 2.125rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 28px;
+  margin-bottom: -1px;
+}
+
+.tab-button {
+  padding: 10px 0 12px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: var(--ink);
+}
+
+.tab-button.active {
+  color: var(--teal-ink);
+  border-bottom-color: var(--teal);
+}
+
+.tab-button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.main-content {
+  padding-top: 28px;
+  padding-bottom: 64px;
+}
+
+/* Standfirst */
+.dashboard-intro {
+  max-width: 780px;
+  margin: 0 0 32px 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.dashboard-intro a {
+  color: var(--teal-ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(49, 151, 149, 0.4);
+  text-underline-offset: 3px;
+}
+
+/* ---------- Headline strip ---------- */
+
+.headline {
+  margin: 0 0 28px 0;
+}
+
+.headline-title {
+  margin: 0 0 10px 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.headline-strip {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+
+.headline-strip.three-up {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* The forecast tab's lead row (its headline tiles) sits above the nav. */
+#headline {
+  margin-bottom: 28px;
+}
+
+.headline-strip > li {
+  min-width: 0;
+}
+
+.headline-strip > li + li .headline-tile,
+.headline-strip > li.headline-tile + li.headline-tile {
+  border-left: 1px solid var(--rule);
+}
+
+.headline-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 16px 20px 18px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.headline-strip > li:first-child .headline-tile,
+.headline-strip > li.headline-tile:first-child {
+  padding-left: 0;
+}
+
+a.headline-tile:hover .headline-label,
+a.headline-tile:focus-visible .headline-label {
+  color: var(--teal-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a.headline-tile:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+.headline-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.headline-label a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(107, 114, 128, 0.4);
+  text-underline-offset: 3px;
+}
+
+.headline-values {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.headline-from {
+  font-size: 1rem;
+  color: #9ca3af;
+}
+
+.headline-arrow {
+  color: #9ca3af;
+}
+
+.headline-to {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.headline-change {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--teal-ink);
+}
+
+.headline-change.change-negative {
+  color: #b91c1c;
+}
+
+.headline-qualifier {
+  margin-top: auto;
+  padding-top: 4px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.headline-qualifier a {
+  color: var(--teal-ink);
+}
+
+/* ---------- Sticky section nav ---------- */
+
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  margin: 0 0 8px 0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: saturate(1.4) blur(8px);
+  -webkit-backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-nav-inner {
+  display: flex;
+  align-items: center;
+}
+
+.section-nav-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+}
+
+.section-nav-links a {
+  display: block;
+  padding: 12px 0 10px;
+  border-bottom: 2px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.section-nav-links a:hover {
+  color: var(--ink);
+}
+
+.section-nav-links a.active {
+  color: var(--teal-ink);
+  border-bottom-color: var(--teal);
+}
+
+.section-nav-select {
+  display: none;
+}
+
+/* Anchored sections clear the sticky nav. */
+.dashboard-section,
+.series-block {
+  scroll-margin-top: 56px;
+}
+
+/* ---------- Sections ---------- */
+
+.dashboard-section + .dashboard-section {
+  margin-top: 24px;
+}
+
+.dashboard-section.has-heading,
+.series-block + .series-block {
+  margin-top: 56px;
+}
+
+.section-heading {
+  margin: 0 0 4px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.section-heading::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 3px;
+  margin-bottom: 12px;
+  background: var(--teal);
+  border-radius: 2px;
+}
+
+/* The first section sits closer to the nav above it. */
+.results-container > .dashboard-section.has-heading:first-child {
+  margin-top: 32px;
+}
+
+.section-block + .section-block {
+  margin-top: 8px;
+}
+
+.section-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.section-toolbar .section-heading {
+  margin: 0;
+}
+
+/* Row notes said once under a section: plain small text. */
+.dashboard-section > .chart-note {
+  max-width: 900px;
+}
+
+.dashboard-section > .chart-note:first-of-type {
+  margin-top: 24px;
+}
+
+/* ---------- Chart cards: open, separated by a thin rule ---------- */
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+}
+
 .chart-card {
-  background: white;
-  padding: 13px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   min-width: 0;
   display: flex;
   flex-direction: column;
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--rule);
+  margin-top: 20px;
 }
 
-.chart-card h2 {
-  margin: 0 0 6px 0;
-  color: #374151;
-  font-size: 1rem;
+/* Two-up cards share the grid's rows (header, summary, controls, chart,
+   notes, source), so titles, lead sentences, controls, chart tops and x axes
+   line up. Every ChartCard renders all six slots, empty or not. */
+.charts-grid > .chart-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 6;
+  row-gap: 0;
+}
+
+.chart-slot:empty {
+  display: block;
+}
+
+.chart-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.chart-card h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* The card's one lead sentence. */
+.chart-summary {
+  margin: 6px 0 0 0;
+  max-width: 68ch;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+.chart-summary strong {
+  color: var(--teal-ink);
   font-weight: 600;
 }
 
-.chart-card .chart-description {
-  margin: 0;
-  color: #6b7280;
-  font-size: 0.875rem;
-  line-height: 1.4;
+.chart-summary a {
+  color: var(--teal-ink);
 }
 
-/* Computed callout: as .region-showing. */
-.chart-summary {
-  margin: 12px 0 0 0;
-  padding: 8px 12px;
-  background: #f0fdfa;
-  border-left: 3px solid #319795;
+/* Controls: one compact row of small labels and segmented groups. */
+.chart-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 14px 0 0 0;
+}
+
+.control-field {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  min-width: 0;
+}
+
+/* A segmented group never wraps inside its track; the whole group moves
+   under its label instead. */
+.control-field .outcome-toggle {
+  flex-wrap: nowrap;
+}
+
+.control-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.chart-area {
+  width: 100%;
+  min-width: 0;
+  margin-top: 4px;
+}
+
+/* The row above a plot: unit on the left, key on the right. */
+.chart-key {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  min-height: 20px;
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.chart-unit {
+  font-weight: 500;
+}
+
+.chart-key-items {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  color: #4b5563;
+}
+
+.chart-key-items li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.key-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  margin-top: 14px;
+  background: #f9fafb;
   border-radius: 4px;
+  color: var(--muted);
   font-size: 0.875rem;
+  text-align: center;
+  padding: 16px;
+}
+
+/* Notes: plain small text under the chart. */
+.chart-note {
+  margin: 8px 0 0 0;
+  font-size: 0.8125rem;
   line-height: 1.5;
   color: #4b5563;
 }
 
-.chart-summary a {
-  color: var(--pe-teal-700);
+.chart-slot-footer .chart-note:first-child {
+  margin-top: 12px;
 }
 
-.chart-summary strong {
-  color: #0f766e;
+/* Source: the last line of a card. */
+.chart-source {
+  margin: 12px 0 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.chart-source a {
+  color: var(--teal-ink);
+}
+
+.chart-source-label {
+  margin-right: 4px;
   font-weight: 600;
+  color: #4b5563;
 }
 
-/* Card controls: one row of equal-height labelled select boxes (as the
-   targeted-energy-discount dashboard's control panel), wrapping on phones. */
-.chart-controls {
+.chart-source-label::after {
+  content: ":";
+}
+
+/* Export button: a quiet icon. */
+.export-button {
+  flex-shrink: 0;
   display: flex;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 16px 0 8px 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
 }
 
-.control-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1 1 96px;
-  min-width: 0;
+.export-button:hover {
+  color: var(--ink);
+  border-color: var(--rule);
 }
 
-.control-field.wide {
-  flex: 2 1 220px;
+.export-button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
 }
 
-.control-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #6b7280;
+.export-button svg {
+  width: 15px;
+  height: 15px;
 }
 
-.control-field .year-selector {
+/* Definition tooltip next to a card title. The bubble is placed against the
+   card header, so it never runs past the card (or the viewport on phones). */
+.info-tip {
+  position: static;
+  display: inline-flex;
+  margin-left: 6px;
+  vertical-align: -1px;
+  color: #9ca3af;
+  cursor: help;
+  outline: none;
+}
+
+.info-tip:hover,
+.info-tip:focus-visible {
+  color: var(--teal);
+}
+
+.info-tip-bubble {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 50;
+  display: none;
+  width: max-content;
+  max-width: min(360px, 100%);
+  padding: 8px 10px;
+  background: #1f2937;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.45;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-tip:hover .info-tip-bubble,
+.info-tip:focus .info-tip-bubble {
   display: block;
-  width: 100%;
+}
+
+/* ---------- Dropdown (kept for long option lists) ---------- */
+
+.year-selector .year-dropdown {
+  left: 0;
+  right: auto;
+  min-width: 100%;
+  width: max-content;
+  max-width: calc(100vw - 32px);
 }
 
 .control-field .year-selector-button {
-  width: 100%;
-  height: 34px;
+  height: 30px;
   padding: 0 10px;
-  justify-content: space-between;
-  font-size: 0.85rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  border-color: var(--rule);
 }
 
-.control-field .year-option {
+.control-field .year-selector .year-option {
+  display: block;
   padding: 8px 12px;
-  font-size: 0.85rem;
-}
-
-.control-field .year-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  white-space: nowrap;
 }
 
 .year-selector .year-option:disabled,
@@ -116,133 +644,27 @@
   cursor: not-allowed;
 }
 
-/* Two-up cards share the grid's rows (header, summary, controls, chart,
-   footer), so titles, callouts, control rows, chart tops and x axes line up.
-   Every ChartCard renders all five slots, empty or not. */
-.charts-grid > .chart-card {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 6;
-  row-gap: 0;
-  margin-bottom: 24px;
+.control-field .year-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* The parent's row gap would land between the subgrid rows too, so cards are
-   spaced by their bottom margin instead (the last row's is cancelled). */
-.charts-grid:has(> .chart-card) {
-  row-gap: 0;
-  margin-bottom: -24px;
-}
-
-.chart-slot:empty {
-  display: block;
-}
-
-.chart-area {
-  width: 100%;
-  min-width: 0;
-  margin-top: 8px;
-}
-
-/* Empty state and footnote: as .region-note. */
-.chart-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  margin-top: 12px;
-  background: #f9fafb;
-  border-radius: 6px;
-  color: #6b7280;
-  font-size: 0.875rem;
-  text-align: center;
-  padding: 16px;
-}
-
-/* Source row: a thin rule, then "SOURCE" and the linked source. */
-.chart-source {
-  margin: 12px 0 0 0;
-  padding-top: 10px;
-  border-top: 1px solid #eef0f2;
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: #6b7280;
-}
-
-.chart-source a {
-  color: var(--pe-teal-700);
-}
-
-.chart-source-label {
-  margin-right: 6px;
-  font-variant: all-small-caps;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #4b5563;
-}
-
-/* Reading caveat (Note): subtle teal-grey box with an info icon. */
-.chart-note,
-.section-foot {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 12px 0 0 0;
-  padding: 6px 10px;
-  background: #f5f8f8;
-  border-radius: 6px;
-  color: #4b5563;
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-
-.chart-note svg,
-.section-foot svg {
-  flex-shrink: 0;
-  margin-top: 2px;
-  color: #319795;
-}
-
-/* Disabled state for the segmented toggle (OutcomeToggle has none). */
+/* Disabled segment */
 .outcome-toggle-button:disabled,
 .outcome-toggle-button:disabled:hover {
   background: transparent;
-  color: #9ca3af;
+  color: #b8bec6;
   cursor: not-allowed;
-  text-decoration: line-through;
-  text-decoration-color: rgba(156, 163, 175, 0.7);
 }
 
-/* Option text in the dropdown can be longer than a year. */
-.year-selector .year-dropdown {
-  left: 0;
-  right: auto;
-  min-width: 100%;
-  width: max-content;
-}
+/* ---------- Page notices and loading ---------- */
 
-.year-selector .year-option {
-  display: block;
-  white-space: nowrap;
-  font-family: inherit;
-}
-
-.year-selector-button {
-  font-family: inherit;
-  font-size: 0.875rem;
-  padding: 6px 12px;
-}
-
-/* Page notices: sample-data banner (amber, as the OBR columns in
-   OBRComparisonTable) and the forecast status notice (teal, as
-   .region-showing). */
 .page-notice {
   margin: 0 0 24px 0;
-  padding: 12px 16px;
-  border-radius: 6px;
-  border-left: 3px solid #319795;
+  padding: 10px 14px;
+  border-left: 3px solid var(--teal);
   background: #f0fdfa;
-  color: #374151;
+  color: var(--body);
   font-size: 0.9rem;
   line-height: 1.6;
   max-width: 960px;
@@ -265,7 +687,7 @@
 .dashboard-loading {
   margin: 0;
   padding: 48px 0;
-  color: #6b7280;
+  color: var(--muted);
   font-size: 0.95rem;
   text-align: center;
   opacity: 0;
@@ -278,98 +700,162 @@
   }
 }
 
-/* Section rhythm: 24px between plain rows; a heading gets 48px above it and
-   16px below, so it reads with the cards under it. Cards in a grid are 24px
-   apart both ways. */
-.dashboard-section + .dashboard-section {
-  margin-top: 24px;
+/* ---------- Caveats ---------- */
+
+.caveats ul,
+.caveats .meta-notes {
+  max-width: 900px;
+  margin: 16px 0 0 0;
+  padding-left: 20px;
+  list-style: disc;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--body);
 }
 
-.dashboard-section + .dashboard-section.has-heading,
-.series-block + .series-block {
-  margin-top: 48px;
+.caveats li + li {
+  margin-top: 6px;
 }
 
-.section-heading {
-  font-size: 1.25rem;
+/* ---------- Forecast table ---------- */
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+  margin-top: 14px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.comparison-table th {
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #374151;
-  margin: 0 0 16px 0;
+  color: var(--muted);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: bottom;
 }
 
-.section-block + .section-block {
-  margin-top: 24px;
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  text-align: left;
+  padding-left: 0;
 }
 
+.comparison-table td {
+  font-variant-numeric: tabular-nums;
+  color: var(--body);
+}
 
+.comparison-table td.pending {
+  color: var(--muted);
+  font-style: italic;
+}
 
-.section-lead {
-  margin: -8px 0 16px 0;
+.comparison-table td.change-positive {
+  color: #0f766e;
+}
+
+.comparison-table td.change-negative {
+  color: #b91c1c;
+}
+
+/* ---------- About this data ---------- */
+
+.policy-details-footer {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+.policy-details-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.policy-details-toggle:hover {
+  color: var(--teal-ink);
+}
+
+.policy-details-toggle svg:first-child {
+  color: var(--teal);
+}
+
+.policy-details-content {
+  margin-top: 12px;
+  max-width: 960px;
+}
+
+.meta-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-light);
   font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--pe-gray-500);
+  line-height: 1.6;
+  color: #4b5563;
 }
 
-.section-notes {
+.meta-list dt {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.meta-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.meta-list a {
+  color: var(--teal-ink);
+}
+
+.meta-notes {
   margin: 12px 0 0 0;
   padding-left: 18px;
   list-style: disc;
   font-size: 0.75rem;
   line-height: 1.5;
-  color: var(--pe-gray-500);
+  color: var(--muted);
 }
 
-.section-notes li + li {
-  margin-top: 2px;
+.meta-notes li + li {
+  margin-top: 4px;
 }
 
-/* Definition tooltip next to a card title. */
-.chart-card h2 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.chart-card .chart-header {
-  position: relative;
-}
-
-/* The bubble is placed against the card header, so it never runs past the
-   card (or the viewport on phones). */
-.info-tip {
-  position: static;
-  display: inline-flex;
-  color: #9ca3af;
-  cursor: help;
-  outline: none;
-}
-
-.info-tip:hover,
-.info-tip:focus-visible {
-  color: #319795;
-}
-
-.info-tip-bubble {
-  position: absolute;
-  top: calc(100% + 2px);
-  left: 0;
-  z-index: 50;
-  display: none;
-  width: max-content;
-  max-width: min(360px, 100%);
-  padding: 8px 10px;
-  background: #1f2937;
-  color: white;
-  border-radius: 6px;
+.technical-notes {
+  margin-top: 12px;
   font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.45;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--muted);
 }
 
-.info-tip:hover .info-tip-bubble,
-.info-tip:focus .info-tip-bubble {
-  display: block;
+.technical-notes summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.technical-notes .meta-notes {
+  margin-top: 8px;
 }
 
 /* Dot plot (poverty by group): grey start dot, teal end dot, arrow for the
@@ -553,174 +1039,6 @@
   white-space: nowrap;
 }
 
-.section-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.section-toolbar .section-heading {
-  margin: 0;
-}
-
-/* Headline tiles: .key-metric, three across. */
-.key-metrics-row.three-up {
-  grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 0;
-}
-
-.metric-sub {
-  margin-top: 8px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--pe-gray-500);
-}
-
-.metric-label a {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: rgba(107, 114, 128, 0.4);
-  text-underline-offset: 3px;
-}
-
-.metric-label a:hover {
-  color: var(--pe-teal-700);
-}
-
-.metric-source {
-  margin: 10px 0 0 0;
-  padding-top: 8px;
-  border-top: 1px solid #eef0f2;
-  font-size: 0.72rem;
-  color: #6b7280;
-}
-
-.metric-source a {
-  color: var(--pe-teal-700);
-}
-
-.metric-sub.change-positive {
-  color: #0f766e;
-}
-
-.metric-sub.change-negative {
-  color: #b91c1c;
-}
-
-/* Forecast table: as .comparison-table in OBRComparisonTable.css. */
-.comparison-table-wrapper {
-  overflow-x: auto;
-  margin-top: 12px;
-}
-
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-
-.comparison-table th,
-.comparison-table td {
-  padding: 10px 12px;
-  text-align: right;
-  border: 1px solid #e5e7eb;
-}
-
-.comparison-table th {
-  background: #f9fafb;
-  font-weight: 600;
-  color: #374151;
-}
-
-.comparison-table th:first-child,
-.comparison-table td:first-child {
-  text-align: left;
-}
-
-.comparison-table td {
-  font-variant-numeric: tabular-nums;
-  color: #374151;
-}
-
-.comparison-table td.pending {
-  color: #6b7280;
-  font-style: italic;
-}
-
-.comparison-table td.change-positive {
-  color: #0f766e;
-}
-
-.comparison-table td.change-negative {
-  color: #b91c1c;
-}
-
-/* "About this data" accordion: .policy-details-footer, with the metadata as a
-   definition list. */
-.meta-list {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 6px 20px;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--pe-gray-600);
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.meta-list dt {
-  font-weight: 600;
-  color: var(--pe-gray-800);
-}
-
-.meta-list dd {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
-.meta-list a,
-.policy-detail a {
-  color: var(--pe-teal-600);
-}
-
-.about-data .meta-list {
-  font-size: 0.8125rem;
-  gap: 4px 16px;
-  padding-bottom: 12px;
-}
-
-.meta-notes {
-  margin: 12px 0 0 0;
-  padding-left: 18px;
-  list-style: disc;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--pe-gray-500);
-}
-
-.meta-notes li + li {
-  margin-top: 4px;
-}
-
-.technical-notes {
-  margin-top: 12px;
-  font-size: 0.75rem;
-  color: var(--pe-gray-500);
-}
-
-.technical-notes summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--pe-gray-600);
-}
-
-.technical-notes .meta-notes {
-  margin-top: 8px;
-}
-
 /* Compact site footer (see SiteFooter.jsx): one row on desktop. */
 .site-footer {
   position: relative;
@@ -768,18 +1086,152 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-@media (max-width: 1024px) {
-  .key-metrics-row.three-up {
-    grid-template-columns: 1fr;
-  }
-}
+
+/* ---------- Responsive ---------- */
 
 @media (max-width: 1024px) {
+  :root {
+    --gutter: 24px;
+  }
+
+  .charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .headline-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .headline-strip > li:nth-child(odd) .headline-tile {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .headline-strip > li:nth-child(n + 3) .headline-tile {
+    border-top: 1px solid var(--rule);
+  }
+
+  .headline-strip.three-up {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .site-footer-inner {
     padding: 20px 24px;
   }
 }
 
+@media (max-width: 768px) {
+  :root {
+    --gutter: 16px;
+  }
+
+  .page-header h1 {
+    padding-top: 24px;
+    margin-bottom: 12px;
+  }
+
+  .tab-navigation {
+    gap: 20px;
+  }
+
+  .main-content {
+    padding-top: 20px;
+  }
+
+  .dashboard-intro {
+    font-size: 0.9375rem;
+    margin-bottom: 24px;
+  }
+
+  .headline-tile {
+    padding: 12px 12px 14px;
+  }
+
+  .headline-to {
+    font-size: 1.3rem;
+  }
+
+  .headline-from {
+    font-size: 0.875rem;
+  }
+
+  .headline-strip.three-up {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .headline-strip.three-up > li.headline-tile {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .headline-strip.three-up > li.headline-tile + li.headline-tile {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The section links collapse into one select. */
+  .section-nav-links {
+    display: none;
+  }
+
+  .section-nav-select {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .section-nav-select select {
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    padding: 0 8px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: white;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--ink);
+  }
+
+  .dashboard-section,
+  .series-block {
+    scroll-margin-top: 60px;
+  }
+
+  .section-heading {
+    font-size: 1.3rem;
+  }
+
+  .chart-controls {
+    gap: 8px 14px;
+  }
+
+  .meta-list {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .meta-list dd {
+    margin-bottom: 8px;
+  }
+
+  .site-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+  }
+
+  .site-footer-links {
+    gap: 6px 16px;
+  }
+
+  .site-footer-copy {
+    margin: 0;
+  }
+}
 @media (max-width: 768px) {
   /* Phones: label on its own line, then the plot and the values. */
   .dot-plot {
@@ -797,7 +1249,11 @@
 
   .dot-row .dot-plot-area {
     min-height: 20px;
-    margin: 0 4px;
+  }
+
+  /* Room for the first and last axis labels. */
+  .dot-plot .dot-plot-area {
+    margin: 0 14px;
   }
 
   .dot-plot {
@@ -839,55 +1295,4 @@
     gap: 5px;
   }
 
-  .site-footer-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 16px;
-  }
-
-  .site-footer-links {
-    gap: 6px 16px;
-  }
-
-  .site-footer-copy {
-    margin: 0;
-  }
-
-  .meta-list {
-    grid-template-columns: 1fr;
-    gap: 2px;
-  }
-
-  .meta-list dd {
-    margin-bottom: 8px;
-  }
-
-  .chart-card {
-    padding: 11px;
-  }
-}
-
-/* Two tab labels must fit one line each at phone width. Control boxes go two
-   per row (the wide measure box gets its own row) so no label is cut. */
-@media (max-width: 480px) {
-  .control-field {
-    flex: 1 1 calc(50% - 6px);
-  }
-
-  .control-field.wide {
-    flex-basis: 100%;
-  }
-
-  .tab-button {
-    gap: 6px;
-    padding: 12px 8px;
-    white-space: nowrap;
-  }
-}
-
-/* "What the baseline leaves out": the caveat list as body text, not small print. */
-.caveats-card .meta-notes {
-  margin: 0;
-  font-size: 0.875rem;
-  color: #374151;
 }

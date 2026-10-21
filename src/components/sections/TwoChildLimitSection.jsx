@@ -27,8 +27,8 @@ export default function TwoChildLimitSection({ data }) {
   );
   const axis = niceAxis(Math.max(...rows.flatMap((r) => [r.baseline ?? 0, r.kept ?? 0])));
   const series = [
-    { key: "baseline", name: "Current law (limit removed)", colour: PALETTE.teal, dash: DASH.long },
-    { key: "kept", name: tcl.label || "Two-child limit kept", colour: PALETTE.amber, dash: DASH.dot },
+    { key: "baseline", name: "Current law (limit removed)", label: "Current law (limit removed)", colour: PALETTE.teal, dash: DASH.long },
+    { key: "kept", name: tcl.label || "Two-child limit kept", label: tcl.label || "Two-child limit kept", colour: PALETTE.amber, dash: DASH.dot },
   ];
 
   // notes[0] is the lead sentence (the 2026-27 fall against DWP); the rest

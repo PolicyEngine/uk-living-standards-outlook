@@ -4,9 +4,10 @@
 
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
-import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
-import { EMPTY, VIEW_OPTIONS, legendItemsFor, lineSeries, mergeSeries, rangeAxis, visibleRows } from "../../lib/baseline";
+import { EMPTY, VIEW_OPTIONS, legendItemsFor, lineSeries, mergeSeries, rangeAxis, shadeFrom, visibleRows } from "../../lib/baseline";
+import { inStrip } from "../../lib/headline";
 import { fyDash, fyLabel, headlineSpan } from "../../lib/outlook";
 import { HbaiSource } from "../../lib/sources";
 
@@ -39,7 +40,13 @@ export default function InequalitySection({ data }) {
     summary = (
       <p className="chart-summary">
         The {ineq.measures[measure].replace(/ coefficient/, "")} ({basis.toUpperCase()}){" "}
-        {same ? (
+        {inStrip("inequality", { measure, basis }) ? (
+          // The headline strip gives this selection's figures.
+          <>
+            <strong>{same ? "stays flat" : b.value > a.value ? "rises" : "falls"}</strong> from {fyDash(a.year)} to{" "}
+            {fyDash(b.year)}
+          </>
+        ) : same ? (
           <>
             <strong>stays flat</strong> at {fmt(a.value)} from {fyDash(a.year)} to {fyDash(b.year)}
           </>
@@ -64,21 +71,21 @@ export default function InequalitySection({ data }) {
       exportOptions={rows.length ? { filename: `inequality-${measure}-${basis}`, legendItems: legendItemsFor(viewMode, !noOutturn) } : null}
       controls={
         <>
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Measure"
             label="Inequality measure"
             value={measure}
             onChange={setMeasure}
-            options={Object.keys(ineq.measures).map((id) => ({ id, label: ineq.measures[id] }))}
+            options={Object.keys(ineq.measures).map((id) => ({ id, label: ineq.measures[id].replace(/ coefficient$/, "") }))}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Housing costs"
             label="Housing costs"
             value={basis}
             onChange={setBasis}
-            options={Object.keys(ineq.bases).map((id) => ({ id, label: id === "bhc" ? "Before (BHC)" : "After (AHC)" }))}
+            options={Object.keys(ineq.bases).map((id) => ({ id, label: id.toUpperCase(), title: id === "bhc" ? "Before housing costs" : "After housing costs" }))}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Period"
             label="Series shown"
             value={viewMode}
@@ -97,6 +104,7 @@ export default function InequalitySection({ data }) {
         yLabel={ineq.measures[measure]}
         yDomain={axis.domain}
         yTicks={axis.ticks}
+        projectionFrom={shadeFrom(rows, viewMode, !noOutturn)}
       />
     </ChartCard>
   );

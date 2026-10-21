@@ -6,9 +6,11 @@
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
 import {
   changeVerb,
+  directionOf,
   fyDash,
   fyLabel,
   headlineSpan,
@@ -26,10 +28,12 @@ import {
   mergeSeries,
   niceAxis,
   projectionStartYear,
+  shadeFrom,
   trimProjection,
   visibleRows,
 } from "../../lib/baseline";
 import { HbaiSource, Note } from "../../lib/sources";
+import { inStrip } from "../../lib/headline";
 
 /** meta.units[metric] may be a string or an object with a label/unit field. */
 function unitFor(meta, metric) {
@@ -102,11 +106,17 @@ export default function LivingStandardsSection({ data }) {
     const b = last[adjustment];
     if (a != null && b != null && a !== 0) {
       const verb = changeVerb(((b - a) / a) * 100, "%");
+      // The headline strip gives this selection's figures; say the direction only.
+      const short = inStrip("income", { metric, adjustment });
       summary = (
         <p className="chart-summary">
           {plainMetric(label)}
           {adjustment === "real" ? ` in ${priceBase} prices` : " in cash terms"}{" "}
-          {verb ? (
+          {short ? (
+            <>
+              <strong>{directionOf(verb)}</strong> from {fyDash(first.year)} to {fyDash(last.year)}.
+            </>
+          ) : verb ? (
             <>
               <strong>{verb}</strong>, from {formatPounds(a)} in {fyDash(first.year)} to {formatPounds(b)} by{" "}
               {fyDash(last.year)}.
@@ -142,7 +152,7 @@ export default function LivingStandardsSection({ data }) {
             onChange={setMetric}
             options={metricIds.map((id) => ({ id, label: living.metrics[id] }))}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Prices"
             label="Price basis"
             value={adjustment}
@@ -152,7 +162,7 @@ export default function LivingStandardsSection({ data }) {
               { id: "nominal", label: "Cash terms" },
             ]}
           />
-          <Dropdown
+          <SegmentedToggle
             fieldLabel="Period"
             label="Series shown"
             value={effectiveView}
@@ -188,6 +198,7 @@ export default function LivingStandardsSection({ data }) {
           yLabel={`${units ? units.split(",")[0] : "Household income"}${realSuffix}`}
           yDomain={axis.domain}
           yTicks={axis.ticks}
+          projectionFrom={shadeFrom(chartData, effectiveView, !noOutturn)}
         />
       )}
     </ChartCard>
