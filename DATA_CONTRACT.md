@@ -1,7 +1,9 @@
 # Data contract: `public/data/outlook.json`
 
 Written by `pipeline/build_outlook.py` (data agent), read by the frontend.
-Years are UK fiscal years as strings, e.g. `"2024-25"`. Rates are fractions (0.132), money in £ per person per year (equivalised, HBAI basis) unless a field says otherwise. Projection series start in 2025-26; 2024-25 model output appears only in `meta.validation_2024_25`.
+Years are UK fiscal years as strings, e.g. `"2024-25"`. Rates are fractions (0.132). Equivalised income (HBAI basis) is in £ a year, adjusted for household size (shown for a couple with no children), unless a field says otherwise.
+
+Projection years: the income (`living_standards`), poverty (`poverty`) and inequality (`inequality`) projections start at the model's own 2024-25 point, the latest HBAI outturn year, so the level gap to HBAI shows within 2024-25 rather than as a one-year change. Every other projection starts in 2025-26 (there is no 2024-25 two-child-limit-kept run). Headline changes run from `meta.headline_start_year` (2025-26) to `meta.headline_end_year` (2029-30), and every model series stops at 2029-30.
 
 ```json
 {
@@ -11,26 +13,31 @@ Years are UK fiscal years as strings, e.g. `"2024-25"`. Rates are fractions (0.1
     "policyengine_uk": "x.y.z (the version policyengine pins)",
     "dataset": {"name": "microcosm_uk_2024_25", "tag": "HF revision tag", "sha256": "..."},
     "real_price_base": "2025-26",
+    "headline_start_year": "2025-26",
     "deflator": "name of the index used for real terms",
     "outturn_source": "HBAI release name + URL",
     "headline_end_year": "2029-30",
-    "headline_end_year_note": "one sentence: why headline comparisons stop at 2029-30",
+    "headline_end_year_note": "one sentence: why series stop at 2029-30",
+    "cpi_ahc_note": "CPI after housing costs is a PolicyEngine derivation; effect of policyengine-uk#2531 on real AHC growth",
+    "units": {"median_equivalised_income": "£ a year, adjusted for household size (shown for a couple with no children)"},
     "method": {"<series key>": "how it is computed (variables, weights, parameters)"},
     "comparators": {"income_by_decile": "RF LSO 2026 ...", "child_poverty": "...", "deep_poverty": "..."},
-    "validation_2024_25": {"median_equivalised_income_weekly": {"bhc": {"model": 762, "hbai": 719}}, "relative_ahc": {}, "gini": {}, "p90_p10": {}},
-    "notes": ["at most ~8 notes, one plain sentence each, <= 160 characters"]
+    "validation_2024_25": {"median_equivalised_income_weekly": {"bhc": {"model": 762, "hbai": 719}}, "relative_ahc": {}, "gini": {}, "p90_p10": {}, "universal_credit_bn": {"model": 74.2}},
+    "notes": ["at most ~8 notes, one plain sentence each, <= 160 characters"],
+    "caveats": ["projection caveats and baseline gaps, one sentence each, <= 160 characters; shown as their own list on the page"]
   },
   "living_standards": {
     "metrics": {"mean_equivalised_income": "Mean equivalised income (BHC)", "median_equivalised_income": "Median equivalised income (BHC)",
                 "mean_equivalised_income_ahc": "Mean equivalised income (AHC)", "median_equivalised_income_ahc": "Median equivalised income (AHC)"},
-    "outturn":    {"median_equivalised_income": [{"year": "2021-22", "nominal": 0, "real": 0}]},
-    "projection": {"median_equivalised_income": [{"year": "2025-26", "nominal": 0, "real": 0}]}
+    "outturn":    {"median_equivalised_income": [{"year": "2021-22", "nominal": 0, "real": 0}], "median_equivalised_income_ahc": [{"year": "2021-22", "nominal": null, "real": 0}]},
+    "projection": {"median_equivalised_income": [{"year": "2024-25", "nominal": 0, "real": 0}]}
   },
   "poverty": {
     "measures": {"absolute_bhc": "Absolute (BHC)", "absolute_ahc": "Absolute (AHC)", "relative_bhc": "Relative (BHC)", "relative_ahc": "Relative (AHC)"},
     "groups": {"all": "All people", "children": "Children", "working_age": "Working-age adults", "pensioners": "Pensioners"},
     "outturn":    {"absolute_bhc": {"all": [{"year": "2021-22", "rate": 0.15}]}},
-    "projection": {"absolute_bhc": {"all": [{"year": "2025-26", "rate": 0.132}]}}
+    "projection": {"absolute_bhc": {"all": [{"year": "2024-25", "rate": 0.12}]}},
+    "notes": ["the absolute poverty line and the level gap to HBAI"]
   },
   "forecast": {
     "pre_label": "OBR March 2026 (pre-Budget)",
@@ -49,17 +56,17 @@ Years are UK fiscal years as strings, e.g. `"2024-25"`. Rates are fractions (0.1
 
 Until the Budget forecast is published, `post` equals `pre` and `post_published` is `false`; the UI must say so visibly.
 
-`living_standards` changed on 20 October 2026: the unequivalised `mean_income` and `median_income` were removed (peers report equivalised HBAI income) and the AHC pair added. BHC series are deflated with OBR CPI, AHC series with CPI after housing costs (see `meta.deflator`). Population groups in `poverty` now follow HBAI (`hbai_person_type`).
+`living_standards` changed on 20 October 2026: the unequivalised `mean_income` and `median_income` were removed (peers report equivalised HBAI income) and the AHC pair added. BHC series are deflated with OBR CPI, AHC series with CPI after housing costs (see `meta.deflator`). AHC outturn is real only (`nominal` is `null`): pe-uk's CPI-AHC index is flat before 2022, so cash values recovered with it are too high in 2021-22. Population groups in `poverty` now follow HBAI (`hbai_person_type`).
 
 ## Added sections (20 October 2026)
 
-All are top-level keys. Years are fiscal, `"2025-26"` to `"2030-31"`. Real values are in 2025-26 prices. Each section carries its own `notes` (section-specific caveats, one sentence each).
+All are top-level keys. Years are fiscal, `"2025-26"` to `"2029-30"` (inequality projection from `"2024-25"`). Real values are in 2025-26 prices. Each section carries its own `notes` (section-specific caveats, one sentence each).
 
 ### `income_by_decile`
 Real growth in equivalised income by person-weighted income decile (re-ranked each year; growth compares positions, not people).
 ```json
 {
-  "base_year": "2025-26", "end_year": "2030-31", "statistic": "...", "deciles": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "base_year": "2025-26", "end_year": "2029-30", "statistic": "...", "deciles": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   "bases": {"bhc": "...", "ahc": "..."},
   "bhc": {"cumulative_growth_to_end": [10 fractions],
           "by_year": [{"year": "2025-26", "real_median": [10 x £], "cumulative_growth": [10 fractions vs 2025-26]}]},
@@ -81,17 +88,18 @@ Child poverty (relative and absolute AHC) by number of HBAI dependent children i
   "unweighted_children": {"all": 38901},
   "two_child_limit_kept": {"label": "Two-child limit kept", "measure": "relative_ahc", "group": "all", "reform": {"<parameter>": "2 from 2026-27"},
                            "baseline": [{"year", "rate"}], "counterfactual": [{"year", "rate"}], "counterfactual_absolute_ahc": [{"year", "rate"}]},
-  "notes": ["explains the 2026-27 fall against RF/DWP"]
+  "notes": ["first: the 2026-27 fall against DWP (the card's lead); then the policy effect, why the net fall is smaller, calibration"],
+  "sources": ["DWP publications the notes cite"]
 }
 ```
-`baseline` repeats `poverty.projection.relative_ahc.children` for convenience.
+`baseline` repeats `poverty.projection.relative_ahc.children` from 2025-26 for convenience. `counterfactual_absolute_ahc` is not shown on the page: its effects are not comparable with DWP's absolute estimates.
 
 ### `inequality`
 ```json
 {
   "measures": {"gini": "Gini coefficient", "p90_p10": "90:10 ratio"}, "bases": {"bhc": "...", "ahc": "..."},
   "outturn":    {"gini": {"bhc": [{"year": "2021-22", "value": 0.332}], "ahc": []}, "p90_p10": {"bhc": [], "ahc": []}},
-  "projection": {"gini": {"bhc": [{"year": "2025-26", "value": 0.303}], "ahc": []}, "p90_p10": {"bhc": [], "ahc": []}},
+  "projection": {"gini": {"bhc": [{"year": "2024-25", "value": 0.302}], "ahc": []}, "p90_p10": {"bhc": [], "ahc": []}},
   "notes": []
 }
 ```
@@ -108,17 +116,17 @@ JRF-style very deep poverty: people below 40% (and 50%) of the model's own media
 ```
 
 ### `poverty_by_group`
-Relative AHC poverty and median equivalised BHC income by tenure, family type, disability and region, for 2025-26, 2029-30 and 2030-31.
+Relative AHC poverty and median equivalised BHC income by tenure, family type and region, for 2025-26 and 2029-30. The disability breakdown was removed on 21 October 2026: it recorded disability-benefit receipt, not HBAI's self-reported definition. Region stays in the file but is not shown on the page: it is not validated against official regional figures.
 ```json
 {
-  "years": ["2025-26", "2029-30", "2030-31"],
+  "years": ["2025-26", "2029-30"],
   "measures": {"relative_ahc": "...", "median_equivalised_income_bhc": "..."},
   "min_unweighted_households": 100,
   "breakdowns": {
     "tenure": {"label": "Tenure", "groups": {"owned_outright": "Owned outright"},
                "cells": {"owned_outright": {"2025-26": {"relative_ahc": 0.089, "median_equivalised_income_bhc": {"nominal": 0, "real": 0},
                                                           "people_millions": 0.0, "unweighted_households": 37727, "suppressed": false}}}},
-    "family_type": {}, "disability": {}, "region": {}
+    "family_type": {}, "region": {}
   },
   "notes": []
 }
@@ -137,5 +145,8 @@ OBR real household disposable income per person (national accounts), fiscal year
 ```
 `growth` is year-on-year (fraction); `type` is `"outturn"` up to 2024-25 and `"forecast"` after; `source_row` is the Excel row in Table 1.5.
 
-### `meta.headline_end_year` (20 October 2026)
-`"2029-30"`. Headline comparisons (cumulative growth, start-to-end changes, group snapshots) should end here. Yearly series still run to 2030-31, but that year contains a model step: policyengine-uk 2.130.1 ends the UC health element protection in 2030, a bug (pe-uk #2282) fixed in 2.134.4 that the policyengine 6.8.0 pin predates. To get growth to the headline year, use `income_by_decile.<basis>.by_year` for 2029-30; `cumulative_growth_to_end` still runs to `end_year` (2030-31).
+### `meta.headline_end_year` (20 October 2026, revised 21 October)
+`"2029-30"`. Every model series stops here, and headline comparisons (cumulative growth, start-to-end changes, group snapshots) end here. 2030-31 is dropped because it contains a model step: policyengine-uk 2.130.1 ends the UC health element protection in 2030, a bug (pe-uk #2282) fixed in 2.134.4 that the policyengine 6.8.0 pin predates. `income_by_decile.<basis>.cumulative_growth_to_end` runs to 2029-30. OBR series (`forecast`, `obr_rhdi`) are not model output and keep their own years.
+
+### Provenance check
+From the next engine run, `pipeline/output/projections.json` carries a `meta` block (dataset sha256, policyengine and policyengine-uk versions). `build_outlook.py` asserts it matches the dataset and engine it is run with; files without the block are accepted.

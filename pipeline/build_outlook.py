@@ -27,8 +27,15 @@ RHDI = Path(__file__).parent / "data" / "obr_rhdi.json"
 OUT = ROOT / "public" / "data" / "outlook.json"
 
 PRICE_BASE_YEAR = 2025  # fiscal 2025-26
-PROJECTION_START = 2025  # 2024-25 is run only for meta.validation_2024_25
-HEADLINE_END_YEAR = 2029  # 2030-31 hit by pe-uk 2.130.1 UC health element bug (#2282, fixed in 2.134.4)
+# Income, poverty and inequality series start at the model's own 2024-25
+# point, so the level gap to HBAI shows within 2024-25 rather than as a
+# one-year change. Everything else (growth, deciles, two-child limit) starts
+# in 2025-26, the first year after the latest HBAI outturn.
+JOIN_START = 2024
+PROJECTION_START = 2025
+HEADLINE_START_YEAR = 2025  # headline changes run from 2025-26
+HEADLINE_END_YEAR = 2029  # series stop here: 2030-31 hit by pe-uk 2.130.1 UC health element bug (#2282, fixed in 2.134.4)
+POST_PUBLISHED = False  # Autumn Budget 2026 OBR forecast loaded into forecast.post
 MIN_HOUSEHOLDS = 100  # suppress poverty_by_group cells below this unweighted count
 FORECAST_YEARS = range(2026, 2031)
 
@@ -96,6 +103,12 @@ def sha256(path: Path) -> str:
 
 def main(dataset_path: str, tag: str) -> None:
     proj = json.loads(PROJ.read_text())
+    # Provenance written by run_projections.py from the next engine run on;
+    # older files have none, so check it only when present.
+    run_meta = proj.pop("meta", None)
+    if run_meta:
+        assert run_meta["dataset_sha256"] == sha256(Path(dataset_path)), "projections.json was run on another dataset"
+        assert run_meta["policyengine_uk"] == version("policyengine-uk"), "projections.json was run on another engine"
     hbai = json.loads(HBAI.read_text())
     rhdi = json.loads(RHDI.read_text())
     params = system.parameters.gov.economic_assumptions
@@ -113,7 +126,9 @@ def main(dataset_path: str, tag: str) -> None:
         idx = indices[basis]
         return value * idx(f"{PRICE_BASE_YEAR}-01-01") / idx(f"{year}-01-01")
 
-    years = [y for y in sorted(int(y) for y in proj) if y >= PROJECTION_START]
+    all_years = sorted(int(y) for y in proj if y.isdigit())
+    years = [y for y in all_years if PROJECTION_START <= y <= HEADLINE_END_YEAR]
+    join_years = [y for y in all_years if JOIN_START <= y <= HEADLINE_END_YEAR]
     end = years[-1]
     P = lambda y: proj[str(y)]  # noqa: E731
 
@@ -126,28 +141,32 @@ def main(dataset_path: str, tag: str) -> None:
     living = {
         m: [
             {"year": fy(y), "nominal": round(P(y)[src]), "real": round(real(P(y)[src], y, basis))}
-            for y in years
+            for y in join_years
         ]
         for m, (src, basis) in income_metrics.items()
     }
 
     # HBAI equivalised income outturn (Table 1.2b) is GBP per week in average
-    # 2024/25 prices. Annualise (x 52), recover approximate cash values with
-    # the index for that basis, then express in 2025-26 prices.
+    # 2024/25 prices. Annualise (x 52) and express in 2025-26 prices. BHC cash
+    # values are recovered with OBR CPI. AHC outturn is real only: pe-uk's
+    # CPI-AHC index is flat before 2022, so recovered 2021-22 cash values come
+    # out about 10.7% too high (PolicyEngine/policyengine-uk#2531 does not fix it).
     income_outturn = {}
     for m, (_, basis) in income_metrics.items():
         idx = indices[basis]
         series = []
         for r in hbai["income"][m]:
             y = int(r["year"][:4])
-            nominal = r["weekly_2024_25_prices"] * 52 * idx(f"{y}-01-01") / idx("2024-01-01")
-            series.append({"year": r["year"], "nominal": round(nominal), "real": round(real(nominal, y, basis))})
+            annual = r["weekly_2024_25_prices"] * 52
+            real_v = annual * idx(f"{PRICE_BASE_YEAR}-01-01") / idx("2024-01-01")
+            nominal = annual * idx(f"{y}-01-01") / idx("2024-01-01") if basis == "bhc" else None
+            series.append({"year": r["year"], "nominal": None if nominal is None else round(nominal), "real": round(real_v)})
         income_outturn[m] = series
 
     measures = ["absolute_bhc", "absolute_ahc", "relative_bhc", "relative_ahc"]
     groups = ["all", "children", "working_age", "pensioners"]
     poverty_proj = {
-        m: {g: [{"year": fy(y), "rate": round(P(y)["poverty"][m][g], 5)} for y in years] for g in groups}
+        m: {g: [{"year": fy(y), "rate": round(P(y)["poverty"][m][g], 5)} for y in join_years] for g in groups}
         for m in measures
     }
 
@@ -172,6 +191,7 @@ def main(dataset_path: str, tag: str) -> None:
             out.append({"year": fy(y), "real_mean": round(v), "cumulative_growth": round(v / base - 1, 5)})
         return out
 
+    ahc_deciles = decile_block("ahc")
     income_by_decile = {
         "base_year": fy(PRICE_BASE_YEAR),
         "end_year": fy(end),
@@ -179,7 +199,7 @@ def main(dataset_path: str, tag: str) -> None:
         "deciles": list(range(1, 11)),
         "bases": {"bhc": "Before housing costs (deflated by OBR CPI)", "ahc": "After housing costs (deflated by CPI excluding housing costs)"},
         "bhc": decile_block("bhc"),
-        "ahc": decile_block("ahc"),
+        "ahc": ahc_deciles,
         "non_pensioner_split": {
             "basis": "ahc",
             "statistic": "Mean equivalised AHC income of each half, real 2025-26 prices",
@@ -192,9 +212,8 @@ def main(dataset_path: str, tag: str) -> None:
         "comparator": "Resolution Foundation, Living Standards Outlook 2026 (February 2026)",
         "notes": [
             "Deciles are re-ranked each year, so growth compares the same position in the distribution, not the same people.",
-            "The split uses the median of non-pensioners only; RF splits at the whole-population median, so its groups differ slightly.",
-            "The bottom AHC decile median is about £11,000 and moves a lot with small income changes; RF drops the bottom 5% for this reason.",
-            YEAR_2030_NOTE,
+            decile_note(ahc_deciles["cumulative_growth_to_end"]),
+            "The halves are split at the non-pensioner median and show means, not the typical (median) incomes in Resolution Foundation analysis.",
         ],
     }
 
@@ -227,7 +246,8 @@ def main(dataset_path: str, tag: str) -> None:
                 "gov.dwp.universal_credit.elements.child.limit.child_count": "2 from 2026-27",
                 "gov.dwp.tax_credits.child_tax_credit.limit.child_count": "2 from 2026-27",
             },
-            "baseline": poverty_proj["relative_ahc"]["children"],
+            # From 2025-26: there is no 2024-25 limit-kept run.
+            "baseline": [r for r in poverty_proj["relative_ahc"]["children"] if r["year"] >= fy(PROJECTION_START)],
             "counterfactual": [
                 {"year": fy(y), "rate": round(P(y)["two_child_limit_kept"]["relative_ahc_children"], 5)} for y in years
             ],
@@ -236,6 +256,7 @@ def main(dataset_path: str, tag: str) -> None:
             ],
         },
         "notes": two_child_notes(proj),
+        "sources": TWO_CHILD_SOURCES,
     }
 
     # 3. Inequality.
@@ -245,12 +266,12 @@ def main(dataset_path: str, tag: str) -> None:
         "bases": {"bhc": "Before housing costs", "ahc": "After housing costs"},
         "outturn": {m: {b: hbai["inequality"][b][m] for b in ("bhc", "ahc")} for m in ineq_measures},
         "projection": {
-            m: {b: [{"year": fy(y), "value": round(P(y)[f"inequality_{b}"][m], 5)} for y in years] for b in ("bhc", "ahc")}
+            m: {b: [{"year": fy(y), "value": round(P(y)[f"inequality_{b}"][m], 5)} for y in join_years] for b in ("bhc", "ahc")}
             for m in ineq_measures
         },
         "notes": [
             "Outturn is HBAI Table 1.2b: Gini, and the ratio of top to bottom quintile medians, which is the 90th over the 10th percentile.",
-            "The model's Gini is about 3 points below HBAI's in 2024-25, so read the projection as a change, not a level.",
+            inequality_note(P(2024), hbai),
         ],
     }
 
@@ -276,6 +297,7 @@ def main(dataset_path: str, tag: str) -> None:
         "notes": [
             "Lines are 40% and 50% of the model's own median equivalised AHC income each year, as JRF defines very deep poverty.",
             "Not the model's in_deep_poverty_ahc flag, which is half the absolute poverty line.",
+            deep_poverty_note(P(PROJECTION_START)),
         ],
     }
 
@@ -288,9 +310,6 @@ def main(dataset_path: str, tag: str) -> None:
             "lone_parent": "Lone parent", "couple_with_children": "Couple with children",
             "single_no_children": "Single, no children", "couple_no_children": "Couple, no children",
             "pensioner": "Pensioner family"}),
-        "disability": ("Disability", {
-            "disabled_in_family": "Disability benefit recipient in family",
-            "no_disabled_in_family": "No disability benefit recipient in family"}),
         "region": ("Region", {
             "NORTH_EAST": "North East", "NORTH_WEST": "North West", "YORKSHIRE": "Yorkshire and the Humber",
             "EAST_MIDLANDS": "East Midlands", "WEST_MIDLANDS": "West Midlands", "EAST_OF_ENGLAND": "East of England",
@@ -324,18 +343,15 @@ def main(dataset_path: str, tag: str) -> None:
         "years": [fy(y) for y in group_years],
         "measures": {
             "relative_ahc": "Relative poverty (AHC)",
-            "median_equivalised_income_bhc": "Median equivalised income (BHC), £ per person per year",
+            "median_equivalised_income_bhc": f"Median equivalised income (BHC), {EQ_UNIT}",
         },
         "min_unweighted_households": MIN_HOUSEHOLDS,
         "breakdowns": breakdowns,
         "notes": [
             f"Cells with fewer than {MIN_HOUSEHOLDS} unweighted households are suppressed (null); "
             + (f"suppressed: {', '.join(suppressed)}." if suppressed else "none are at this sample size."),
-            "Disability means someone in the benefit unit receives DLA, PIP or similar, narrower than HBAI's self-reported definition.",
-            "Disability benefits count as income, which is why the disability-benefit group can show lower poverty than in HBAI.",
             "Family type is at benefit-unit level; a pensioner family is any benefit unit with someone at or above State Pension age.",
-            "Regional figures are single-year model estimates; HBAI uses three-year averages for regions.",
-            YEAR_2030_NOTE,
+            "Region: model estimates, not validated against official regional figures (Northern Ireland is far above DfC's own figure); not shown on the page.",
         ],
     }
 
@@ -359,7 +375,7 @@ def main(dataset_path: str, tag: str) -> None:
         ],
     }
 
-    # 2024-25 validation: model vs HBAI outturn (kept out of the projection series).
+    # 2024-25 validation: model vs HBAI outturn.
     v = P(2024)
     hb = lambda series, yr="2024-25": next(r for r in series if r["year"] == yr)  # noqa: E731
     validation = {
@@ -374,6 +390,8 @@ def main(dataset_path: str, tag: str) -> None:
         },
         "gini": {b: {"model": round(v[f"inequality_{b}"]["gini"], 4), "hbai": hb(hbai["inequality"][b]["gini"])["value"]} for b in ("bhc", "ahc")},
         "p90_p10": {b: {"model": round(v[f"inequality_{b}"]["p90_p10"], 3), "hbai": hb(hbai["inequality"][b]["p90_p10"])["value"]} for b in ("bhc", "ahc")},
+        # Admin comparator not added: FYE2025 UC spending (£67.4bn) still needs a check that it covers the same countries.
+        "universal_credit_bn": {"model": round(v["diagnostics"]["universal_credit_bn"], 1)},
     }
 
     obr = params.yoy_growth.obr
@@ -410,14 +428,11 @@ def main(dataset_path: str, tag: str) -> None:
                 "hf_repo": "policyengine/populace-uk-private",
             },
             "real_price_base": fy(PRICE_BASE_YEAR),
+            "headline_start_year": fy(HEADLINE_START_YEAR),
             "headline_end_year": fy(HEADLINE_END_YEAR),
             "headline_end_year_note": HEADLINE_NOTE,
-            "units": {
-                "mean_equivalised_income": "£ per person per year, equivalised",
-                "median_equivalised_income": "£ per person per year, equivalised",
-                "mean_equivalised_income_ahc": "£ per person per year, equivalised",
-                "median_equivalised_income_ahc": "£ per person per year, equivalised",
-            },
+            "cpi_ahc_note": cpi_ahc_note(living["median_equivalised_income_ahc"]),
+            "units": {m: EQ_UNIT for m in income_metrics},
             "deflator": (
                 "OBR CPI index (gov.economic_assumptions.indices.obr.consumer_price_index) for BHC incomes "
                 "and CPI after housing costs (gov.economic_assumptions.indices.obr.consumer_price_index_ahc) "
@@ -434,7 +449,7 @@ def main(dataset_path: str, tag: str) -> None:
                 "median_equivalised_income": "Person-weighted median of equiv_hbai_household_net_income (BHC), as in HBAI",
                 "mean_equivalised_income_ahc": "Person-weighted mean of equiv_hbai_household_net_income_ahc, as in HBAI",
                 "median_equivalised_income_ahc": "Person-weighted median of equiv_hbai_household_net_income_ahc, as in HBAI",
-                "income_outturn": "HBAI Table 1.2b (£ per week in 2024/25 prices) x 52; nominal values recovered with the OBR CPI index (BHC) or CPI-AHC index (AHC)",
+                "income_outturn": "HBAI Table 1.2b (£ per week in 2024/25 prices) x 52, rebased to 2025-26 prices; BHC cash values recovered with the OBR CPI index; AHC outturn is real only (nominal null)",
                 "poverty": "Person-weighted share of people in households with in_poverty_bhc / in_poverty_ahc (absolute, 60% of FYE 2025 median held in real terms) and in_relative_poverty_bhc / in_relative_poverty_ahc (60% of contemporary median)",
                 "groups": "hbai_person_type: HBAI dependent children (is_hbai_dependent_child), working-age adults below State Pension age, and pensioners at or above it; each person in exactly one group",
                 "income_by_decile": "Person-weighted deciles of equiv_hbai_household_net_income (BHC) and _ahc (AHC), re-ranked each year; decile medians deflated by CPI (BHC) or CPI-AHC (AHC)",
@@ -443,7 +458,7 @@ def main(dataset_path: str, tag: str) -> None:
                 "two_child_limit_kept": "Second simulation with gov.dwp.universal_credit.elements.child.limit.child_count and gov.dwp.tax_credits.child_tax_credit.limit.child_count set to 2 from 2026",
                 "inequality": "Person-weighted Gini (incomes as computed, negatives kept) and p90/p10 of equivalised BHC and AHC income",
                 "deep_poverty": "Share of people with equivalised AHC income below 40% and 50% of the person-weighted median AHC income in the same year",
-                "poverty_by_group": "tenure_type (council and housing association combined as social rent), benefit-unit family type, is_disabled_for_benefits for anyone in the benefit unit, and region; unweighted counts are distinct households in the cell",
+                "poverty_by_group": "tenure_type (council and housing association combined as social rent), benefit-unit family type, and region; unweighted counts are distinct households in the cell",
                 "obr_rhdi": f"{rhdi['source']['table']} ({rhdi['source']['definition']})",
                 "source_repos": [
                     "PolicyEngine/scottish-budget-dashboard scripts/generate_scotland_baseline.py",
@@ -452,11 +467,12 @@ def main(dataset_path: str, tag: str) -> None:
             },
             "comparators": {
                 "income_by_decile": "Resolution Foundation, Living Standards Outlook 2026 (February 2026): https://www.resolutionfoundation.org/publications/living-standards-outlook-2026/",
-                "child_poverty": "DWP low-income poverty projections for children, November 2025, and RF LSO 2026",
+                "child_poverty": "DWP, Low income poverty projections for children, FYE 2026 to FYE 2031 (July 2026)",
                 "deep_poverty": "JRF, UK Poverty 2026 (January 2026)",
             },
             "validation_2024_25": validation,
-            "notes": NOTES,
+            "notes": notes(validation),
+            "caveats": CAVEATS,
         },
         "living_standards": {
             "metrics": {
@@ -483,12 +499,13 @@ def main(dataset_path: str, tag: str) -> None:
             },
             "outturn": hbai["poverty"],
             "projection": poverty_proj,
+            "notes": [absolute_poverty_note(validation)],
         },
         "forecast": {
             "pre_label": "OBR March 2026 (pre-Budget)",
             "basis": "Calendar year, growth in annual average",
             "post_label": "Budget forecast",
-            "post_published": False,
+            "post_published": POST_PUBLISHED,
             "headline": ["cpi", "rpi", "earnings"],
             "sections": sections,
         },
@@ -499,52 +516,159 @@ def main(dataset_path: str, tag: str) -> None:
         "poverty_by_group": poverty_by_group,
         "obr_rhdi": obr_rhdi,
     }
-    for note in NOTES:
+    for note in outlook["meta"]["notes"] + CAVEATS:
         assert len(note) <= 160, note
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(outlook, indent=2) + "\n")
     print(f"Wrote {OUT}")
 
 
+EQ_UNIT = "£ a year, adjusted for household size (shown for a couple with no children)"
+
 HEADLINE_NOTE = (
-    "Headlines end in 2029-30: policyengine-uk 2.130.1 ends the UC health element protection in 2030, "
+    "Series end in 2029-30: policyengine-uk 2.130.1 ends the UC health element protection in 2030, "
     "a bug fixed in 2.134.4 that this engine pin predates."
 )
-YEAR_2030_NOTE = (
-    "2030-31 is distorted by a policyengine-uk 2.130.1 bug that ends the UC health element protection in 2030 "
-    "(fixed in 2.134.4), so use 2029-30 for headlines."
-)
 
-NOTES = [
-    "Model figures are unvalidated demo output from the Microcosm dataset.",
-    "Projections are a current-law baseline: no Autumn Budget 2026 measures are modelled.",
-    "Income outturn is HBAI, published in real terms; nominal values are recovered with OBR CPI (BHC) and CPI after housing costs (AHC).",
-    "Poverty and inequality outturn is the HBAI admin-linked series, which starts in 2021-22.",
-    "The model's 2024-25 median income is about 6% above HBAI's, so projected absolute poverty sits below outturn.",
-    "OBR series are calendar years; CPI after housing costs and social rent are PolicyEngine derivations, not OBR forecasts.",
-    HEADLINE_NOTE,
-    "The Autumn Budget 2026 OBR forecast is due on 28 October 2026; until then the post-Budget series repeat the pre-Budget ones.",
+# Projection caveats and baseline gaps in policyengine-uk 2.130.1 (issue #1),
+# shown as their own list on the page.
+CAVEATS = [
+    "Ages and benefit take-up are held fixed, so the State Pension age rise to 67 removes State Pension from 66-year-olds with no work response.",
+    "The population is uprated uniformly, so its age structure stays as in 2025.",
+    "Results for small groups are noisy: calibration roughly halves the effective sample, so family-size and two-child figures are approximate.",
+    "The September 2026 free school meals expansion to all Universal Credit families in England is not modelled, so child poverty from 2026-27 is a little high.",
+    "The Universal Credit health element is assigned too widely (through disabled children, and twice to some couples), so child poverty is a little low.",
+    "The above-inflation rises in the Universal Credit standard allowance from 2027-28 are missing, so UC is about £0.6bn too low by 2029-30.",
+]
+
+
+def notes(validation: dict) -> list[str]:
+    """meta.notes: one plain sentence each, at most 160 characters."""
+    out = [
+        "Model figures are unvalidated demo output from the Microcosm dataset.",
+        "Income outturn is HBAI, published in real terms; BHC cash values are recovered with OBR CPI, and AHC outturn is shown in real terms only.",
+        "Poverty and inequality outturn is the HBAI admin-linked series, which starts in 2021-22.",
+        (
+            "The 2024-25 model point uses the weights solved for 2025, scaled for population, so it carries 2025 "
+            f"composition and caseloads (UC £{validation['universal_credit_bn']['model']:.0f}bn)."
+        ),
+        "OBR series are calendar years; CPI after housing costs and social rent are PolicyEngine derivations, not OBR forecasts.",
+    ]
+    if not POST_PUBLISHED:
+        out.append(
+            "The Autumn Budget 2026 OBR forecast is due on 28 October 2026; until then the post-Budget series repeat the pre-Budget ones."
+        )
+    return out
+
+
+def absolute_poverty_note(validation: dict) -> str:
+    """Poverty card note (issue #1), with the median gap measured on this file."""
+    med = validation["median_equivalised_income_weekly"]["bhc"]
+    gap = (med["model"] / med["hbai"] - 1) * 100
+    return (
+        "The absolute line is the official one: 60% of the 2024-25 HBAI median (£431.69 a week before housing costs "
+        "for a couple), uprated by CPI. Our 2024-25 incomes are higher than HBAI's at the bottom and middle of the "
+        f"distribution (median about {gap:.0f}% higher), so absolute and relative poverty both sit below official "
+        "figures. On the same survey records with the survey's own weights the model reproduces HBAI's median and "
+        "poverty rates; the difference comes from reweighting the data to 2025 administrative totals. Read the "
+        "projections as changes from 2024-25."
+    )
+
+
+def inequality_note(v: dict, hbai: dict) -> str:
+    hb = lambda series: next(r for r in series if r["year"] == "2024-25")["value"]  # noqa: E731
+    gap = (hb(hbai["inequality"]["bhc"]["gini"]) - v["inequality_bhc"]["gini"]) * 100
+    return (
+        "Read the projection as a change, not a level. "
+        f"Our Gini is about {gap:.1f} points below official figures in 2024-25. Our data have fewer very low incomes, "
+        "and we treat very high incomes differently from HBAI's SPI-based adjustment. The 90:10 ratio is low "
+        f"({v['inequality_bhc']['p90_p10']:.2f} against {hb(hbai['inequality']['bhc']['p90_p10']):.2f}) because the "
+        "bottom tenth is too high, not because the top is too low."
+    )
+
+
+def deep_poverty_note(v: dict) -> str:
+    d = v["deep_poverty_ahc"]["below_40pc"]
+    # JRF, UK Poverty 2026: about 10% (6.8m) in very deep poverty in 2023-24, older HBAI series.
+    return (
+        f"Our very deep poverty ({d['rate'] * 100:.1f}%, {d['people_millions']:.1f} million in 2025-26) is well "
+        "below JRF's figure of about 10% (6.8 million in 2023-24, on the older survey series), so read it as a "
+        "change, not a level."
+    )
+
+
+def decile_note(ahc_growth: list[float]) -> str:
+    """Bottom AHC decile caveat (issue #1); growth to the headline end year."""
+    bottom = ahc_growth[0] * 100
+    rest = max(abs(g) for g in ahc_growth[1:]) * 100
+    return (
+        f"The lowest tenth's real median after housing costs falls {abs(bottom):.0f}% to 2029-30, while the other "
+        f"tenths move within about {rest:.1f}%. That median is the 5th percentile, a noisy point, and the fall sits "
+        "in the bottom 5%. The largest driver is the State Pension age rise to 67 on a dataset whose ages are held "
+        "fixed; next is Local Housing Allowance frozen beyond 2026-27, an assumption rather than law."
+    )
+
+
+def signed(v: float) -> str:
+    """-0.61 -> "−0.6" (typographic minus)."""
+    return f"{v:.1f}".replace("-", "\u2212")
+
+
+def cpi_ahc_note(median_ahc: list[dict]) -> str:
+    """CPI after housing costs caveat, with real AHC median growth from this file."""
+    at = lambda y: next(r["real"] for r in median_ahc if r["year"] == fy(y))  # noqa: E731
+    g = (at(HEADLINE_END_YEAR) / at(HEADLINE_START_YEAR) - 1) * 100
+    # Effect of PolicyEngine/policyengine-uk#2531's CPI-AHC values, measured
+    # on the pinned engine in issue #1: about -0.6pp on every AHC growth figure.
+    return (
+        "CPI after housing costs, used for real incomes after housing costs, is a PolicyEngine derivation, not an "
+        "OBR forecast. With the corrected index in policyengine-uk#2531, real median growth after housing costs to "
+        f"2029-30 would be about {signed(g - 0.6)}% rather than {signed(g)}%, and every decile's about 0.6 points lower. "
+        "No poverty rate uses it."
+    )
+
+
+# DWP comparators for the two-child limit card (issue #1).
+DWP_2026_CHILD_POVERTY = (28, 25)  # relative AHC, FYE2026 -> FYE2027, July 2026 projections
+DWP_EFFECT = {2026: (2.2, 300_000), 2029: (3.2, 450_000)}
+DWP_FSM_2026 = 0.4
+# Not in projections.json (the run records the rate only in years the limit
+# binds in the baseline): measured on the pinned engine for issue #1.
+AFFECTED_RATE_2026 = {"kept": 64, "removed": 49}
+
+TWO_CHILD_SOURCES = [
+    "DWP, Low income poverty projections for children, FYE 2026 to FYE 2031 (July 2026)",
+    "DWP, Removing the two-child limit on Universal Credit: impact on low income poverty levels",
+    "DWP, Universal Credit claimants: statistics on the two child limit policy",
+    "DWP, Child Poverty Strategy: impact on low income poverty levels (December 2025)",
 ]
 
 
 def two_child_notes(proj: dict) -> list[str]:
-    """Explain the 2026-27 fall in child poverty against RF/DWP (about 3 points)."""
-    b = lambda y: proj[str(y)]["poverty"]["relative_ahc"]["children"]  # noqa: E731
-    cf = lambda y: proj[str(y)]["two_child_limit_kept"]["relative_ahc_children"]  # noqa: E731
-    d = proj["2025"]["diagnostics"]
-    fall = (b(2025) - b(2026)) * 100
-    effect26 = (cf(2026) - b(2026)) * 100
-    drift = (cf(2026) - cf(2025)) * 100
-    effect29 = (cf(2029) - b(2029)) * 100
-    kids = proj["2029"]["child_poverty_by_family"]["children_millions"]["all"]
+    """Two-child limit card text (issue #1). The first note is the card's lead sentence."""
+    b = lambda y: proj[str(y)]["poverty"]["relative_ahc"]["children"] * 100  # noqa: E731
+    cf = lambda y: proj[str(y)]["two_child_limit_kept"]["relative_ahc_children"] * 100  # noqa: E731
+    kids = lambda y: proj[str(y)]["child_poverty_by_family"]["children_millions"]["all"] * 1e6  # noqa: E731
+    effect = {y: cf(y) - b(y) for y in DWP_EFFECT}
+    children = {y: round(effect[y] / 100 * kids(y), -4) for y in DWP_EFFECT}
+    dwp = DWP_EFFECT
+    a, z = DWP_2026_CHILD_POVERTY
     return [
-        f"Relative AHC child poverty falls {fall:.1f} points in 2026-27, against about 3 points in RF LSO 2026 (33% to 30%) and DWP's projections.",
-        f"Removing the two-child limit cuts it by {effect26:.1f} points in 2026-27; other changes push it up {drift:.1f} points, so the net fall is smaller.",
-        f"Coverage is not the gap: in 2025-26 the model has {d['limit_affected_households_k']:.0f}k affected households and {d['children_in_limit_affected_benefit_units_m']:.2f}m children in them, close to DWP's 470k and 1.7m.",
-        f"The policy effect grows to {effect29:.1f} points ({effect29 / 100 * kids * 1000:.0f}k children) by 2029-30, near DWP's 450k, as more children born after April 2017 would have been affected.",
-        f"Most affected children stay below the line after the gain ({d['relative_ahc_rate_children_in_limit_affected_bu'] * 100:.0f}% were in relative AHC poverty in 2025-26), and model levels sit below HBAI's.",
-        "Sources: Save the Children on DWP April 2025 statistics (469,780 households, 1.67m children); DWP, Removing the two-child limit on Universal Credit: impact on low-income poverty levels (450,000 children, FYE 2030).",
-        YEAR_2030_NOTE,
+        f"Relative child poverty after housing costs falls {b(2025) - b(2026):.1f} points in 2026-27, from "
+        f"{b(2025):.1f}% to {b(2026):.1f}%. DWP's July 2026 projections, on the same OBR forecast and the new HBAI "
+        f"series, fall about {a - z} points ({a}% to {z}%).",
+        f"Removing the two-child limit lowers child poverty by {effect[2026]:.1f} points (about {children[2026]:,.0f} "
+        f"children) in 2026-27, close to DWP's estimate of {dwp[2026][0]} points ({dwp[2026][1]:,}). By 2029-30 the "
+        f"effect is {effect[2029]:.1f} points ({children[2029]:,.0f}), against DWP's {dwp[2029][0]} points "
+        f"({dwp[2029][1]:,}).",
+        "Our net fall is smaller mainly because, with the limit removed, our child poverty is otherwise flat between "
+        "2025-26 and 2026-27, while DWP's central figures imply other changes lower it. Part of that is the September "
+        "2026 free school meals expansion, which our baseline leaves out and DWP puts at "
+        f"{DWP_FSM_2026} points in 2026-27. DWP's figures are rounded, and the difference is within our sampling "
+        "uncertainty.",
+        "The 2025-26 counts of affected families match DWP's statistics because the data are calibrated to them. "
+        f"In 2026-27, {AFFECTED_RATE_2026['kept']}% of children in affected families are in relative poverty after "
+        f"housing costs with the limit kept, and {AFFECTED_RATE_2026['removed']}% after its removal.",
     ]
 
 
