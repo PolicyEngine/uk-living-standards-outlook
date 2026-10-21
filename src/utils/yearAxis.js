@@ -1,22 +1,25 @@
-// X-axis props for year ticks, shared by the line and bar charts: every year
-// when there is room, every other year on narrow charts, and rotated −40°
-// when a straight label would collide with its neighbour.
+// X-axis props for year ticks, shared by the line and bar charts. Labels are
+// never rotated: when they would collide, every other (or every third) label
+// is shown instead. Line charts put the first and last points on the plot
+// edges, so the chart's right margin must leave room for half the last label
+// (`edgeRoom`); without it "2029–30" is cut to "2029–3" on phones.
 
-export function yearAxisProps({ width, count, labels, yAxisWidth, margin, narrow }) {
+export const labelWidthOf = (labels) => Math.max(1, ...labels.map((l) => String(l).length)) * 6.4 + 8;
+
+export function yearAxisProps({ width, count, labels, yAxisWidth, margin }) {
   const plotWidth = Math.max(0, width - yAxisWidth - margin.left - margin.right);
-  const perTick = count ? plotWidth / count : plotWidth;
-  const longest = Math.max(1, ...labels.map((l) => String(l).length));
-  const labelWidth = longest * 6.6 + 10;
-  const interval = narrow && count > 6 ? 1 : 0;
-  const rotate = perTick * (interval + 1) < labelWidth;
+  const perTick = count > 1 ? plotWidth / (count - 1) : plotWidth;
+  const labelWidth = labelWidthOf(labels);
+  let interval = 0;
+  while (perTick * (interval + 1) < labelWidth && interval < count) interval += 1;
   return {
     interval,
-    angle: rotate ? -40 : 0,
-    textAnchor: rotate ? "end" : "middle",
-    // Fiscal-year axes ("2025–26") always reserve the rotated height, so
-    // two-up cards' x axes sit at the same height whether or not they rotate.
-    height: longest >= 7 || rotate ? Math.ceil(Math.max(longest, 7) * 6.6 * 0.64 + 20) : 30,
-    tickMargin: rotate ? 4 : 6,
-    tick: { fontSize: 11, fill: "#666" },
+    height: 26,
+    tickMargin: 8,
+    tickLine: false,
+    tick: { fontSize: 11, fill: "#6b7280" },
   };
 }
+
+/** Right margin that keeps a centred end label inside the chart. */
+export const edgeRoom = (labels) => Math.ceil(labelWidthOf(labels) / 2) + 2;

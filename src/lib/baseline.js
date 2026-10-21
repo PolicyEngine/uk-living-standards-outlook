@@ -80,6 +80,7 @@ export function lineSeries(viewMode, hasOutturn = true) {
     {
       key: "historical",
       name: "Official: DWP Households Below Average Income",
+      label: "Official (DWP)",
       colour: OUTTURN_COLOUR,
       dash: DASH.solid,
       hidden: viewMode === "forecast" || !hasOutturn,
@@ -87,11 +88,22 @@ export function lineSeries(viewMode, hasOutturn = true) {
     {
       key: "projection",
       name: "Baseline (projection)",
+      label: "Baseline projection",
       colour: PROJECTION_COLOUR,
       dash: DASH.long,
       hidden: viewMode === "outturn",
     },
   ];
+}
+
+/**
+ * First x value of the shaded projection region: the first projection year,
+ * when outturn is drawn beside it; otherwise no shading.
+ */
+export function shadeFrom(rows, viewMode, hasOutturn = true) {
+  if (viewMode !== "both" || !hasOutturn) return undefined;
+  if (!rows.some((d) => d.historical != null)) return undefined;
+  return rows.find((d) => d.projection != null)?.year;
 }
 
 export function legendItemsFor(viewMode, hasOutturn = true) {

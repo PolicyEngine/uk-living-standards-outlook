@@ -1,15 +1,17 @@
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, Customized } from "recharts";
-import { PolicyEngineLogo } from "../utils/chartLogo";
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from "recharts";
 import useElementWidth from "../hooks/useElementWidth";
 import { yearAxisProps } from "../utils/yearAxis";
-import { LEGEND_HEIGHT, NARROW } from "./LineSeriesChart";
+import { AXIS, GRID, TICK, TOOLTIP_PROPS } from "../utils/chartStyle";
+import ChartKey from "./ChartKey";
+import { NARROW } from "./LineSeriesChart";
 
 /**
- * Bar chart in the same house style as LineSeriesChart (grid, ticks, axis
- * label, legend clear of the logo). Bars stack when `stacked`; with
- * `signColours` a single series is coloured by sign (gain / loss).
+ * Bar chart in the same style as LineSeriesChart: unit and key above the
+ * plot, light horizontal grid. Bars stack when `stacked`; with `signColours`
+ * a single series is coloured by sign.
  *
  * series: [{ key, name, colour }]
+ * keyItems: [{ label, colour }] overrides the key (e.g. rise/fall colours).
  */
 export default function BarSeriesChart({
   data,
@@ -24,109 +26,84 @@ export default function BarSeriesChart({
   yTicks,
   stacked = false,
   signColours = null,
-  // Custom legend entries, e.g. gain/loss colours for signColours.
-  legendPayload,
-  height = 350,
+  keyItems,
+  height: plotHeight = 300,
 }) {
+  // An x-axis title adds its own height, so the plot itself stays as tall as
+  // a line chart's beside it.
+  const height = xLabel ? plotHeight + 16 : plotHeight;
   const [ref, width] = useElementWidth();
   const narrow = width > 0 && width < NARROW;
-  const yAxisWidth = narrow ? 58 : 70;
-  const margin = { top: 20, right: narrow ? 12 : 30, left: narrow ? 0 : 20, bottom: 10 };
+  const yAxisWidth = narrow ? 44 : 52;
+  const margin = { top: 22, right: 8, left: 0, bottom: 4 };
   const xAxis = yearAxisProps({
     width,
     count: data.length,
     labels: data.map((d) => xFormat(d[xKey])),
     yAxisWidth,
     margin,
-    narrow: narrow && xKey === "year",
   });
+  const items = (keyItems || series.map((s) => ({ label: s.name, colour: s.colour }))).map((k) => ({
+    ...k,
+    type: "rect",
+  }));
 
   return (
-    <div ref={ref} style={{ width: "100%", height }}>
-      {width > 0 && (
-        <BarChart width={width} height={height} data={data} margin={margin} barCategoryGap="20%">
-          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-          <XAxis
-            dataKey={xKey}
-            tickFormatter={xFormat}
-            {...xAxis}
-            label={
-              xLabel
-                ? { value: xLabel, position: "insideBottom", offset: -2, style: { fill: "#374151", fontSize: 12, fontWeight: 500 } }
-                : undefined
-            }
-            // With an axis title, match the fiscal-year axis height so
-            // paired cards keep their x axes level.
-            height={xLabel ? Math.max(xAxis.height + 16, 50) : xAxis.height}
-          />
-          <YAxis
-            domain={yDomain}
-            ticks={yTicks}
-            tickFormatter={yFormat}
-            tick={{ fontSize: 11, fill: "#666" }}
-            width={yAxisWidth}
-            allowDecimals
-            label={{
-              value: yLabel,
-              angle: -90,
-              position: "insideLeft",
-              dx: narrow ? 4 : -10,
-              style: { textAnchor: "middle", fill: "#374151", fontSize: 12, fontWeight: 500 },
-            }}
-          />
-          <ReferenceLine y={0} stroke="#9ca3af" />
-          <Tooltip
-            formatter={(value, name) => [tooltipFormat(value), name]}
-            labelFormatter={xFormat}
-            cursor={{ fill: "rgba(49, 151, 149, 0.06)" }}
-            contentStyle={{
-              background: "white",
-              border: "1px solid #d1d5db",
-              borderRadius: "8px",
-              padding: "12px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-            }}
-            labelStyle={{ fontWeight: 600, marginBottom: "4px" }}
-          />
-          {(
-            <Legend
-              verticalAlign="bottom"
-              align="center"
-              // Reserve two legend lines on wide charts so paired cards keep
-              // their x axes level whether a legend wraps or not.
-              height={narrow ? undefined : LEGEND_HEIGHT}
-              iconType="square"
-              iconSize={12}
-              payload={legendPayload}
-              wrapperStyle={
-                narrow
-                  ? { paddingTop: "12px", paddingBottom: "26px" }
-                  : { paddingTop: "15px", paddingRight: "100px" }
+    <div className="chart-frame">
+      <ChartKey unit={yLabel} items={items} />
+      <div ref={ref} style={{ width: "100%", height }}>
+        {width > 0 && (
+          <BarChart width={width} height={height} data={data} margin={margin} barCategoryGap="22%">
+            <CartesianGrid stroke={GRID} vertical={false} />
+            <XAxis
+              dataKey={xKey}
+              tickFormatter={xFormat}
+              stroke={AXIS}
+              {...xAxis}
+              interval={xKey === "year" ? xAxis.interval : 0}
+              label={
+                xLabel
+                  ? { value: xLabel, position: "insideBottom", offset: -2, style: { fill: "#6b7280", fontSize: 11 } }
+                  : undefined
               }
-              formatter={(value) => (
-                <span style={{ fontSize: "12px", fontWeight: 500, color: "#374151" }}>{value}</span>
-              )}
+              height={xLabel ? 42 : xAxis.height}
             />
-          )}
-          {series.map((s) => (
-            <Bar
-              key={s.key}
-              dataKey={s.key}
-              name={s.name}
-              fill={s.colour}
-              stackId={stacked ? "stack" : undefined}
-              maxBarSize={56}
-              isAnimationActive={false}
-            >
-              {signColours &&
-                data.map((d, i) => (
-                  <Cell key={i} fill={(d[s.key] ?? 0) < 0 ? signColours.negative : signColours.positive} />
-                ))}
-            </Bar>
-          ))}
-          <Customized component={PolicyEngineLogo} />
-        </BarChart>
-      )}
+            <YAxis
+              domain={yDomain}
+              ticks={yTicks}
+              tickFormatter={yFormat}
+              tick={TICK}
+              axisLine={false}
+              tickLine={false}
+              width={yAxisWidth}
+              allowDecimals
+            />
+            <ReferenceLine y={0} stroke="#9ca3af" />
+            <Tooltip
+              formatter={(value, name) => [tooltipFormat(value), name]}
+              labelFormatter={xFormat}
+              cursor={{ fill: "rgba(49, 151, 149, 0.06)" }}
+              {...TOOLTIP_PROPS}
+            />
+            {series.map((s) => (
+              <Bar
+                key={s.key}
+                dataKey={s.key}
+                name={s.name}
+                fill={s.colour}
+                stackId={stacked ? "stack" : undefined}
+                maxBarSize={48}
+                isAnimationActive={false}
+              >
+                {signColours &&
+                  data.map((d, i) => (
+                    <Cell key={i} fill={(d[s.key] ?? 0) < 0 ? signColours.negative : signColours.positive} />
+                  ))}
+              </Bar>
+            ))}
+          </BarChart>
+        )}
+      </div>
     </div>
   );
 }

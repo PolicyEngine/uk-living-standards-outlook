@@ -58,10 +58,10 @@ export default function ChartCard({
   return (
     <div className={`chart-card ${className}`}>
       <div className="chart-header">
-        <h2>
+        <h3>
           {title}
           <InfoTip text={description} />
-        </h2>
+        </h3>
         {exportOptions && (
           <button
             className="export-button"

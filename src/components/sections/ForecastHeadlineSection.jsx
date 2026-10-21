@@ -1,4 +1,4 @@
-// Headline forecast figures as AB26 .key-metric tiles.
+// Headline forecast figures, in the same strip style as the Baseline tab's headline.
 
 import { HERO_YEAR, changeClass, pctLabel, ppLabel, toRows } from "../../lib/forecast";
 import { ObrSource } from "../../lib/sources";
@@ -30,10 +30,10 @@ export default function ForecastHeadlineSection({ data }) {
   if (!cards.length) return null;
 
   return (
-    <div className="key-metrics-row three-up">
+    <ul className="headline-strip three-up">
       {cards.map((card) => (
-        <div key={card.key} className="key-metric">
-          <div className="metric-label">
+        <li key={card.key} className="headline-tile static">
+          <span className="headline-label">
             {ONS_SERIES[card.key] ? (
               <a href={ONS_SERIES[card.key]} target="_blank" rel="noopener noreferrer" title="ONS series">
                 {card.label}
@@ -41,25 +41,31 @@ export default function ForecastHeadlineSection({ data }) {
             ) : (
               card.label
             )}
-          </div>
+          </span>
           {published ? (
             <>
-              <div className="metric-number">
-                {pctLabel(card.previous)} &rarr; {pctLabel(card.updated)}
-              </div>
-              <div className={`metric-sub ${changeClass(card.change)}`}>{ppLabel(card.change)}</div>
+              <span className="headline-values">
+                <span className="headline-from">{pctLabel(card.previous)}</span>
+                <span className="headline-arrow" aria-label="to">
+                  →
+                </span>
+                <span className="headline-to">{pctLabel(card.updated)}</span>
+              </span>
+              <span className={`headline-change ${changeClass(card.change)}`}>{ppLabel(card.change)}</span>
             </>
           ) : (
             <>
-              <div className="metric-number">{pctLabel(card.previous)}</div>
-              <div className="metric-sub">Budget revision pending</div>
+              <span className="headline-values">
+                <span className="headline-to">{pctLabel(card.previous)}</span>
+              </span>
+              <span className="headline-change">Budget revision pending</span>
             </>
           )}
-          <p className="metric-source">
+          <span className="headline-qualifier">
             <ObrSource />
-          </p>
-        </div>
+          </span>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

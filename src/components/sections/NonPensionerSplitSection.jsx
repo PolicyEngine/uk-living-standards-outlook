@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
-import Dropdown from "../Dropdown";
+import SegmentedToggle from "../SegmentedToggle";
 import LineSeriesChart from "../LineSeriesChart";
 import { DASH, PALETTE, joinSeries, niceAxis, rangeAxis } from "../../lib/baseline";
 import { dashOf } from "../LineSeriesChart";
@@ -46,8 +46,8 @@ export default function NonPensionerSplitSection({ data }) {
   const base = data.meta.real_price_base;
 
   const series = [
-    { key: "lower", name: "Lower-income half", colour: PALETTE.amber, dash: DASH.dot },
-    { key: "upper", name: "Higher-income half", colour: PALETTE.teal, dash: DASH.long },
+    { key: "lower", name: "Lower-income half", label: "Lower-income half", colour: PALETTE.amber, dash: DASH.dot },
+    { key: "upper", name: "Higher-income half", label: "Higher-income half", colour: PALETTE.teal, dash: DASH.long },
   ];
 
   return (
@@ -74,7 +74,7 @@ export default function NonPensionerSplitSection({ data }) {
         legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line", dash: dashOf(s) })),
       }}
       controls={
-        <Dropdown
+        <SegmentedToggle
           fieldLabel="Show"
           label="Show"
           value={view}
