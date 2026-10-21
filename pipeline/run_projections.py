@@ -39,11 +39,14 @@ Usage: uv run python pipeline/run_projections.py <path-to-microcosm.h5>
 """
 
 import gc
+import hashlib
 import json
 import sys
 import time
 import warnings
 from pathlib import Path
+
+from importlib.metadata import version
 
 import numpy as np
 import policyengine as pe
@@ -79,8 +82,9 @@ TENURE = {
 
 
 def wquantile(values, weights, q):
+    # float64 running total: in float32 the cumulative weight ends about 0.07% short.
     order = np.argsort(values, kind="stable")
-    v, w = values[order], weights[order]
+    v, w = values[order], weights[order].astype(np.float64)
     cw = np.cumsum(w)
     idx = np.searchsorted(cw, q * cw[-1])
     return float(v[min(idx, len(v) - 1)])
@@ -104,7 +108,7 @@ def gini(values, weights):
 def decile_medians(values, weights):
     """Person-weighted decile groups (ranked within the year), median of each."""
     order = np.argsort(values, kind="stable")
-    v, w = values[order], weights[order]
+    v, w = values[order], weights[order].astype(np.float64)
     cw = np.cumsum(w) / w.sum()
     group = np.minimum((cw * 10 - 1e-12).astype(int), 9)
     return [wmedian(v[group == d], w[group == d]) for d in range(10)]
@@ -117,6 +121,10 @@ def rate(flag, weight, mask):
 def person_arrays(sim, year):
     """Person-level arrays needed by every section."""
     c = lambda var, **kw: sim.calculate(var, year, **kw).values  # noqa: E731
+    # Entity ids come back as floats: check they are whole numbers before the cast.
+    for var in ("person_household_id", "person_benunit_id"):
+        ids = c(var)
+        assert np.array_equal(ids, np.round(ids)), f"{var} ids do not round-trip to integers"
     a = {
         "weight": c("person_weight"),
         "eq_bhc": c("equiv_hbai_household_net_income", map_to="person"),
@@ -177,10 +185,17 @@ def child_poverty(a):
     }
 
 
+def tenure_groups(tenure):
+    """Map tenure_type to the four groups; fail on any value the map does not cover."""
+    unmapped = set(np.unique(tenure)) - set(TENURE)
+    assert not unmapped, f"tenure_type values with no group: {sorted(unmapped)}"
+    return np.array([TENURE[t] for t in tenure], dtype=object)
+
+
 def poverty_by_group(a):
     w = a["weight"]
     breakdowns = {
-        "tenure": np.vectorize(TENURE.get)(a["tenure"]),
+        "tenure": tenure_groups(a["tenure"]),
         "family_type": family_type(a),
         "disability": np.where(a["bu_has_disabled"], "disabled_in_family", "no_disabled_in_family"),
         "region": a["region"],
@@ -293,7 +308,14 @@ def counterfactual_year(sim, year):
 
 
 def main(dataset_path: str) -> None:
-    results = {}
+    # Provenance, checked by build_outlook.py against the dataset it is run with.
+    results = {
+        "meta": {
+            "dataset_sha256": sha256(Path(dataset_path)),
+            "policyengine": version("policyengine"),
+            "policyengine_uk": version("policyengine-uk"),
+        }
+    }
     sim = pe.uk.managed_microsimulation(dataset=dataset_path, allow_unmanaged=True)
     for year in YEARS:
         t0 = time.time()
@@ -325,6 +347,14 @@ def main(dataset_path: str) -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(results, indent=2))
     print(f"Wrote {OUT}")
+
+
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 if __name__ == "__main__":

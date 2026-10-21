@@ -9,7 +9,7 @@ import { useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import { niceAxis, rangeAxis } from "../../lib/baseline";
-import { formatOneDp, formatPct, formatPounds, fyDash, headlineYear } from "../../lib/outlook";
+import { formatOneDp, formatPct, formatPounds, fyDash, headlineYear, round1 } from "../../lib/outlook";
 import { PeSource } from "../../lib/sources";
 
 const MEASURES = {
@@ -24,7 +24,8 @@ const MEASURES = {
     },
     format: formatPct,
     tick: (v) => `${v}%`,
-    change: (a, b) => b - a,
+    // From the one-decimal values shown, so "12.2% → 11.9%" reads −0.3pp.
+    change: (a, b) => round1(b) - round1(a),
     changeLabel: (d) => `${d > 0 ? "+" : "−"}${formatOneDp(Math.abs(d))}pp`,
     // A fall in poverty is good (teal); a rise is orange.
     good: (d) => d < 0,
@@ -55,20 +56,22 @@ const PLURAL = {
   single_no_children: "Single adults without children",
   couple_no_children: "Couples without children",
   pensioner: "Pensioner families",
-  disabled_in_family: "Families with a disability benefit recipient",
-  no_disabled_in_family: "Families without a disability benefit recipient",
 };
+
+// Not shown: the region estimates are not validated against official regional
+// figures (Northern Ireland comes out far above DfC's own figure), and the
+// disability split was dropped from outlook.json (review #1).
+const HIDDEN = new Set(["region", "disability"]);
 
 export default function PovertyByGroupSection({ data }) {
   const pbg = data.poverty_by_group;
-  const breakdownIds = Object.keys(pbg.breakdowns);
+  const breakdownIds = Object.keys(pbg.breakdowns).filter((id) => !HIDDEN.has(id));
   const [breakdown, setBreakdown] = useState(breakdownIds.includes("family_type") ? "family_type" : breakdownIds[0]);
   const [measure, setMeasure] = useState("relative_ahc");
   const m = MEASURES[measure];
   const from = pbg.years[0];
   const to = pbg.years.includes(headlineYear(data)) ? headlineYear(data) : pbg.years[pbg.years.length - 1];
   const b = pbg.breakdowns[breakdown];
-  const isRegion = breakdown === "region";
 
   const rows = Object.entries(b.groups)
     .map(([id, label]) => {
@@ -91,7 +94,7 @@ export default function PovertyByGroupSection({ data }) {
   const verb = (d) => (Math.abs(d) < 0.05 ? "unchanged" : `${d > 0 ? "up" : "down"} ${m.changeLabel(d).slice(1)}`);
   const lead = top && (
     <p className="chart-summary">
-      {top.label} {isRegion ? "has" : "have"} the highest {m.noun} ({m.format(top.z ?? top.a)} in {fyDash(to)})
+      {top.label} have the highest {m.noun} ({m.format(top.z ?? top.a)} in {fyDash(to)})
       {top.d != null && (
         <>
           , <strong>{verb(top.d)}</strong> since {fyDash(from)}
@@ -104,7 +107,7 @@ export default function PovertyByGroupSection({ data }) {
   return (
     <ChartCard
       title={`${m.title} by ${b.label.toLowerCase()}`}
-      description={`Relative poverty: share of people below 60% of current median income after housing costs. Median income is per person, adjusted for household size, in ${fyDash(data.meta.real_price_base)} prices. Family type is at benefit-unit level; a pensioner family has someone at or above State Pension age. Disability means someone in the family receives DLA, PIP or similar, narrower than the self-reported definition in official statistics, and disability benefits count as income. Regions are single-year model estimates (official statistics use three-year averages).`}
+      description={`Relative poverty: share of people below 60% of current median income after housing costs. Median income is in £ a year, adjusted for household size (shown for a couple with no children), in ${fyDash(data.meta.real_price_base)} prices. Family type is at benefit-unit level; a pensioner family has someone at or above State Pension age.`}
       summary={lead}
       source={<PeSource />}
       controls={
@@ -128,7 +131,7 @@ export default function PovertyByGroupSection({ data }) {
       }
     >
       <div
-        className={`dot-plot${isRegion ? " compact" : ""}`}
+        className="dot-plot"
         role="table"
         aria-label={`${m.label} by ${b.label.toLowerCase()}, ${fyDash(from)} and ${fyDash(to)}`}
       >

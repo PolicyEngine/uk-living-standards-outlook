@@ -15,6 +15,8 @@ import { ObrSource, PeDerivedSource } from "../../lib/sources";
 // CPI after housing costs and social rent are PolicyEngine derivations, not OBR series.
 const DERIVED = new Set(["cpi_ahc", "social_rent"]);
 const sourceFor = (series) => (DERIVED.has(series.key) ? <PeDerivedSource /> : <ObrSource />);
+// Line names for derived series: they follow the OBR forecast but are not OBR's.
+const DERIVED_LABEL = "PolicyEngine derivation from the OBR March 2026 forecast";
 
 const pctTick = (v) => `${formatOneDp(v).replace(/\.0$/, "")}%`;
 
@@ -31,7 +33,8 @@ function seriesFor(published, preLabel, postLabel) {
 function ForecastChartCard({ series, published, preLabel, postLabel }) {
   const rows = toRows(series, published);
   if (!rows.length) return null;
-  const lines = seriesFor(published, preLabel, postLabel);
+  const derived = DERIVED.has(series.key);
+  const lines = seriesFor(published, derived ? DERIVED_LABEL : preLabel, derived ? `PolicyEngine derivation from the ${postLabel}` : postLabel);
   const values = rows.flatMap((d) => [d.previous, published ? d.updated : null]).filter((v) => v != null);
   const axis = percentAxis(values);
   return (
@@ -40,7 +43,7 @@ function ForecastChartCard({ series, published, preLabel, postLabel }) {
       source={sourceFor(series)}
       exportOptions={{
         filename: `forecast-${series.key}`,
-        legendItems: lines.map((l) => ({ color: l.colour, label: l.name, type: "line" })),
+        legendItems: lines.map((l) => ({ color: l.colour, label: l.name, type: "line", dash: l.dashed ? "8 4" : undefined })),
       }}
     >
       <LineSeriesChart
@@ -67,7 +70,7 @@ function ForecastTableCard({ series, published, preLabel, postLabel }) {
           <thead>
             <tr>
               <th>Year</th>
-              <th>{preLabel}</th>
+              <th>{DERIVED.has(series.key) ? "PolicyEngine derivation (pre-Budget)" : preLabel}</th>
               <th>{postLabel}</th>
               <th>Change</th>
             </tr>

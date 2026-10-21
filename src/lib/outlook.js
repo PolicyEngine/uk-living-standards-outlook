@@ -76,13 +76,25 @@ export function splitSource(text) {
 /** End year for headline comparisons (meta.headline_end_year, e.g. "2029-30"). */
 export const headlineYear = (data) => data?.meta?.headline_end_year || null;
 
-/** First row and the headline-year row (or the last row) of a projection. */
+/** Start year for headline changes (meta.headline_start_year, e.g. "2025-26"). */
+export const headlineStartYear = (data) => data?.meta?.headline_start_year || null;
+
+/**
+ * Headline-start row (2025-26; the first row if absent) and the headline-year
+ * row (or the last row) of a projection. Series that also carry the model's
+ * 2024-25 point still report change from 2025-26.
+ */
 export function headlineSpan(rows, data) {
   if (!rows || rows.length < 2) return null;
+  const start = headlineStartYear(data);
   const end = headlineYear(data);
+  const first = (start && rows.find((r) => r.year === start)) || rows[0];
   const last = (end && rows.find((r) => r.year === end)) || rows[rows.length - 1];
-  return [rows[0], last];
+  return first === last ? null : [first, last];
 }
+
+/** Round to one decimal place, so a change agrees with the values shown. */
+export const round1 = (v) => (v == null ? v : Math.round(v * 10) / 10);
 
 /** "rises 10.0%" / "falls 1.3pp" / null when the change rounds to zero. */
 export function changeVerb(delta, unit) {
@@ -92,4 +104,4 @@ export function changeVerb(delta, unit) {
 
 /** Section notes minus the 2030-31 UC step, which meta.headline_end_year_note states once. */
 export const sectionNotes = (notes) =>
-  (notes || []).filter((n) => !/baseline discontinuity|UC health element protection/i.test(n));
+  (notes || []).filter((n) => !/baseline discontinuity|UC health element protection|^Series end in/i.test(n));

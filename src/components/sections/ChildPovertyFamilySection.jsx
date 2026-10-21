@@ -7,7 +7,8 @@ import { useMemo, useState } from "react";
 import ChartCard from "../ChartCard";
 import Dropdown from "../Dropdown";
 import LineSeriesChart from "../LineSeriesChart";
-import { PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
+import { DASH, PALETTE, joinSeries, niceAxis } from "../../lib/baseline";
+import { dashOf } from "../LineSeriesChart";
 import { fyDash, fyLabel, formatPct, formatPctAxis, headlineYear } from "../../lib/outlook";
 import { PeSource } from "../../lib/sources";
 
@@ -15,16 +16,16 @@ const SPLITS = {
   children: {
     label: "Number of children",
     groups: [
-      ["one_child", "1 child", PALETTE.light],
-      ["two_children", "2 children", PALETTE.teal],
-      ["three_plus_children", "3+ children", PALETTE.dark],
+      ["one_child", "1 child", PALETTE.light, DASH.dot],
+      ["two_children", "2 children", PALETTE.teal, DASH.long],
+      ["three_plus_children", "3+ children", PALETTE.dark, DASH.dashDot],
     ],
   },
   family: {
     label: "Family type",
     groups: [
-      ["lone_parent", "Lone-parent", PALETTE.amber],
-      ["couple", "Couple", PALETTE.teal],
+      ["lone_parent", "Lone-parent", PALETTE.amber, DASH.dot],
+      ["couple", "Couple", PALETTE.teal, DASH.long],
     ],
   },
 };
@@ -56,8 +57,8 @@ export default function ChildPovertyFamilySection({ data }) {
   );
   const axis = niceAxis(Math.max(...rows.flatMap((r) => groups.map(([id]) => r[id] ?? 0))));
   const series = [
-    { key: "all", name: "All children", colour: PALETTE.grey, dashed: true },
-    ...groups.map(([id, name, colour]) => ({ key: id, name, colour, dashed: true })),
+    { key: "all", name: "All children", colour: PALETTE.grey, dash: DASH.solid },
+    ...groups.map(([id, name, colour, dash]) => ({ key: id, name, colour, dash })),
   ];
 
   const end = headlineYear(data);
@@ -84,7 +85,7 @@ export default function ChildPovertyFamilySection({ data }) {
       source={<PeSource />}
       exportOptions={{
         filename: `child-poverty-${split}-${measure}`,
-        legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line" })),
+        legendItems: series.map((s) => ({ color: s.colour, label: s.name, type: "line", dash: dashOf(s) })),
       }}
       controls={
         <>

@@ -20,6 +20,7 @@ import {
   EMPTY,
   NO_OFFICIAL_SERIES,
   VIEW_OPTIONS,
+  chartEndYear,
   legendItemsFor,
   lineSeries,
   mergeSeries,
@@ -48,8 +49,8 @@ function describeMetric(id, label) {
   const concept = equivalised
     ? "household net income adjusted for household size and composition (equivalised)"
     : "household net income";
-  if (/median/i.test(id)) return `${label} is the middle value when households are ranked by ${concept}.`;
-  if (/mean/i.test(id)) return `${label} is the average of ${concept} across households.`;
+  if (/median/i.test(id)) return `${label} is the middle value when people are ranked by ${concept}.`;
+  if (/mean/i.test(id)) return `${label} is the average of ${concept} across people.`;
   return "";
 }
 
@@ -62,16 +63,19 @@ export default function LivingStandardsSection({ data }) {
     ? "median_equivalised_income"
     : metricIds.find((id) => (living.outturn?.[id] || []).length > 0) || metricIds[0];
   const [metric, setMetric] = useState(defaultMetric);
-  const [adjustment, setAdjustment] = useState("nominal");
+  const [adjustment, setAdjustment] = useState("real");
   const [viewMode, setViewMode] = useState("both");
 
   const startYear = useMemo(() => projectionStartYear(data), [data]);
+  const endYear = chartEndYear(data);
   const outturn = living.outturn?.[metric] || EMPTY;
   const projection = useMemo(
-    () => trimProjection(living.projection?.[metric], startYear),
-    [living, metric, startYear],
+    () => trimProjection(living.projection?.[metric], startYear, endYear),
+    [living, metric, startYear, endYear],
   );
-  const noOutturn = outturn.length === 0;
+  // AHC outturn is published in real terms only (nominal is null).
+  const noOutturn = !outturn.some((d) => d[adjustment] != null);
+  const realOnlyOutturn = noOutturn && outturn.some((d) => d.real != null);
   // With no outturn for this metric, Outturn is disabled and Both shows the projection only.
   const effectiveView = noOutturn && viewMode === "outturn" ? "both" : viewMode;
 
@@ -85,7 +89,7 @@ export default function LivingStandardsSection({ data }) {
   const priceBase = fyDash(meta.real_price_base);
   const label = living.metrics[metric];
   const units = unitFor(meta, metric);
-  const realSuffix = adjustment === "real" ? `, ${priceBase} prices` : "";
+  const realSuffix = adjustment === "real" ? `, ${priceBase} prices` : ", cash terms";
   const yFormat = yMax >= 10000 ? formatPoundsKAxis : formatPoundsWholeAxis;
 
   // One sentence: what the measure is (a few words) and how it moves to the
@@ -101,7 +105,7 @@ export default function LivingStandardsSection({ data }) {
       summary = (
         <p className="chart-summary">
           {plainMetric(label)}
-          {adjustment === "real" ? ` in ${priceBase} prices` : ""}{" "}
+          {adjustment === "real" ? ` in ${priceBase} prices` : " in cash terms"}{" "}
           {verb ? (
             <>
               <strong>{verb}</strong>, from {formatPounds(a)} in {fyDash(first.year)} to {formatPounds(b)} by{" "}
@@ -144,8 +148,8 @@ export default function LivingStandardsSection({ data }) {
             value={adjustment}
             onChange={setAdjustment}
             options={[
-              { id: "nominal", label: "Nominal" },
               { id: "real", label: "Real" },
+              { id: "nominal", label: "Cash terms" },
             ]}
           />
           <Dropdown
@@ -154,12 +158,23 @@ export default function LivingStandardsSection({ data }) {
             value={effectiveView}
             onChange={setViewMode}
             options={VIEW_OPTIONS.map((o) =>
-              o.id === "outturn" && noOutturn ? { ...o, disabled: true, title: NO_OFFICIAL_SERIES } : o,
+              o.id === "outturn" && noOutturn
+                ? { ...o, disabled: true, title: realOnlyOutturn ? "Official series in real terms only" : NO_OFFICIAL_SERIES }
+                : o,
             )}
           />
         </>
       }
-      footer={noOutturn && <Note>{NO_OFFICIAL_SERIES}.</Note>}
+      footer={
+        noOutturn && (
+          <Note>
+            {realOnlyOutturn
+              ? "Official incomes after housing costs are shown in real terms only."
+              : `${NO_OFFICIAL_SERIES}.`}
+          </Note>
+        )
+      }
+      notes={[units && `Incomes are in ${units}.`]}
     >
       {chartData.length === 0 ? (
         <div className="chart-empty">No data for this metric.</div>

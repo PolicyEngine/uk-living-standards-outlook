@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { CHART_LOGO } from "../utils/chartLogo";
 import { exportChartAsSvg } from "../utils/exportChartAsSvg";
+import { fyDash } from "../lib/outlook";
+import { Note, plainWords } from "../lib/sources";
 import "./ChartExport.css";
 
 /** Small ⓘ next to a card title; the definition shows on hover or focus. */
@@ -23,7 +25,9 @@ export function InfoTip({ text }) {
 /**
  * Card with AB26's chart header (h2, SVG export button). The description is
  * a definition shown in an ⓘ tooltip next to the title; the card's one block
- * of text is the dynamic summary sentence.
+ * of text is the dynamic summary sentence. Caveats that change how the chart
+ * reads go in `notes` (strings from outlook.json or nodes), shown as visible
+ * notes under the chart, never only in the tooltip.
  *
  * exportOptions: { filename, legendItems } shows the export button; the SVG
  * is taken from the Recharts chart inside the card body.
@@ -36,6 +40,7 @@ export default function ChartCard({
   exportOptions,
   children,
   footer,
+  notes,
   source,
   className = "",
 }) {
@@ -91,7 +96,12 @@ export default function ChartCard({
       <div ref={chartRef} className="chart-area">
         {children}
       </div>
-      <div className="chart-slot chart-slot-footer">{footer}</div>
+      <div className="chart-slot chart-slot-footer">
+        {footer}
+        {(notes || []).filter(Boolean).map((n) => (
+          <Note key={typeof n === "string" ? n : undefined}>{typeof n === "string" ? fyDash(plainWords(n)) : n}</Note>
+        ))}
+      </div>
       <div className="chart-slot chart-slot-source">{source && <p className="chart-source">{source}</p>}</div>
     </div>
   );

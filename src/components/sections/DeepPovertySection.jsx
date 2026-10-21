@@ -52,6 +52,7 @@ export default function DeepPovertySection({ data }) {
           <strong>{verb || "stays flat"}</strong> from {fyDash(first.fy)}.
         </p>
       }
+      notes={(data.deep_poverty.notes || []).filter((n) => /JRF's figure/.test(n))}
       source={<PeSource />}
       exportOptions={{
         filename: "depth-of-poverty",

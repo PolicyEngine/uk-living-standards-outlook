@@ -884,3 +884,10 @@
     white-space: nowrap;
   }
 }
+
+/* "What the baseline leaves out": the caveat list as body text, not small print. */
+.caveats-card .meta-notes {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
