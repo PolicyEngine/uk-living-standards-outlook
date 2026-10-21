@@ -567,9 +567,9 @@ def absolute_poverty_note(validation: dict) -> str:
     gap = (med["model"] / med["hbai"] - 1) * 100
     return (
         "The absolute line is the official one: 60% of the 2024-25 HBAI median (£431.69 a week before housing costs "
-        "for a couple), uprated by CPI. Our 2024-25 incomes are higher than HBAI's at the bottom and middle of the "
+        "for a couple), uprated by CPI. Our 2024-25 incomes are higher than in HBAI at the bottom and middle of the "
         f"distribution (median about {gap:.0f}% higher), so absolute and relative poverty both sit below official "
-        "figures. On the same survey records with the survey's own weights the model reproduces HBAI's median and "
+        "figures. On the same survey records with the survey's own weights the model reproduces the HBAI median and "
         "poverty rates; the difference comes from reweighting the data to 2025 administrative totals. Read the "
         "projections as changes from 2024-25."
     )
@@ -581,7 +581,7 @@ def inequality_note(v: dict, hbai: dict) -> str:
     return (
         "Read the projection as a change, not a level. "
         f"Our Gini is about {gap:.1f} points below official figures in 2024-25. Our data have fewer very low incomes, "
-        "and we treat very high incomes differently from HBAI's SPI-based adjustment. The 90:10 ratio is low "
+        "and we treat very high incomes differently from the SPI-based adjustment in HBAI. The 90:10 ratio is low "
         f"({v['inequality_bhc']['p90_p10']:.2f} against {hb(hbai['inequality']['bhc']['p90_p10']):.2f}) because the "
         "bottom tenth is too high, not because the top is too low."
     )
