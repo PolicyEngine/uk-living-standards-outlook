@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-24T14:20:59+00:00",
+    "generated_at": "2026-10-24T14:23:25+00:00",
     "policyengine": "6.10.2",
     "policyengine_uk": "2.132.6",
     "dataset": {
@@ -24,7 +24,7 @@
     "outturn_source": "Households Below Average Income: FYE 1995 to FYE 2025 (DWP, 26 March 2026), tables 1.2b (BHC and AHC blocks), 1.3a, 1.4a, 1.5a, 1.6a: https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
     "outturn_file_sha256": "38586ace5e06ca0029f9b5345a6047c54143ee03c644a2c0553d77813ca27a21",
     "method": {
-      "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household_weight x household_count_people), as in HBAI",
+      "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household weight x household_count_people), as in HBAI",
       "median_equivalised_income": "Person-weighted median of equiv_hbai_household_net_income (BHC), as in HBAI",
       "mean_equivalised_income_ahc": "Person-weighted mean of equiv_hbai_household_net_income_ahc, as in HBAI",
       "median_equivalised_income_ahc": "Person-weighted median of equiv_hbai_household_net_income_ahc, as in HBAI",

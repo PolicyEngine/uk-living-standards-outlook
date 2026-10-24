@@ -430,7 +430,7 @@ def main(dataset_path: str, tag: str) -> None:
             ),
             "outturn_file_sha256": hbai["source"]["file_sha256"],
             "method": {
-                "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household_weight x household_count_people), as in HBAI",
+                "mean_equivalised_income": "Person-weighted mean of equiv_hbai_household_net_income (BHC, modified OECD scale, household weight x household_count_people), as in HBAI",
                 "median_equivalised_income": "Person-weighted median of equiv_hbai_household_net_income (BHC), as in HBAI",
                 "mean_equivalised_income_ahc": "Person-weighted mean of equiv_hbai_household_net_income_ahc, as in HBAI",
                 "median_equivalised_income_ahc": "Person-weighted median of equiv_hbai_household_net_income_ahc, as in HBAI",
