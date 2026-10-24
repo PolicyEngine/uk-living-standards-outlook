@@ -29,16 +29,13 @@ household_weight x number of members).
 - poverty by group    = tenure, family type, disability-benefit receipt in
                         the benefit unit, and region, with unweighted
                         household counts
-- two-child limit kept = a second simulation with the UC and CTC child limit
-                        set back to 2 (the baseline removes it from April 2026)
 
-Years run sequentially in one process (one simulation at a time). Writes
+Years run sequentially in one baseline simulation. Writes
 pipeline/output/projections.json.
 
 Usage: uv run python pipeline/run_projections.py <path-to-microcosm.h5>
 """
 
-import gc
 import hashlib
 import json
 import sys
@@ -53,8 +50,12 @@ import policyengine as pe
 
 warnings.filterwarnings("ignore", message="Accessing .values on a MicroSeries")
 
-YEARS = list(range(2024, 2031))  # fiscal 2024-25 .. 2030-31 (2024-25 for validation)
-GROUP_YEARS = (2025, 2029, 2030)  # poverty_by_group snapshot years (2029-30 = headline end year)
+# Fiscal 2024-25 .. 2030-31: 2024-25 for validation against HBAI, 2026-27 is
+# the base year, 2029-30 the headline end year. 2030-31 is run to show the UC
+# health element step (policyengine-uk 2.132.6 applies the protected amount
+# only for 2026-2029), not published.
+YEARS = list(range(2024, 2031))
+GROUP_YEARS = (2026, 2029, 2030)  # poverty_by_group snapshot years (2026-27 base, 2029-30 headline end)
 OUT = Path(__file__).parent / "output" / "projections.json"
 
 POVERTY_VARS = {
@@ -62,14 +63,6 @@ POVERTY_VARS = {
     "absolute_ahc": "in_poverty_ahc",
     "relative_bhc": "in_relative_poverty_bhc",
     "relative_ahc": "in_relative_poverty_ahc",
-}
-
-# Two-child limit restored from April 2026 (both UC and CTC, which is already
-# zero in the data). pe-uk reads the parameter at the start of the year, so the
-# reform covers the whole calendar year.
-TWO_CHILD_LIMIT_KEPT = {
-    "gov.dwp.universal_credit.elements.child.limit.child_count": {"2026-01-01.2100-12-31": 2},
-    "gov.dwp.tax_credits.child_tax_credit.limit.child_count": {"2026-01-01.2100-12-31": 2},
 }
 
 TENURE = {
@@ -267,44 +260,8 @@ def baseline_year(sim, year):
     res["child_poverty_by_family"] = child_poverty(a)
     if year in GROUP_YEARS:
         res["poverty_by_group"] = poverty_by_group(a)
-    # Diagnostics for the two-child-limit note.
-    affected = sim.calculate("uc_is_child_limit_affected", year).values.astype(bool)
-    uc = sim.calculate("universal_credit", year, map_to="person").values
-    bu_uc = uc > 0  # benefit-unit UC mapped to persons
-    _, bu_idx = np.unique(a["bu_id"], return_inverse=True)
-    bu_aff = np.bincount(bu_idx, weights=affected)[bu_idx] > 0
-    child = groups["children"]
-    res["diagnostics"] = {
-        "children_not_receiving_uc_child_element_m": float(w[affected].sum() / 1e6),
-        "children_in_limit_affected_benefit_units_m": float(w[child & bu_aff].sum() / 1e6),
-        "children_in_uc_benefit_units_m": float(w[child & bu_uc].sum() / 1e6),
-        "children_in_uc_benefit_units_3plus_m": float(w[child & bu_uc & (a["bu_children"] >= 3)].sum() / 1e6),
-        "relative_ahc_rate_children_in_limit_affected_bu": rate(a["relative_ahc"], w, child & bu_aff)
-        if (child & bu_aff).any()
-        else None,
-        "universal_credit_bn": float(sim.calculate("universal_credit", year).sum() / 1e9),
-    }
-    hh_w = sim.calculate("household_weight", year).values
-    hh_aff = sim.calculate("uc_is_child_limit_affected", year, map_to="household").values > 0
-    res["diagnostics"]["limit_affected_households_k"] = float(hh_w[hh_aff].sum() / 1e3)
+    res["diagnostics"] = {"universal_credit_bn": float(sim.calculate("universal_credit", year).sum() / 1e9)}
     return res
-
-
-def counterfactual_year(sim, year):
-    a = person_arrays(sim, year)
-    cp = child_poverty(a)
-    return {
-        "relative_ahc_children": cp["relative_ahc"]["all"],
-        "absolute_ahc_children": cp["absolute_ahc"]["all"],
-        "relative_ahc_by_family": cp["relative_ahc"],
-        "median_equivalised_income_ahc": wmedian(a["eq_ahc"], a["weight"]),
-        "uc_child_limit_param": float(
-            sim.tax_benefit_system.parameters(str(year)).gov.dwp.universal_credit.elements.child.limit.child_count
-        ),
-        "children_not_receiving_uc_child_element_m": float(
-            (sim.calculate("uc_is_child_limit_affected", year).values.astype(bool) * a["weight"]).sum() / 1e6
-        ),
-    }
 
 
 def main(dataset_path: str) -> None:
@@ -326,22 +283,6 @@ def main(dataset_path: str) -> None:
             f"AHC £{r['median_equivalised_income_ahc']:,.0f} "
             f"child rel AHC {r['poverty']['relative_ahc']['children']:.3f} "
             f"gini BHC {r['inequality_bhc']['gini']:.3f} ({time.time() - t0:.0f}s)",
-            flush=True,
-        )
-    del sim
-    gc.collect()
-
-    sim = pe.uk.managed_microsimulation(
-        dataset=dataset_path, allow_unmanaged=True, reform=TWO_CHILD_LIMIT_KEPT
-    )
-    for year in YEARS:
-        if year < 2025:
-            continue
-        cf = counterfactual_year(sim, year)
-        results[str(year)]["two_child_limit_kept"] = cf
-        print(
-            f"{year} limit kept: child rel AHC {cf['relative_ahc_children']:.3f} "
-            f"(param {cf['uc_child_limit_param']})",
             flush=True,
         )
     OUT.parent.mkdir(parents=True, exist_ok=True)

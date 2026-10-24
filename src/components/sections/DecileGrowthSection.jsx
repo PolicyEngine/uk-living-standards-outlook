@@ -1,7 +1,7 @@
 "use client";
 
 // Growth incidence: cumulative real change in each income decile's median,
-// 2025-26 to the headline end year (income_by_decile.<basis>.by_year).
+// 2026-27 to the headline end year (income_by_decile.<basis>.by_year).
 
 import { useState } from "react";
 import ChartCard from "../ChartCard";

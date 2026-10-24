@@ -76,13 +76,13 @@ export function splitSource(text) {
 /** End year for headline comparisons (meta.headline_end_year, e.g. "2029-30"). */
 export const headlineYear = (data) => data?.meta?.headline_end_year || null;
 
-/** Start year for headline changes (meta.headline_start_year, e.g. "2025-26"). */
+/** Start year for headline changes (meta.headline_start_year, e.g. "2026-27"). */
 export const headlineStartYear = (data) => data?.meta?.headline_start_year || null;
 
 /**
- * Headline-start row (2025-26; the first row if absent) and the headline-year
+ * Headline-start row (2026-27; the first row if absent) and the headline-year
  * row (or the last row) of a projection. Series that also carry the model's
- * 2024-25 point still report change from 2025-26.
+ * 2024-25 and 2025-26 points still report change from 2026-27.
  */
 export function headlineSpan(rows, data) {
   if (!rows || rows.length < 2) return null;
