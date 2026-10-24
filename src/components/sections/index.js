@@ -10,7 +10,6 @@ import PovertySection from "./PovertySection";
 import DecileGrowthSection from "./DecileGrowthSection";
 import NonPensionerSplitSection from "./NonPensionerSplitSection";
 import ChildPovertyFamilySection from "./ChildPovertyFamilySection";
-import TwoChildLimitSection from "./TwoChildLimitSection";
 import InequalitySection from "./InequalitySection";
 import DeepPovertySection from "./DeepPovertySection";
 import PovertyByGroupSection from "./PovertyByGroupSection";
@@ -64,7 +63,7 @@ export const TABS = [
         id: "child-poverty",
         heading: "Child poverty",
         requires: "child_poverty_by_family",
-        blocks: [[ChildPovertyFamilySection, TwoChildLimitSection]],
+        blocks: [[ChildPovertyFamilySection]],
       },
       {
         id: "caveats",

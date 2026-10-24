@@ -1,7 +1,7 @@
 "use client";
 
 // Poverty and income by group: one breakdown at a time, a dot plot of
-// 2025-26 (grey) to the headline end year (teal), with an arrow for the
+// 2026-27 (grey) to the headline end year (teal), with an arrow for the
 // direction, the values and a change chip per row, and a dashed line for all
 // people (poverty_by_group).
 
